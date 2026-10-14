@@ -1,0 +1,75 @@
+{
+  "version": 3,
+  "base_revisions": {
+    "Qwen/Qwen3-0.6B-Base": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+    "Qwen/Qwen3-4B-Base": "906bfd4b4dc7f14ee4320094d8b41684abff8539"
+  },
+  "dataset_revisions": {
+    "CogComp/trec": "65752bf53af25bc935a0dce92fb5b6c930728450",
+    "legacy-datasets/banking77": "f54121560de48f2852f90be299010d1d6dc612ec",
+    "stanfordnlp/imdb": "e6281661ce1c48d982bc483cf8a173c1bbeb5d31",
+    "fancyzhx/ag_news": "eb185aade064a813bc0b7f42de02595523103ca4",
+    "SetFit/amazon_reviews_multi_en": "ec73b665e4be0f567b69d39425355401cfe0d29b",
+    "fancyzhx/dbpedia_14": "9abd46cf7fc8b4c64290f26993c540b92aa145ac",
+    "google/boolq": "35b264d03638db9f4ce671b711558bf7ff0f80d5",
+    "SetFit/sst5": "e51bdcd8cd3a30da231967c1a249ba59361279a3",
+    "nyu-mll/multi_nli": "da70db2af9d09693783c3320c4249840212ee221",
+    "Yelp/yelp_review_full": "c1f9ee939b7d05667af864ee1cb066393154bf85"
+  },
+  "holdout_sources": [],
+  "trainable_sources": [
+    "agnews",
+    "amazon",
+    "banking77",
+    "boolq",
+    "dbpedia14",
+    "imdb",
+    "mnli",
+    "sst5",
+    "trec",
+    "yelp",
+    "legacy_policy",
+    "compositional"
+  ],
+  "eval_only_sources": [
+    "mmlu",
+    "emotion",
+    "tweet_offensive",
+    "qnli",
+    "paws",
+    "sciq",
+    "contrastive",
+    "legacy_holdout",
+    "composition_holdout"
+  ],
+  "context": {
+    "max_state": 384,
+    "max_branch": 1024,
+    "max_packed": 2048,
+    "truncate": false
+  },
+  "files": {
+    "train.jsonl": {
+      "sha256": "7ed5254b5cb5291baefaceb09edf7e13110258211518c8038f4a12c11bd628ad",
+      "records": 12576,
+      "questions": 15576
+    },
+    "calibration.jsonl": {
+      "sha256": "12c2029a07d24828f5f8cc48f09f572c81457de96f3d5d16180be4c090abd5ca",
+      "records": 968,
+      "questions": 1148
+    },
+    "development.jsonl": {
+      "sha256": "8d5765d7aec4d08c61854f4664ca79ec2ba44ed092e9b967eaf61ed86c496d9c",
+      "records": 1204,
+      "questions": 1468
+    },
+    "test.jsonl": {
+      "sha256": "cd7d129a84232e0c7a4e92b4840a6dfe14c8bb93c5d1904b526fa8c085325d2d",
+      "records": 1176,
+      "questions": 1440
+    }
+  },
+  "public_artifact": "evals/v7/decision-v7",
+  "metadata_notice": "Public-schema metadata projection. Partition hashes identify the study data; omitted preparation history is not distributed. Exact reconstruction is not validated."
+}

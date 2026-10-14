@@ -1,0 +1,59 @@
+{
+  "version": "documents-v1",
+  "partitions": [
+    "train",
+    "development",
+    "test"
+  ],
+  "locked": [
+    "test"
+  ],
+  "files": {
+    "train.jsonl": {
+      "sha256": "2d7e4c4360d642a382d55425d7f34ffa2f46d00ca39a9bae31acaf82b178ee69",
+      "records": 5219,
+      "questions": 7488,
+      "by_length": {
+        "short": 1721,
+        "medium": 1774,
+        "long": 1724
+      }
+    },
+    "development.jsonl": {
+      "sha256": "bfca7b41b0d8553b03f9781f48c942dfea368ce19b8508794316e555de8280f5",
+      "records": 568,
+      "questions": 920,
+      "by_length": {
+        "medium": 191,
+        "short": 187,
+        "long": 190
+      }
+    },
+    "test.jsonl": {
+      "sha256": "742d04a1abc2207bd3e4f24b281f483cdc69238e4da747cbbc3774e836f2e557",
+      "records": 574,
+      "questions": 936,
+      "by_length": {
+        "short": 192,
+        "long": 188,
+        "medium": 194
+      }
+    }
+  },
+  "trainable_sources": [
+    "cfpb"
+  ],
+  "holdout_sources": [],
+  "context": {
+    "max_state": 8192,
+    "max_branch": 8192,
+    "max_packed": 16384,
+    "truncate": false
+  },
+  "base_revisions": {
+    "Qwen/Qwen3-0.6B-Base": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+    "Qwen/Qwen3-4B-Base": "906bfd4b4dc7f14ee4320094d8b41684abff8539"
+  },
+  "public_artifact": "evals/documents-v1",
+  "metadata_notice": "Public-schema metadata projection. Partition hashes identify the study data; omitted preparation history is not distributed. Exact reconstruction is not validated."
+}

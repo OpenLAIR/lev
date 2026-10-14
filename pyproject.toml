@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lev"
+version = "0.1.0"
+description = "Lev: one decision-model checkpoint, multiple depth operating points"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{name = "Lev authors"}, {name = "Jared Palmer"}]
+requires-python = ">=3.12,<3.14"
+dependencies = [
+  "accelerate>=1.15.0", "datasets>=3.0", "numpy>=2.5.3", "peft>=0.21",
+  "pydantic>=2.9", "scikit-learn>=1.9.1", "torch>=2.6,<2.9",
+  "transformers>=5.17,<6", "huggingface-hub>=1.0", "safetensors>=0.4", "sentencepiece>=0.2",
+]
+
+[project.urls]
+Repository = "https://github.com/OpenLAIR/lev"
+
+[project.optional-dependencies]
+dev = ["pytest>=9.1.1", "matplotlib>=3.9", "build>=1.2", "PyYAML>=6.0"]
+
+[tool.setuptools.packages.find]
+include = ["kev*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

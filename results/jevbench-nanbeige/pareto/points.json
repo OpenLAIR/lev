@@ -1,0 +1,311 @@
+{
+  "points": [
+    {
+      "label": "Looped-Kev 3B (Nanbeige4.2) both loops · depth 1",
+      "kind": "loop",
+      "depth": 1,
+      "params_b": 3.0,
+      "compute": 3.0,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.8333333333333334,
+        "hard": 0.46846846846846846
+      },
+      "intelligence": 57.13868156846669,
+      "hard_ece": 0.21902972972972967,
+      "p50_ms": 23.014141246676445,
+      "usd_per_1000": 0.01354633312414348,
+      "axes": {
+        "intelligence": 57.13868156846669,
+        "calibration": 56.194054054054064,
+        "speed": 92.17061691674056,
+        "cost": 66.04534745985573
+      },
+      "score_proxy": 66.49114717476826,
+      "hard": 0.46846846846846846
+    },
+    {
+      "label": "Looped-Kev 3B (Nanbeige4.2) both loops · depth 2",
+      "kind": "loop",
+      "depth": 2,
+      "params_b": 3.0,
+      "compute": 6.0,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.9027777777777778,
+        "hard": 0.4954954954954955
+      },
+      "intelligence": 62.78790053729559,
+      "hard_ece": 0.22449099099099096,
+      "p50_ms": 44.65029947459698,
+      "usd_per_1000": 0.02647488265268741,
+      "axes": {
+        "intelligence": 62.78790053729559,
+        "calibration": 55.101801801801805,
+        "speed": 89.53471905338662,
+        "cost": 57.31497868551321
+      },
+      "score_proxy": 64.91205272121137,
+      "hard": 0.4954954954954955
+    },
+    {
+      "label": "Looped-Kev 3B (Nanbeige4.2) last loop · depth 1",
+      "kind": "loop",
+      "depth": 1,
+      "params_b": 3.0,
+      "compute": 3.0,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.6666666666666666,
+        "hard": 0.42342342342342343
+      },
+      "intelligence": 44.8250931937398,
+      "hard_ece": 0.09642792792792797,
+      "p50_ms": 23.41422252357006,
+      "usd_per_1000": 0.013691636646021303,
+      "axes": {
+        "intelligence": 44.8250931937398,
+        "calibration": 80.7144144144144,
+        "speed": 92.1531544274354,
+        "cost": 65.90633904571328
+      },
+      "score_proxy": 55.02750443998587,
+      "hard": 0.42342342342342343
+    },
+    {
+      "label": "Looped-Kev 3B (Nanbeige4.2) last loop · depth 2",
+      "kind": "loop",
+      "depth": 2,
+      "params_b": 3.0,
+      "compute": 6.0,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.9583333333333334,
+        "hard": 0.4954954954954955
+      },
+      "intelligence": 65.9495988209451,
+      "hard_ece": 0.21256936936936938,
+      "p50_ms": 45.44388782233,
+      "usd_per_1000": 0.026769609046726345,
+      "axes": {
+        "intelligence": 65.9495988209451,
+        "calibration": 57.48612612612612,
+        "speed": 89.50702113070352,
+        "cost": 57.17073914092089
+      },
+      "score_proxy": 66.36689936508411,
+      "hard": 0.4954954954954955
+    },
+    {
+      "label": "Qwen3.5-4B control",
+      "kind": "dense",
+      "depth": 1,
+      "params_b": 4.0,
+      "compute": 4.0,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.9027777777777778,
+        "hard": 0.5135135135135135
+      },
+      "intelligence": 63.91929794680695,
+      "hard_ece": 0.21871621621621629,
+      "p50_ms": 140.28964191675186,
+      "usd_per_1000": 0.05887201567070254,
+      "axes": {
+        "intelligence": 63.91929794680695,
+        "calibration": 56.256756756756744,
+        "speed": 87.25329464429214,
+        "cost": 46.902732834411566
+      },
+      "score_proxy": 61.93650108312405,
+      "hard": 0.5135135135135135
+    },
+    {
+      "label": "Looped-Kev 2.6B (Ouro) · depth 1",
+      "kind": "loop",
+      "depth": 1,
+      "params_b": 2.6,
+      "compute": 2.6,
+      "accuracy": {
+        "easy": 0.9791666666666666,
+        "standard": 0.7638888888888888,
+        "hard": 0.3963963963963964
+      },
+      "intelligence": 48.09517534808701,
+      "hard_ece": 0.2047513513513513,
+      "p50_ms": 51.06732901185751,
+      "usd_per_1000": 0.02379594277993683,
+      "axes": {
+        "intelligence": 48.09517534808701,
+        "calibration": 59.04972972972974,
+        "speed": 90.8369678250033,
+        "cost": 58.70491252169555
+      },
+      "score_proxy": 57.720108847782534,
+      "hard": 0.3963963963963964
+    },
+    {
+      "label": "Looped-Kev 2.6B (Ouro) · depth 2",
+      "kind": "loop",
+      "depth": 2,
+      "params_b": 2.6,
+      "compute": 5.2,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.8888888888888888,
+        "hard": 0.46846846846846846
+      },
+      "intelligence": 60.3003798521162,
+      "hard_ece": 0.26569009009009015,
+      "p50_ms": 100.74784606695175,
+      "usd_per_1000": 0.04698456076718329,
+      "axes": {
+        "intelligence": 60.3003798521162,
+        "calibration": 46.86198198198197,
+        "speed": 87.55339721619076,
+        "cost": 49.84134486309703
+      },
+      "score_proxy": 59.25852861267263,
+      "hard": 0.46846846846846846
+    },
+    {
+      "label": "Looped-Kev 2.6B (Ouro) · depth 3",
+      "kind": "loop",
+      "depth": 3,
+      "params_b": 2.6,
+      "compute": 7.8,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.8888888888888888,
+        "hard": 0.5585585585585585
+      },
+      "intelligence": 65.95736689967295,
+      "hard_ece": 0.24068288288288284,
+      "p50_ms": 150.36209858953953,
+      "usd_per_1000": 0.07009806572916565,
+      "axes": {
+        "intelligence": 65.95736689967295,
+        "calibration": 51.86342342342343,
+        "speed": 85.17392665654182,
+        "cost": 44.6288189708746
+      },
+      "score_proxy": 60.04981011200933,
+      "hard": 0.5585585585585585
+    },
+    {
+      "label": "Looped-Kev 2.6B (Ouro) · depth 4",
+      "kind": "loop",
+      "depth": 4,
+      "params_b": 2.6,
+      "compute": 10.4,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.9027777777777778,
+        "hard": 0.5675675675675675
+      },
+      "intelligence": 67.313490175341,
+      "hard_ece": 0.21757387387387384,
+      "p50_ms": 200.09259413927794,
+      "usd_per_1000": 0.09327946412027646,
+      "axes": {
+        "intelligence": 67.313490175341,
+        "calibration": 56.485225225225236,
+        "speed": 83.32429240243653,
+        "cost": 40.9064187264826
+      },
+      "score_proxy": 59.99982959294453,
+      "hard": 0.5675675675675675
+    },
+    {
+      "label": "Qwen3-1.7B control",
+      "kind": "dense",
+      "depth": 1,
+      "params_b": 1.7,
+      "compute": 1.7,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.8472222222222222,
+        "hard": 0.34234234234234234
+      },
+      "intelligence": 50.009324272799624,
+      "hard_ece": 0.2577135135135135,
+      "p50_ms": 21.85304742306471,
+      "usd_per_1000": 0.01049403860677211,
+      "axes": {
+        "intelligence": 50.009324272799624,
+        "calibration": 48.457297297297295,
+        "speed": 93.3747353175946,
+        "cost": 69.37172027194843
+      },
+      "score_proxy": 62.944169179526696,
+      "hard": 0.34234234234234234
+    },
+    {
+      "label": "Kev-0.8B",
+      "kind": "dense",
+      "depth": 1,
+      "params_b": 0.8,
+      "compute": 0.8,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.8055555555555556,
+        "hard": 0.36936936936936937
+      },
+      "intelligence": 49.33514667432952,
+      "hard_ece": 0.17236396396396397,
+      "p50_ms": 79.3662965297699,
+      "usd_per_1000": 0.03315348800205898,
+      "axes": {
+        "intelligence": 49.33514667432952,
+        "calibration": 65.52720720720721,
+        "speed": 90.16594136775085,
+        "cost": 54.384123212021564
+      },
+      "score_proxy": 61.43219348361627,
+      "hard": 0.36936936936936937
+    },
+    {
+      "label": "Kev-4B",
+      "kind": "dense",
+      "depth": 1,
+      "params_b": 4.0,
+      "compute": 4.0,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.9305555555555556,
+        "hard": 0.5405405405405406
+      },
+      "intelligence": 67.19724320289873,
+      "hard_ece": 0.11225855855855857,
+      "p50_ms": 107.91520401835442,
+      "usd_per_1000": 0.045387000322589195,
+      "axes": {
+        "intelligence": 67.19724320289873,
+        "calibration": 77.54828828828828,
+        "speed": 88.60565976192069,
+        "cost": 50.2920555794435
+      },
+      "score_proxy": 69.4178455415687,
+      "hard": 0.5405405405405406
+    }
+  ],
+  "jev": {
+    "label": "Jev 1.13.0",
+    "kind": "jev",
+    "accuracy": {
+      "easy": 1.0,
+      "standard": 0.9861111111111112,
+      "hard": 0.7297297297297297
+    },
+    "intelligence": 82.23861428641739,
+    "hard_ece": 0.08571171171171188,
+    "p50_ms": 652.4335257709026,
+    "speed": 83.26811926100174,
+    "cost": 51.96616538951724,
+    "official_score": 63.29205745601932,
+    "score_proxy": 73.68888168120587,
+    "hard": 0.7297297297297297
+  },
+  "gpu_usd_per_hour": 1.5,
+  "hardware": "one H200"
+}

@@ -1,0 +1,282 @@
+{
+  "version": 1,
+  "name": "lev-eval-v1",
+  "seed": "lev-eval-v1",
+  "sizes": "full",
+  "locked": [
+    "test"
+  ],
+  "files": {
+    "test.jsonl": {
+      "sha256": "73c6f3622012d8e784bae8f0e0547386fcee7534bbb423d2243984022e37aaba",
+      "records": 9500,
+      "questions": 9740
+    },
+    "development.jsonl": {
+      "sha256": "a0f8f8ad4a7c51aeb313b5ab4667ac23e9bd9e6ab184900d0a2069faa62a298c",
+      "records": 4750,
+      "questions": 4870
+    }
+  },
+  "tiers": {
+    "test": {
+      "far": 3200,
+      "id": 2500,
+      "deep": 1600,
+      "near": 1600,
+      "unknowable": 600
+    },
+    "development": {
+      "far": 1600,
+      "id": 1250,
+      "unknowable": 300,
+      "near": 800,
+      "deep": 800
+    }
+  },
+  "families": {
+    "rule_depth": {
+      "k_range": [
+        1,
+        6
+      ],
+      "k_train": 3,
+      "unknowable_min_k": 1
+    },
+    "dep_chain": {
+      "k_range": [
+        1,
+        10
+      ],
+      "k_train": 4,
+      "unknowable_min_k": null
+    },
+    "ledger_steps": {
+      "k_range": [
+        1,
+        8
+      ],
+      "k_train": 3,
+      "unknowable_min_k": 2
+    },
+    "date_chain": {
+      "k_range": [
+        1,
+        8
+      ],
+      "k_train": 3,
+      "unknowable_min_k": 1
+    }
+  },
+  "templates": {
+    "id": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "near_deep_unknowable": {
+      "development": [
+        4
+      ],
+      "test": [
+        5
+      ]
+    }
+  },
+  "public_sources": {
+    "s31": [
+      "agnews",
+      "amazon",
+      "banking77",
+      "boolq",
+      "dbpedia14",
+      "imdb",
+      "mnli",
+      "sst5",
+      "trec",
+      "yelp"
+    ],
+    "added": [
+      "arc",
+      "openbookqa",
+      "csqa"
+    ]
+  },
+  "dataset_revisions": {
+    "CogComp/trec": "65752bf53af25bc935a0dce92fb5b6c930728450",
+    "legacy-datasets/banking77": "f54121560de48f2852f90be299010d1d6dc612ec",
+    "stanfordnlp/imdb": "e6281661ce1c48d982bc483cf8a173c1bbeb5d31",
+    "fancyzhx/ag_news": "eb185aade064a813bc0b7f42de02595523103ca4",
+    "SetFit/amazon_reviews_multi_en": "ec73b665e4be0f567b69d39425355401cfe0d29b",
+    "fancyzhx/dbpedia_14": "9abd46cf7fc8b4c64290f26993c540b92aa145ac",
+    "google/boolq": "35b264d03638db9f4ce671b711558bf7ff0f80d5",
+    "SetFit/sst5": "e51bdcd8cd3a30da231967c1a249ba59361279a3",
+    "nyu-mll/multi_nli": "da70db2af9d09693783c3320c4249840212ee221",
+    "Yelp/yelp_review_full": "c1f9ee939b7d05667af864ee1cb066393154bf85",
+    "allenai/ai2_arc": "210d026faf9955653af8916fad021475a3f00453",
+    "allenai/openbookqa": "388097ea7776314e93a529163e0fea805b8a6454",
+    "tau/commonsense_qa": "94630fe30dad47192a8546eb75f094926d47e155"
+  },
+  "trainable_sources": [
+    "lev_gen_rule_depth",
+    "lev_gen_dep_chain",
+    "lev_gen_ledger_steps",
+    "lev_gen_date_chain",
+    "agnews",
+    "amazon",
+    "banking77",
+    "boolq",
+    "dbpedia14",
+    "imdb",
+    "mnli",
+    "sst5",
+    "trec",
+    "yelp",
+    "arc",
+    "openbookqa",
+    "csqa",
+    "lev_condaqa",
+    "lev_social_iqa",
+    "lev_cosmosqa",
+    "lev_mathqa",
+    "lev_qasc",
+    "lev_piqa"
+  ],
+  "eval_only_sources": [
+    "lev_boardgameqa",
+    "lev_stepgame",
+    "lev_cladder",
+    "lev_strategyqa",
+    "lev_logiqa2",
+    "lev_ar_lsat",
+    "lev_quail",
+    "lev_timedial"
+  ],
+  "audited_sources": {
+    "lev_condaqa": {
+      "repo": "lasha-nlp/CONDAQA",
+      "revision": "3c9caa2f2f6960711e7f4d2e800581def2b6c183",
+      "role": "trainable",
+      "licence": "Apache-2.0",
+      "local_only": false,
+      "report_only": false
+    },
+    "lev_social_iqa": {
+      "repo": "allenai/social_i_qa",
+      "revision": "537a2ec8ec565adc0b70b70752893e59e024df26",
+      "role": "trainable",
+      "licence": "CC-BY-4.0",
+      "local_only": false,
+      "report_only": false
+    },
+    "lev_cosmosqa": {
+      "repo": "allenai/cosmos_qa",
+      "revision": "ed50fe83db62b355759053b1cd5eef344ee371e0",
+      "role": "trainable",
+      "licence": "CC-BY-4.0",
+      "local_only": false,
+      "report_only": false
+    },
+    "lev_mathqa": {
+      "repo": "allenai/math_qa",
+      "revision": "fafb9f7ee5b9ec4da9499f9c4177a4c91389f2d6",
+      "role": "trainable",
+      "licence": "Apache-2.0",
+      "local_only": false,
+      "report_only": false
+    },
+    "lev_qasc": {
+      "repo": "allenai/qasc",
+      "revision": "a34ba204eb9a33b919c10cc08f4f1c8dae5ec070",
+      "role": "trainable",
+      "licence": "CC-BY-4.0",
+      "local_only": false,
+      "report_only": false
+    },
+    "lev_piqa": {
+      "repo": "ybisk/piqa",
+      "revision": "142c51238b3ca2bc61e9a075913871b8b600e8e1",
+      "role": "trainable",
+      "licence": "AFL-3.0",
+      "local_only": false,
+      "report_only": false
+    },
+    "lev_boardgameqa": {
+      "repo": "tasksource/Boardgame-QA",
+      "revision": "78e38c3c8df3b4f6de7ae8bd1fc6a8bd1f31be56",
+      "role": "eval_only",
+      "licence": "CC-BY-4.0",
+      "local_only": false,
+      "report_only": false
+    },
+    "lev_stepgame": {
+      "repo": "Fangjun-Li/SpatialLM-StepGame",
+      "revision": "1114cb58382e1cea8c66c8bf98b5749fb32d7575",
+      "role": "eval_only",
+      "licence": "MIT (StepGame, ShiZhengyan/StepGame); the corrected-subset repository has no licence file",
+      "local_only": false,
+      "report_only": false
+    },
+    "lev_cladder": {
+      "repo": "causal-nlp/CLadder",
+      "revision": "18d684e444ed07cc57ae0f3a91ee983a79b8119a",
+      "role": "eval_only",
+      "licence": "MIT",
+      "local_only": false,
+      "report_only": false
+    },
+    "lev_strategyqa": {
+      "repo": "voidful/StrategyQA",
+      "revision": "2279eaf9f2580aef77ed6fa0efd7846c381ab5a0",
+      "role": "eval_only",
+      "licence": "MIT",
+      "local_only": false,
+      "report_only": true
+    },
+    "lev_logiqa2": {
+      "repo": "datatune/LogiQA2.0",
+      "revision": "edbf6440d36a03f715c0c9d479f421f2ece87d6a",
+      "role": "eval_only",
+      "licence": "CC-BY-NC-SA-4.0 (upstream csitfun/LogiQA2.0; the HF card's mit conflicts)",
+      "local_only": true,
+      "report_only": false
+    },
+    "lev_ar_lsat": {
+      "repo": "tasksource/lsat-ar",
+      "revision": "0adf424eef17df6a3506ab3d94ed194a80dfd837",
+      "role": "eval_only",
+      "licence": "MIT (zhongwanjun/AR-LSAT); questions copyright LSAC",
+      "local_only": true,
+      "report_only": false
+    },
+    "lev_quail": {
+      "repo": "textmachinelab/quail",
+      "revision": "2bd9d7f90a532fe1a910b70972cef5fda341c8fe",
+      "role": "eval_only",
+      "licence": "CC-BY-NC-SA-4.0",
+      "local_only": true,
+      "report_only": false
+    },
+    "lev_timedial": {
+      "repo": "google-research-datasets/time_dial",
+      "revision": "6c65411432c135ac7cca3669db8da476c858b141",
+      "role": "eval_only",
+      "licence": "CC-BY-NC-SA-4.0",
+      "local_only": true,
+      "report_only": false
+    }
+  },
+  "local_only_sources": [
+    "lev_logiqa2",
+    "lev_ar_lsat",
+    "lev_quail",
+    "lev_timedial"
+  ],
+  "tokenizer": [
+    "Qwen/Qwen3.5-4B-Base",
+    "1001bb4d826a52d1f399e183466143f4da7b741b"
+  ],
+  "public_artifact": "evals/levbench-v1",
+  "metadata_notice": "Public-schema metadata projection. Partition hashes identify the study data; omitted preparation history is not distributed. Exact reconstruction is not validated."
+}

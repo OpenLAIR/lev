@@ -1,0 +1,16 @@
+Lev
+Copyright 2026 Lev contributors.
+
+This product includes software developed by Jared Palmer for Kev
+(https://github.com/jaredpalmer/kev), licensed under the Apache License 2.0.
+The upstream LICENSE is retained verbatim. Original copyright and attribution
+notices in the source remain applicable.
+
+Lev adds native recurrent backbones (Ouro and Nanbeige), shared decision heads,
+training losses across depths, depth readouts, offline stopping rules and
+analysis, data builders, and release packaging and documentation. Release
+copies also adapt local paths and remove optional upstream entry points.
+
+Ouro and Nanbeige weights, benchmark and training datasets, and third-party
+libraries have their own terms. This source-code license does not relicense
+those materials. See docs/LICENSING.md and data/sources.json.

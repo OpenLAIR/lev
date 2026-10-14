@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "artifact_id": "OpenLAIR/lev",
+  "distribution": "candidate",
+  "checks": {
+    "clean_install": {
+      "status": "blocked",
+      "reason": "Full dependency installation and CPU checks in a fresh environment remain unvalidated.",
+      "subject_sha256": null,
+      "evidence": null
+    },
+    "cpu_tests": {
+      "status": "passed",
+      "reason": "Complete CPU suite: 187 passed; 14 opt-in network tests skipped.",
+      "subject_sha256": "a90fffe559be2a1eb085be6543d486b2105aeb16cda70a990fc1614c3199f1d2",
+      "evidence": {
+        "path": "release-evidence/cpu-tests.json",
+        "sha256": "304c6ec9aa6d5afef27a07f55e8e30622eaed8d2ccd49c1e6e19b369d3eede2e"
+      }
+    },
+    "gpu_parity": {
+      "status": "blocked",
+      "reason": "Full-size model parity and training/readout smoke checks remain unvalidated.",
+      "subject_sha256": null,
+      "evidence": null
+    },
+    "weight_artifacts": {
+      "status": "blocked",
+      "reason": "Final public weight revisions and calibrated checkpoint identities remain unverified.",
+      "subject_sha256": null,
+      "evidence": null
+    },
+    "data_rights": {
+      "status": "blocked",
+      "reason": "Per-source redistribution terms and required attribution remain under review.",
+      "subject_sha256": null,
+      "evidence": null
+    },
+    "data_reconstruction": {
+      "status": "blocked",
+      "reason": "Exact data reconstruction and complete prerequisite acquisition remain unvalidated.",
+      "subject_sha256": null,
+      "evidence": null
+    },
+    "all_figure_reproduction": {
+      "status": "blocked",
+      "reason": "Seven aggregate redraws are available; complete row-based figure reproduction remains pending.",
+      "subject_sha256": null,
+      "evidence": null
+    },
+    "public_endpoints": {
+      "status": "blocked",
+      "reason": "Final public code, model, dataset and paper endpoints remain unverified.",
+      "subject_sha256": null,
+      "evidence": null
+    },
+    "author_review": {
+      "status": "blocked",
+      "reason": "Final author review of this artifact remains pending.",
+      "subject_sha256": null,
+      "evidence": null
+    }
+  }
+}

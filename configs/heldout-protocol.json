@@ -1,0 +1,89 @@
+{
+  "name": "Lev held-out protocol",
+  "status": "Fixed study settings; existing aggregate results only",
+  "checkpoints": {
+    "main": {
+      "Lev-2.6B-s0": "Lev-2.6B-s0",
+      "Lev-2.6B-s1": "Lev-2.6B-s1",
+      "Lev-2.6B-s2": "Lev-2.6B-s2",
+      "Lev-1.4B-s0": "Lev-1.4B-s0",
+      "Lev-3B-s0": "Lev-3B-s0"
+    },
+    "dense_controls": {
+      "Qwen3-1.7B-S31-s0": "Qwen3-1.7B-S31-s0",
+      "Qwen3.5-2B-S31-s0": "Qwen3.5-2B-S31-s0",
+      "Qwen3.5-4B-S31-s0": "Qwen3.5-4B-S31-s0",
+      "kev-0.8b": "jaredpalmer/kev-0.8b@bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+      "kev-4b": "jaredpalmer/kev-4b@6cfce5c2fa4b4bd64026336ab649c5ca78857d52"
+    },
+    "supplementary_report_only": {
+      "Lev-3B-depth3-s0": "Lev-3B-depth3-s0"
+    },
+    "note": "all trained on S31 (kev08b-release-mix + decision-v7 train replay); Lev-2.6B has seeds 0-2, every other model seed 0 only"
+  },
+  "reads": {
+    "script": "scripts/depth_rows.py --allow_test (the only use of --allow_test in the project), fp32, TF32 off, one record per pass",
+    "partitions": [
+      "evals/v7/decision-v7:calibration (temperatures only)",
+      "evals/levbench-v1:test",
+      "evals/breadth-v1:test",
+      "evals/v7/decision-v7:test",
+      "evals/v9/transfer-v9:test",
+      "evals/hard-v1:test"
+    ],
+    "overlong": "records over a backbone's context are skipped and listed, as in every earlier read; comparisons use the questions every compared system read"
+  },
+  "panels": {
+    "primary": "eval-v1-test (9,740 questions; gates on the answerable, non-report-only rows pooled over its tiers)",
+    "secondary": "breadth-v1-test (3,089 questions)",
+    "report_only": [
+      "decision-v7-test",
+      "transfer-v9-test",
+      "hard-v1-test",
+      "eval-v1-test per tier, per source and per difficulty k",
+      "unknowable tier: confident-answer rate",
+      "StrategyQA (report_only rows)",
+      "calibration (ECE / Brier / NLL)"
+    ],
+    "not_locked": "JevBench public (231) was read in phases 1-4; its earlier numbers may be quoted, it is not part of this read"
+  },
+  "temperatures": "one per depth (one for a dense model), fitted on decision-v7 calibration (121-point log grid on 0.25..4, minimum NLL), frozen before the test rows are scored",
+  "stopper": {
+    "script": "analysis/adaptive_depth.py",
+    "primary": {
+      "rule": "agree",
+      "fit": "xfit",
+      "min_agree": 0.98
+    },
+    "control": {
+      "rule": "agree",
+      "fit": "calibration",
+      "min_agree": 0.98
+    },
+    "xfit_note": "the stopper is fitted on the calibration rows plus the other fold's unlabelled rows of the same test panel (label-free), as on development"
+  },
+  "gates": {
+    "G1": "adaptive accuracy - deepest accuracy >= -1 pp, paired 95% CI lower bound > -2 pp, question cost <= 0.70",
+    "G2": "adaptive - random escalation with the same stop distribution: paired 95% CI lower bound > 0",
+    "G3": "adaptive - fixed-depth frontier at the same question cost: paired 95% CI lower bound > 0",
+    "ci": "paired bootstrap over record groups, 2,000 resamples, seed 0",
+    "verdict": "per Lev checkpoint, on eval-v1-test (primary) and breadth-v1-test (secondary), each reported; for Lev-2.6B also the three seeds pooled (analysis/seed_pool.py: per question the seeds' correctness averaged, group bootstrap) and the per-seed count of seeds that pass. Where a gate fails, it is reported as is"
+  },
+  "cascades": {
+    "script": "analysis/cascade.py --axis latency, rules maxp and agree, as study",
+    "cascades": [
+      "Qwen3.5-2B-S31-s0 > Qwen3.5-4B-S31-s0",
+      "Qwen3-1.7B-S31-s0 > Qwen3.5-4B-S31-s0",
+      "kev-0.8b > kev-4b",
+      "Lev-1.4B-s0@4 > Lev-2.6B-s0"
+    ],
+    "lev": [
+      "Lev-2.6B-s0",
+      "Lev-1.4B-s0",
+      "Lev-3B-s0"
+    ],
+    "latency": "Per-depth fits in results/latency/latency-fits.json; H200, bf16, batch one, measured on development requests and applied to token counts.",
+    "verdict": "study's rule at matched mean latency: 'better than' a cascade when one of eval-v1-test / breadth-v1-test has CI lower bound > 0 and the other upper bound > 0; 'worse' when both upper bounds < 0; otherwise 'level'. Every Lev x cascade x rule is reported"
+  },
+  "supplementary": "Lev-3B-depth3-s0: the same tables (G1-G3, per tier) under its own heading, not in the main table, not in any verdict"
+}

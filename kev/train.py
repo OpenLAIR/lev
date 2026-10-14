@@ -1,0 +1,778 @@
+"""LoRA fine-tune of the decision model on labelled requests (a frozen suite's training partition, records built on the
+fly from the public sources, or your own JSONL), with the pointer head trained from scratch. `--full_ft 1` trains the
+whole backbone instead (kev.full_ft: bf16 weights, fp32 masters; several GPUs through torchrun + FSDP2). A LoRA run under
+torchrun is data parallel: the adapter and head are replicated and their gradients summed over the ranks before the step.
+
+    uv run python -m kev.train --suite evals/v7/decision-v7 --out runs/<name>          # what studies run
+    uv run python -m kev.train --n_per_source 40 --accum 4 --out runs/smoke               # ~1 min smoke test
+    uv run python -m kev.train --data mine.jsonl --init_from jaredpalmer/kev-4b --lr 2e-5 --out runs/mine   # delta
+    torchrun --standalone --nproc_per_node 8 -m kev.train --full_ft 1 --weights_dtype bf16 --dtype bf16 --checkpointing 1 ...
+    torchrun --standalone --nproc_per_node 4 -m kev.train --length_sort 1 --batch 8 --accum 2 ...   # LoRA: 64 records per step
+
+Batch size is small (variable-length records with custom masks) and gradients are accumulated over --accum micro-batches
+(per rank: a step sees accum x batch x world size records).
+"""
+import argparse, contextlib, dataclasses, json, math, os, random, resource, shutil, sys, time
+from collections import Counter
+from dataclasses import dataclass
+from pathlib import Path
+import torch
+import torch.nn.functional as F
+from . import full_ft
+from .checkpoint import Checkpoint, LoadOptions, Meta, set_native_steps, write_meta
+from .loop import LoopSpec, set_repeats
+from .device import allocated_bytes, default_device, empty_cache, sync
+from .data import EVAL_ONLY, build, augment, load_records, materialize, none_pair, source_seed
+from .suite import SYNTHETIC_SOURCES, digest, load_split, read_json, read_manifest, validate_training, write_json
+from .model import LETTERS, MAX_STATE, MAX_TRAIN_STATE, DecisionModel, fits, load_tokenizer, rows_of, training_context, user_tokens
+
+
+# --- losses -----------------------------------------------------------------------------------------------------------
+
+def permuted_copy(rec, rng):
+    """Re-shuffle options of every Choice question with K>=3; return (record, perms) with perms[q] = new->old index or None."""
+    out, perms = {"state": rec["state"], "questions": []}, []
+    for q in rec["questions"]:
+        if q["qtype"] == "choice" and len(q["options"]) >= 3:
+            perm = list(range(len(q["options"]))); rng.shuffle(perm)
+            out["questions"].append({**q, "options": [q["options"][j] for j in perm], "label": perm.index(q["label"])}); perms.append(perm)
+        else:
+            out["questions"].append(q); perms.append(None)
+    return out, perms
+
+
+def question_loss(z, q, dev, ord_w, label_smoothing=0.0, brier_w=0.0, focal_gamma=0.0):
+    """Cross-entropy (or cross-entropy against a soft target when the question carries one), optionally plus the
+    normalized ranked probability score for ordered levels."""
+    options = (label_smoothing, brier_w, focal_gamma)
+    if not all(math.isfinite(v) and v >= 0 for v in options) or label_smoothing > 1 or sum(v > 0 for v in options) > 1:
+        raise ValueError("choose at most one finite, nonnegative loss modifier; smoothing must be <= 1")
+    if q.get("target") is not None:
+        t = torch.tensor(q["target"], device=dev, dtype=z.dtype)
+        return -(t * F.log_softmax(z, -1)).sum()
+    y = torch.tensor([q["label"]], device=dev)
+    loss = F.cross_entropy(z[None], y, label_smoothing=label_smoothing)
+    if brier_w:
+        target = F.one_hot(y[0], len(z)).to(z.dtype)
+        loss = loss + brier_w * (F.softmax(z, -1) - target).square().sum()
+    if focal_gamma:
+        loss = (1 - torch.exp(-loss)).pow(focal_gamma) * loss
+    if q["qtype"] == "score" and ord_w > 0:
+        p = F.softmax(z, -1)
+        observed_cdf = (torch.arange(len(p) - 1, device=dev) >= q["label"]).to(p.dtype)
+        loss = loss + ord_w * (p.cumsum(-1)[:-1] - observed_cdf).square().mean()
+    return loss
+
+
+def anchor_loss(z, q, target, dev):
+    """KL(teacher || student) for one question, teacher = frozen base zero-shot distribution keyed by option key.
+    Skips (returns None) when the current option set is not exactly the teacher's (e.g. a none-option was inserted)."""
+    if target is None or set(target) != set(q["keys"]): return None
+    t = torch.tensor([target[k] for k in q["keys"]], device=dev, dtype=torch.float32).clamp_min(1e-6); t = t / t.sum()
+    return F.kl_div(F.log_softmax(z, -1), t, reduction="sum")
+
+
+def permutation_kl(z1, z2, perm, dev):
+    """Symmetric KL between one question's predictions under two option orders; perm maps the second order's positions
+    back to the first (perms from permuted_copy)."""
+    lp1 = F.log_softmax(z1, -1); lp2 = F.log_softmax(z2, -1)[torch.tensor([perm.index(j) for j in range(len(perm))], device=dev)]
+    return 0.5 * (F.kl_div(lp2, lp1, log_target=True, reduction="sum") + F.kl_div(lp1, lp2, log_target=True, reduction="sum"))
+
+
+def accumulation_records(n, batch, accum, microbatch):
+    start = (microbatch // accum) * accum * batch
+    return min(accum * batch, n - start)
+
+
+# --- data -------------------------------------------------------------------------------------------------------------
+
+def training_requests(a, tok, manifest, holdout):
+    """The labelled requests one run trains on: the suite's training partition, records built from the public sources,
+    or the user's own file (optionally with a replay sample from the suite); filtered to the training context, checked
+    against the eval-only policy, then the ablation knobs (--train_sources, --public_frac, --synthetic_repeat)."""
+    # the suite's rules (declared trainable sources, no held-out structures) apply to every record taken from it
+    if a.data:
+        reqs = load_records(a.data)
+        if a.replay:
+            pool = load_split(a.suite, "train"); replay = random.Random(f"replay:{a.seed}").sample(pool, min(a.replay, len(pool)))
+            validate_training(replay, manifest)
+            print(f"replay: {len(replay)} of {len(pool)} suite training records mixed with {len(reqs)} from {a.data}", flush=True)
+            reqs = reqs + replay
+    elif manifest:
+        reqs = load_split(a.suite, "train"); validate_training(reqs, manifest)
+    else:
+        reqs = build(a.n_per_source, "train", a.seed, exclude=holdout)
+    if not manifest or a.data:
+        # frozen suites are filtered to the training context when they are frozen (kev.suite.select_unique); records built
+        # on the fly here are not, so apply the same rule instead of letting the strict encoder abort the run (issue #5)
+        kept = [r for r in reqs if fits(materialize(r), tok, **training_context(a.max_state))]
+        if len(kept) < len(reqs):
+            c = training_context(a.max_state)
+            print(f"dropped {len(reqs) - len(kept)} of {len(reqs)} records that exceed the training context "
+                  f"({c['max_state']} state / {c['max_branch']} branch / {c['max_packed']} packed tokens)", flush=True)
+        reqs = kept
+    if getattr(a, "readout", "pointer") == "letter":
+        # the letter readout reads at most len(LETTERS) options, and augmentation (kev.data.augment, none_pair) adds up to one
+        kept = [r for r in reqs if all(len(q["options"]) < len(LETTERS) for q in materialize(r)["questions"])]
+        if len(kept) < len(reqs): print(f"letter readout: dropped {len(reqs) - len(kept)} of {len(reqs)} records with a question of {len(LETTERS)} or more options", flush=True)
+        reqs = kept
+    if not reqs:
+        raise ValueError("empty training set")
+    eval_only = set(EVAL_ONLY) | set(manifest.get("eval_only_sources", []) if manifest else [])
+    forbidden = {r["_meta"]["source"] for r in reqs} & eval_only
+    if forbidden:
+        raise ValueError(f"training data contains eval-only sources: {sorted(forbidden)}")
+    if a.train_sources:
+        wanted = set(a.train_sources.split(","))
+        unknown = wanted - {r["_meta"]["source"] for r in reqs}
+        if unknown: raise ValueError(f"--train_sources not in the training partition: {sorted(unknown)}")
+        reqs = [r for r in reqs if r["_meta"]["source"] in wanted]
+        print(f"ablation: training on {sorted(wanted)} -> {len(reqs)} records", flush=True)
+    if a.public_frac < 1:
+        mix_rng = random.Random(source_seed(a.seed, "public_frac"))
+        public = [r for r in reqs if r["_meta"]["source"] not in SYNTHETIC_SOURCES]; synth = [r for r in reqs if r["_meta"]["source"] in SYNTHETIC_SOURCES]
+        keep = sorted(mix_rng.sample(range(len(public)), int(round(a.public_frac * len(public)))))
+        reqs = [public[i] for i in keep] + synth
+        print(f"mix: public_frac {a.public_frac} -> {len(keep)} public + {len(synth)} synthetic records", flush=True)
+    if a.synthetic_repeat > 1:
+        extra = [r for r in reqs if r["_meta"]["source"] in SYNTHETIC_SOURCES] * (a.synthetic_repeat - 1)
+        reqs = reqs + extra
+        print(f"mix: synthetic_repeat {a.synthetic_repeat} -> +{len(extra)} records", flush=True)
+    return reqs
+
+
+@dataclass(eq=False)   # identity, so batch.index(v) finds this very variant
+class Variant:
+    """One encoded training example: an augmented copy of a source request, with the request's id and source kept for
+    the anchor lookup, and optionally the same record under a second option order for the permutation KL."""
+    rec: dict
+    enc: dict
+    request_id: str
+    source: str
+    permuted: tuple | None = None   # (encoding under the other order, perms from permuted_copy)
+    share: float = 1.0              # the part of its variant this is, when --row_budget split the variant's questions (row_passes)
+
+    @property
+    def tokens(self):
+        return len(self.enc["ids"]) + (len(self.permuted[0]["ids"]) if self.permuted else 0)
+
+
+def shape(enc):
+    """(state tokens, branch tokens of each question) of an encoding (kev.model.rows_of)."""
+    state, _, rows = rows_of(enc)
+    return len(state), [len(r["ids"]) for r in rows]
+
+
+def pass_tokens(shapes, shared):
+    """Padded tokens of one forward pass over records of these shapes: in the row form, rows x the longest row (the state
+    once per question); with a shared prefix (kev.shared_prefix), states x the longest state + branches x the longest branch."""
+    if shared: return len(shapes) * max(s for s, _ in shapes) + sum(len(b) for _, b in shapes) * max(x for _, b in shapes for x in b)
+    rows = [s + x for s, branches in shapes for x in branches]
+    return len(rows) * max(rows)
+
+
+def question_parts(enc, budget, shared):
+    """--row_budget: a record's questions in consecutive groups whose pass fits `budget` tokens (a single question always
+    fits: its row is at most kev.model.MAX_TRAIN_STATE + a branch); one group without a budget."""
+    state, branches = shape(enc)
+    if not budget: return [list(range(len(branches)))]
+    parts = [[]]
+    for q in range(len(branches)):
+        if parts[-1] and pass_tokens([(state, [branches[i] for i in parts[-1] + [q]])], shared) > budget: parts.append([])
+        parts[-1].append(q)
+    return parts
+
+
+NONE_OPTION_CHARS = 64   # a none-pair sibling's extra option, in the characters microbatch_plan measures (kev.data.NONE_OPTIONS' longest is shorter)
+
+
+def microbatch_plan(reqs, a, world, rank, pairs=None, shapes=None):
+    """This rank's micro-batches for one epoch of `reqs` (already shuffled), in order: (records, records in its optimizer
+    step over all ranks, whether that step ends after it). Every rank gets the same number of micro-batches in every
+    step (FSDP2's collectives line up) and each record is seen once per epoch (the last step wraps around to fill every
+    rank, as full_ft.rank_share does).
+    Plain: `--batch` consecutive records of this rank's share per micro-batch, `--accum` micro-batches per step.
+    --length_sort 1: each step's records (batch x accum x world) are cut, in length order, into accum x world runs of
+    neighbours whose largest padded cost (pass_tokens) is as small as possible (sizes vary: one long record, or many short
+    ones), and the k-th micro-batch of every rank is one of the k-th costliest runs, so micro-batches pad little and the
+    ranks, which wait for the slowest at every layer, run similar loads. A step still sees the same records (the same
+    gradient up to summation order). Characters stand in for tokens (known before encoding). On the SFT corpus's shapes
+    (8 ranks, 128 records per step) the ranks' critical path is 1.4x the real tokens; plain length order, a fixed --batch
+    of neighbours, left it 4.3x (a few 6k-token states among many short public records).
+    pairs (--none_pair_max_state: the records whose none-pair siblings this epoch trains, by id(), from none_pairs): each
+    such record's cost also counts its two siblings (its state twice more, each with its longest Choice question and one
+    more option), so a micro-batch's real padded tokens stay within the cost the runs were cut to. Without it the siblings
+    of --p_none_pair are not in the cost: on long states they tripled a pass past the GPU (round 21's projection).
+    shapes (--pass_tokens_max, from plan_shapes: {id(record): the token shapes of every variant it trains this epoch,
+    siblings included}): the runs are cut on those exact padded tokens instead of characters, and a step whose costliest
+    run is over --pass_tokens_max gets one more micro-batch per rank (every rank the same count), until none is. Round 21
+    ran out of memory on a characters plan: a token-dense state (PII text, ~2 characters per token) set the padding of 16
+    states (8 records and their siblings) at 5,877 tokens: 98.7k padded tokens in a slot whose other passes, costed the
+    same in characters, held 33-50k."""
+    if not a.length_sort:
+        mine = full_ft.rank_share(reqs, rank, world)
+        n = math.ceil(len(mine) / a.batch)
+        return [(mine[mb * a.batch:(mb + 1) * a.batch], world * accumulation_records(len(mine), a.batch, a.accum, mb), (mb + 1) % a.accum == 0 or mb + 1 == n)
+                for mb in range(n)]
+    ceiling = a.pass_tokens_max if shapes is not None else 0
+    if shapes is None:
+        shapes = {id(r): [(len(json.dumps(r["state"], ensure_ascii=False)), [len(json.dumps(q, ensure_ascii=False)) for q in r["questions"].values()])] for r in reqs}
+        for r in reqs if pairs else ():
+            if id(r) in pairs:   # a sibling: the state again with one Choice (at most the longest) and a none option
+                choice = max(len(json.dumps(q, ensure_ascii=False)) for q in r["questions"].values() if q["type"] == "choice")
+                shapes[id(r)] += [(shapes[id(r)][0][0], [choice + NONE_OPTION_CHARS])] * 2
+    cost = lambda rs: pass_tokens([s for r in rs for s in shapes[id(r)]], a.shared_prefix)
+    if ceiling and (over := [r for r in reqs if cost([r]) > ceiling]):
+        worst = max(over, key=lambda r: cost([r]))
+        raise ValueError(f"{len(over)} record(s) need more than --pass_tokens_max {ceiling} padded tokens on their own (the largest, "
+                         f"{worst['_meta']['id']}, {cost([worst])}): raise the ceiling or lower --max_state")
+    plan, per_step = [], a.batch * a.accum * world
+    for start in range(0, len(reqs), per_step):
+        step = reqs[start:start + per_step]
+        m = math.ceil(len(step) / (world * a.batch))   # micro-batches per rank: accum, fewer in a short last step
+        step += step[:max(0, world * m - len(step))]    # so no micro-batch is empty; the repeats count in len(step), the
+                                                         # step's loss normaliser, as rank_share's do in the plain path
+        runs = balanced_runs(sorted(step, key=lambda r: cost([r]), reverse=True), world * m, cost)
+        while ceiling and max(map(cost, runs)) > ceiling:   # ends: world * m runs of one record each are all within it
+            m += 1
+            # a step with fewer records than runs (a short last step) repeats its cheapest, counted like the fill above
+            step += sorted(step, key=lambda r: cost([r]))[:max(0, world * m - len(step))]
+            runs = balanced_runs(sorted(step, key=lambda r: cost([r]), reverse=True), world * m, cost)
+        runs = sorted(runs, key=cost, reverse=True)
+        plan += [(runs[k * world + rank], len(step), k == m - 1) for k in range(m)]
+    return plan
+
+
+def balanced_runs(items, n, cost):
+    """`items` cut into exactly n consecutive non-empty runs, the costliest as cheap as a greedy cut allows (binary search
+    on the cap); when the cap leaves fewer runs, the costliest splittable run is halved until there are n."""
+    def cut(cap):
+        runs = [[]]
+        for item in items:
+            if runs[-1] and cost(runs[-1] + [item]) > cap: runs.append([])
+            runs[-1].append(item)
+        return runs
+    low, high = max(cost([item]) for item in items), cost(items)
+    while low < high:
+        mid = (low + high) // 2
+        if len(cut(mid)) <= n: high = mid
+        else: low = mid + 1
+    runs = cut(low)
+    while len(runs) < n:
+        run = max((r for r in runs if len(r) > 1), key=cost)
+        at = runs.index(run); runs[at:at + 1] = [run[:len(run) // 2], run[len(run) // 2:]]
+    return runs
+
+
+def row_passes(batch, budget, shared):
+    """--row_budget: a micro-batch's variants in forward/backward passes of at most `budget` padded tokens (pass_tokens),
+    longest first; [batch] without a budget. The loss is a sum over variants (a split record's parts carry their share of
+    its mean), so the gradient is the same sum, but only one pass's activations are alive at a time: on one H200 a 27B's
+    bf16 weights and gradients leave ~35 GB; the first probe, with passes of up to 16k tokens, ran out of memory."""
+    if not budget: return [batch]
+    passes = []   # [variants, their shapes]
+    for v in sorted(batch, key=lambda v: pass_tokens([shape(v.enc)], shared), reverse=True):
+        if passes and pass_tokens(passes[-1][1] + [shape(v.enc)], shared) <= budget:
+            passes[-1][0].append(v); passes[-1][1].append(shape(v.enc))
+        else:
+            passes.append([[v], [shape(v.enc)]])
+    return [p[0] for p in passes]
+
+
+def state_token_counts(tok, reqs):
+    """{id(record): state tokens} as kev.model.encode counts them: the <state> token plus user_tokens of the materialised
+    state (kev.rounds.state_lengths, `state_tokens` in rows); the length --none_pair_max_state gates on."""
+    return {id(r): 1 + len(user_tokens(tok, materialize(r)["state"])) for r in reqs}
+
+
+def none_pairs(a, reqs, epoch, state_tokens):
+    """--none_pair_max_state: {id(record)} of the records that train their none-pair siblings this epoch. A record draws
+    from its own stream (seed, epoch, record id, "none_pair"), so microbatch_plan knows the siblings before anything is
+    encoded; it pairs with probability --p_none_pair when its state has at most none_pair_max_state tokens and it has an
+    eligible Choice (kev.data.none_pair returns its pair)."""
+    return {id(r) for r in reqs if state_tokens[id(r)] <= a.none_pair_max_state
+            and random.Random(source_seed(a.seed, f"{epoch}:{r['_meta']['id']}:none_pair")).random() < a.p_none_pair
+            and none_pair(r, random.Random(0))}
+
+
+def record_variants(req, a, epoch, pairs=None):
+    """(the requests one record trains this epoch, its item stream afterwards): the augmented record (fresh permutation /
+    none option / distractor per epoch) and its none-pair siblings. pairs None: a record draws its none pair from its own
+    item stream with probability --p_none_pair (every recipe before --none_pair_max_state); otherwise exactly the records
+    in pairs (by id(), none_pairs) get theirs. encode_batch trains them; plan_shapes measures them."""
+    item_rng = random.Random(source_seed(a.seed, f"{epoch}:{req['_meta']['id']}"))
+    variants = [augment(req, item_rng, p_none=a.p_none, p_none_distract=a.p_none_distract, p_distract=a.p_distract)]
+    if pairs is None:
+        if a.p_none_pair > 0 and item_rng.random() < a.p_none_pair:
+            variants += none_pair(req, item_rng)
+    elif id(req) in pairs:
+        variants += none_pair(req, item_rng)
+    return variants, item_rng
+
+
+def plan_shapes(model, tok, a, reqs, epoch, pairs, state_tokens):
+    """--pass_tokens_max: {id(record): [(state tokens, [branch tokens of each question]) of every variant it trains this
+    epoch (record_variants: augmented, siblings included)]}, the shapes encode_batch will build, exactly. A branch's tokens
+    do not depend on the state (kev.model.encode tokenizes each part on its own), so the branches are encoded under an
+    empty state and the state's count comes from state_token_counts: the states are not tokenized a second time. The
+    branches are tokenized again every epoch (augmentation draws per epoch), a few minutes on the SFT corpus. Encoded
+    under a one-token state, a branch is not checked against its real state's row limit here: one that fits a one-token
+    state but not the real one still raises ContextOverflow in encode_batch, mid-epoch, as without this flag (frozen
+    suites are admitted with branch headroom, so it does not arise on them)."""
+    c = training_context(a.max_state)
+    branches = lambda v: [len(r["ids"]) for r in rows_of(model.encode(tok, {**materialize(v), "state": ""}, max_state=c["max_state"], max_branch=c["max_branch"]))[2]]
+    return {id(r): [(state_tokens[id(r)], branches(v)) for v in record_variants(r, a, epoch, pairs)[0]] for r in reqs}
+
+
+def encode_batch(model, tok, a, chunk, epoch, pairs=None):
+    """Each request's variants for this epoch (record_variants), optionally a permuted copy for the KL term, encoded
+    strictly."""
+    out, c = [], training_context(a.max_state)
+    limits = {"max_state": c["max_state"], "max_branch": c["max_branch"]}
+    for req in chunk:
+        variants, item_rng = record_variants(req, a, epoch, pairs)
+        for v in variants:
+            rec = materialize(v)
+            enc = model.encode(tok, rec, strict=True, **limits)
+            if len(enc["ids"]) > c["max_packed"]:
+                raise ValueError(f"training request exceeds {c['max_packed']} packed tokens")
+            parts = question_parts(enc, a.row_budget, a.shared_prefix)
+            for part in parts:   # one part unless --row_budget splits a record whose rows do not fit one pass
+                sub = rec if len(parts) == 1 else {**rec, "questions": [rec["questions"][q] for q in part]}
+                out.append(Variant(sub, enc if sub is rec else model.encode(tok, sub, strict=True, **limits), req["_meta"]["id"], req["_meta"]["source"],
+                                   share=len(part) / len(rec["questions"])))
+        if a.perm_kl > 0 and item_rng.random() < a.perm_frac and any(q["qtype"] == "choice" and len(q["options"]) >= 3 for q in rec["questions"]):
+            rec2, perms = permuted_copy(rec, item_rng)
+            out[-1].permuted = (model.encode(tok, rec2, strict=True, **limits), perms)
+    return out
+
+
+def native_extra(a):
+    """head.pt extra for a run with --native_steps / --readout letter: the step count and the readout the checkpoint must
+    be read with (kev.checkpoint); absent for the defaults, so those head.pt files are unchanged."""
+    return ({"native_steps": a.native_steps} if a.native_steps else {}) | ({"readout": a.readout} if getattr(a, "readout", "pointer") != "pointer" else {})
+
+
+def step_weights(a, n):
+    """Per-step CE weights of a natively looped backbone: --step_weights (comma-separated, normalised), uniform by default."""
+    w = [float(x) for x in a.step_weights.split(",")] if a.step_weights else [1.0] * n
+    if len(w) != n: raise ValueError(f"--step_weights has {len(w)} weights for {n} steps")
+    return [x / sum(w) for x in w]
+
+
+def batch_loss(model, a, batch, dev, anchors, anchor_sources, autocast, teacher=None):
+    """Forward the variants and sum the loss terms: mean question loss per variant, the anchor KL per anchored variant,
+    the permutation KL per permuted variant. Returns (loss, terms) with the summed term values for logging."""
+    terms = Counter()
+    permuted = [v for v in batch if v.permuted]
+    with autocast:
+        if getattr(model, "native_loop", False):
+            # a natively looped backbone (Ouro): one pass reads out every step; the CE is averaged over the steps
+            # (--step_weights), so every depth is a usable decision model and depth becomes an inference-time knob
+            steps_b = model.forward_steps_batch([v.enc for v in batch])
+            logits_b = steps_b[-1]
+        else:
+            steps_b = None
+            logits_b = model.forward_batch([v.enc for v in batch], a.shared_prefix)
+        logits2_b = model.forward_batch([v.permuted[0] for v in permuted], a.shared_prefix) if permuted else []
+        if teacher is not None:
+            with torch.no_grad(): teacher_b = teacher.forward_batch([v.enc for v in batch], a.shared_prefix)
+    loss = 0.0
+    for i, (v, logits) in enumerate(zip(batch, logits_b)):
+        qloss = lambda zs: sum(question_loss(z.float(), q, dev, a.ord_w, a.label_smoothing, a.brier_w, a.focal_gamma)
+                               for z, q in zip(zs, v.rec["questions"])) / len(zs) * v.share
+        if steps_b is None: ce = qloss(logits)
+        else:
+            w = step_weights(a, len(steps_b))
+            ce = sum(wk * qloss(step[i]) for wk, step in zip(w, steps_b) if wk)
+        terms["ce"] += ce.item(); loss = loss + ce
+        if steps_b is not None and a.self_distill_w and len(steps_b) > 1:
+            # self-distillation: the last step's answer distribution (no gradient) is the target of every earlier step
+            last = [F.log_softmax(z.float(), -1).detach() for z in steps_b[-1][i]]
+            sd = sum(F.kl_div(F.log_softmax(z.float(), -1), t, log_target=True, reduction="sum")
+                     for step in steps_b[:-1] for z, t in zip(step[i], last)) / (len(last) * (len(steps_b) - 1)) * v.share
+            loss = loss + a.self_distill_w * sd; terms["sd"] += sd.item()
+        if teacher is not None and a.teacher_w and (not a.teacher_sources or v.source in a.teacher_sources.split(",")):
+            zt = teacher_b[i]
+            kl = sum(F.kl_div(F.log_softmax(z.float(), -1), F.log_softmax(t.float(), -1), log_target=True, reduction="sum")
+                     for z, t in zip(logits, zt)) / len(logits) * v.share
+            loss = loss + a.teacher_w * kl; terms["teacher"] += kl.item(); terms["teacher_n"] += v.share
+        if anchors and v.request_id in anchors and (anchor_sources is None or v.source in anchor_sources):
+            kls = [t for t in (anchor_loss(z.float(), q, anchors[v.request_id].get(q["qid"]), dev) for z, q in zip(logits, v.rec["questions"])) if t is not None]
+            if kls:
+                kl_a = sum(kls) / len(kls) * v.share; loss = loss + a.anchor_w * kl_a; terms["anchor"] += kl_a.item(); terms["anchor_n"] += v.share
+    for v, logits2 in zip(permuted, logits2_b):
+        logits = logits_b[batch.index(v)]
+        kls = [permutation_kl(z1.float(), z2.float(), perm, dev) for z1, z2, perm in zip(logits, logits2, v.permuted[1]) if perm is not None]
+        kl = sum(kls) / len(kls); loss = loss + a.perm_kl * kl; terms["kl"] += kl.item(); terms["kl_n"] += 1
+    if not torch.isfinite(loss):
+        raise ValueError("non-finite training loss")
+    return loss, terms
+
+
+# --- run --------------------------------------------------------------------------------------------------------------
+
+def parse_args():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--base", default="Qwen/Qwen3-0.6B-Base")
+    ap.add_argument("--n_per_source", type=int, default=1000)
+    ap.add_argument("--epochs", type=int, default=1)
+    ap.add_argument("--lr", type=float, default=2e-4)
+    ap.add_argument("--head_lr", type=float, default=0.0, help="separate learning rate for the pointer head (0 = same as --lr); the head trains from scratch")
+    ap.add_argument("--weight_decay", type=float, default=0.01, help="AdamW weight decay on LoRA and head parameters")
+    ap.add_argument("--lora", type=int, default=16)
+    ap.add_argument("--accum", type=int, default=8)
+    ap.add_argument("--holdout", default="", help="comma-separated sources excluded from training (evaluated as out-of-source)")
+    ap.add_argument("--perm_kl", type=float, default=0.0, help="weight of symmetric KL between predictions under two option orders")
+    ap.add_argument("--perm_frac", type=float, default=0.3, help="fraction of records that get the second permuted forward pass")
+    ap.add_argument("--ord_w", type=float, default=0.0, help="weight of ranked probability score for Score questions")
+    ap.add_argument("--label_smoothing", type=float, default=0.0, help="hard-label CE smoothing; existing soft targets are unchanged")
+    ap.add_argument("--brier_w", type=float, default=0.0, help="weight of sum-squared probability error added to hard-label CE")
+    ap.add_argument("--focal_gamma", type=float, default=0.0, help="hard-label CE multiplier (1-p_y)^gamma; 0 is ordinary CE")
+    ap.add_argument("--suite", help="frozen suite directory; train only on its training partition")
+    ap.add_argument("--train_sources", default="", help="comma-separated subset of the suite's trainable sources (ablations); default all")
+    ap.add_argument("--device", choices=["cpu", "mps", "cuda"], default=None)
+    ap.add_argument("--batch", type=int, default=1, help="records per forward pass (padded batch); optimizer step every --accum micro-batches")
+    ap.add_argument("--dtype", choices=["fp32", "bf16"], default="fp32", help="bf16 = autocast forward with fp32 master weights (CUDA only)")
+    ap.add_argument("--weights_dtype", choices=["fp32", "bf16"], default="fp32", help="dtype of the frozen backbone weights. bf16 halves memory and is required by the fused MoE experts "
+                                                                                        "(torch._grouped_mm wants bf16); LoRA and head stay fp32 (peft upcasts adapters). The checkpoint records it and is loaded the same way.")
+    ap.add_argument("--checkpointing", type=int, choices=[0, 1], default=0)
+    ap.add_argument("--option_isolation", type=int, choices=[0, 1], default=0, help="option spans are isolated sub-branches with shared positions (exact permutation invariance)")
+    ap.add_argument("--special_embeddings", type=int, choices=[0, 1], default=0, help="also train the embeddings of the 5 delimiter tokens")
+    ap.add_argument("--head_dim", type=int, default=256, help="pointer head dimension")
+    ap.add_argument("--lora_targets", choices=["all", "dense", "attn", "qv"], default="all", help="LoRA module set; fewer modules = less drift from the base; dense = all minus the DeltaNet projections on hybrid bases")
+    ap.add_argument("--loop", default="", help="looped layers (kev.loop): START:ENDxREPEATS, e.g. 8:16x2 runs layers 8-15 twice with shared weights; empty = plain depth")
+    ap.add_argument("--loop_gate", choices=["channel", "scalar", "none"], default="channel", help="gate on repeat passes (zero-initialised; none = ungated re-application)")
+    ap.add_argument("--loop_share", type=int, choices=[0, 1], default=1, help="0 = unshared control: repeat passes run deep copies of the block with their own LoRA")
+    ap.add_argument("--loop_inject", type=float, default=None, help="input injection (kev.loop): initial weight w0 of the re-injected block input on later passes; unset = none")
+    ap.add_argument("--loop_depths", default="", help="sample the loop depth per micro-batch from these (e.g. 1,2,3,4; the largest must equal the --loop repeats); unset = always the --loop repeats")
+    ap.add_argument("--step_weights", default="", help="natively looped backbone (Ouro): CE weight per step, e.g. 1,1,1,1 (uniform, the default) or 0,0,0,1 (last step only)")
+    ap.add_argument("--self_distill_w", type=float, default=0.0, help="natively looped backbone: weight of KL(last step || step k), the last step's "
+                    "distribution a stop-gradient target, averaged over the earlier steps and the questions (docs: docs/REPRODUCING.md)")
+    ap.add_argument("--readout", choices=["pointer", "letter"], default="pointer", help="pointer: Kev's pointer head; letter: the standard "
+                    "multiple-choice readout (options written A., B., ..., the LM head's letter logits after 'Answer:'), the readout ablation")
+    ap.add_argument("--native_steps", type=int, default=0, help="natively looped backbone: run this many steps of the stack (0 = the base's "
+                    "pretrained count; Ouro 4, Nanbeige 2), in training and, through head.pt extra['native_steps'], when the checkpoint is read")
+    ap.add_argument("--teacher", default="", help="frozen teacher checkpoint (run dir or Hub id): adds --teacher_w * KL(teacher || student) per question")
+    ap.add_argument("--teacher_w", type=float, default=0.0)
+    ap.add_argument("--teacher_sources", default="", help="comma-separated sources whose records get the teacher KL; unset = every record")
+    ap.add_argument("--loop_lr", type=float, default=1e-3, help="learning rate of the loop gates (no weight decay)")
+    ap.add_argument("--base_revision", default="", help="pin the base commit when the suite manifest does not pin this base")
+    ap.add_argument("--p_none", type=float, default=0.1)
+    ap.add_argument("--p_none_distract", type=float, default=0.12)
+    ap.add_argument("--p_distract", type=float, default=0.15)
+    ap.add_argument("--p_none_pair", type=float, default=0.0, help="fraction of Choice records that additionally emit a none-present/none-absent minimal pair")
+    ap.add_argument("--none_pair_max_state", type=int, default=None, help="only records whose state has at most this many tokens emit none pairs (each pair repeats "
+                                                                          "the state twice); their siblings count in the --length_sort cost (default: every record, as before)")
+    ap.add_argument("--synthetic_repeat", type=int, default=1, help="oversample synthetic policy sources (legacy_policy, compositional, contrastive) this many times per epoch")
+    ap.add_argument("--public_frac", type=float, default=1.0, help="deterministic subsample of public-source training records (mix ablations)")
+    ap.add_argument("--anchor", default="", help="JSON of frozen-base zero-shot distributions {record_id: {qid: {key: p}}} (kev.anchors); enables the anchoring loss")
+    ap.add_argument("--anchor_w", type=float, default=0.0, help="weight of KL(base || model) toward the frozen base model's zero-shot distribution, per anchored question")
+    ap.add_argument("--anchor_sources", default="", help="comma-separated sources to anchor (default: every record with a target)")
+    ap.add_argument("--out", default="runs/kev")
+    ap.add_argument("--data", default="", help="your own labelled requests, one JSON object per line (see kev.data.load_records); an alternative to --suite for fine-tuning, or combined with --suite and --replay")
+    ap.add_argument("--max_state", type=int, default=MAX_STATE, help=f"state tokens per training record (default {MAX_STATE}); raising it admits long-state --data records, the packed limit grows by the same amount")
+    ap.add_argument("--replay", type=int, default=0, help="with --data and --suite: mix in this many records sampled (by --seed) from the suite's training partition, so a delta fine-tune does not forget the released recipe")
+    ap.add_argument("--init_from", default="", help="delta mode: warm-start LoRA and the pointer head from an existing run "
+                                                   "(local directory or hub id) instead of starting from the base model; keeps the "
+                                                   "released model's in-domain skill while adapting to a new domain")
+    ap.add_argument("--full_ft", type=int, choices=[0, 1], default=0, help="train every backbone weight (bf16, fp32 masters in kev.full_ft.MasterAdamW) instead of a LoRA; "
+                                                                          "needs --weights_dtype bf16. One GPU: masters in host memory. Under torchrun: FSDP2 across the GPUs")
+    ap.add_argument("--row_budget", type=int, default=0, help="padded row tokens per forward/backward pass (0 = the whole micro-batch at once); a micro-batch over it "
+                                                              "runs in several passes, a record whose rows do not fit is split by question (long states x many questions)")
+    ap.add_argument("--shared_prefix", type=int, choices=[0, 1], default=None, help="hybrid backbones: run each record's state once and its question branches from it "
+                                                                                  "(kev.shared_prefix; exact) instead of one row per question; default on with --full_ft 1, off otherwise")
+    ap.add_argument("--length_sort", type=int, choices=[0, 1], default=0, help="deal each optimizer step's records into micro-batches balanced by padded length "
+                                                                               "(--batch becomes the average; same records per step; see microbatch_plan)")
+    ap.add_argument("--pass_tokens_max", type=int, default=0, help="with --length_sort 1: padded tokens (pass_tokens: states x the longest state + branches x the longest "
+                                                                   "branch, none-pair siblings included) no forward/backward pass may exceed; the plan cuts on exact "
+                                                                   "token shapes and gives a step more micro-batches (every rank the same count) until none does (0 = off)")
+    ap.add_argument("--max_steps", type=int, default=0, help="stop after this many optimizer steps (0 = every epoch); the lr schedule spans them")
+    ap.add_argument("--save_every_steps", type=int, default=0, help="full-weight: write a resume point (<out>/resume) every N optimizer steps")
+    ap.add_argument("--save_every_minutes", type=float, default=0, help="full-weight: write a resume point once this many minutes have passed since the last")
+    ap.add_argument("--resume", type=int, choices=[0, 1], default=0, help="full-weight: continue from <out>/resume if it holds a resume point (same arguments), else start")
+    ap.add_argument("--stop_after_minutes", type=float, default=0, help="write a resume point and exit at the first optimizer step after this many minutes of this attempt "
+                    "(continue with --resume 1; an interrupted training run)")
+    ap.add_argument("--stop_after", type=int, default=0, help="full-weight: exit after this optimizer step without saving the checkpoint (a run split across containers; tests)")
+    ap.add_argument("--snapshot_fractions", default="", help="full-weight: also write a loadable checkpoint (the final one's files) after these fractions of the optimizer steps, "
+                                                             "e.g. 0.25,0.5,0.75, into <snapshot_dir>/step-<N>/checkpoint; kept, never deleted ('' or none: no snapshots)")
+    ap.add_argument("--snapshot_every_steps", type=int, default=0, help="full-weight: also write a snapshot every N optimizer steps")
+    ap.add_argument("--snapshot_dir", default="", help="where snapshots go (default <out>-snapshots; a study trial's are <trial>/snapshots)")
+    ap.add_argument("--seed", type=int, default=0)
+    a = ap.parse_args()
+    if a.shared_prefix is None: a.shared_prefix = a.full_ft
+    if min(a.epochs, a.accum, a.n_per_source, a.lora, a.batch, a.synthetic_repeat) < 1 or not 0 < a.public_frac <= 1:
+        ap.error("epochs, accum, n_per_source, lora, batch and synthetic_repeat must be positive; 0 < public_frac <= 1")
+    if a.dtype == "bf16" and a.device != "cuda":
+        ap.error("--dtype bf16 requires --device cuda")
+    if a.lr <= 0 or a.head_lr < 0 or a.weight_decay < 0 or min(a.ord_w, a.perm_kl, a.anchor_w) < 0 or not 0 <= a.perm_frac <= 1:
+        ap.error("invalid learning rate or loss weights")
+    loss_options = (a.label_smoothing, a.brier_w, a.focal_gamma)
+    if not all(math.isfinite(v) and v >= 0 for v in loss_options) or a.label_smoothing > 1 or sum(v > 0 for v in loss_options) > 1:
+        ap.error("use at most one finite, nonnegative loss modifier; smoothing must be <= 1")
+    if bool(a.anchor) != (a.anchor_w > 0):
+        ap.error("--anchor and --anchor_w > 0 go together")
+    if not MAX_STATE <= a.max_state <= MAX_TRAIN_STATE:
+        ap.error(f"--max_state must be in [{MAX_STATE}, {MAX_TRAIN_STATE}]")
+    if a.none_pair_max_state is not None and (a.none_pair_max_state < 1 or a.p_none_pair <= 0):
+        ap.error("--none_pair_max_state is a positive token count and needs --p_none_pair > 0")
+    if a.replay and not (a.data and a.suite):
+        ap.error("--replay needs both --data and --suite")
+    if a.full_ft and (problem := full_ft.unsupported_torch()):
+        ap.error(problem)
+    if a.full_ft and (a.weights_dtype != "bf16" or a.special_embeddings):
+        ap.error("--full_ft 1 trains bf16 weights (--weights_dtype bf16) and every embedding already (no --special_embeddings)")
+    if a.row_budget < 0 or a.max_steps < 0 or a.pass_tokens_max < 0:
+        ap.error("--row_budget, --pass_tokens_max and --max_steps are >= 0")
+    if a.pass_tokens_max and (not a.length_sort or a.row_budget or a.perm_kl > 0):
+        ap.error("--pass_tokens_max caps the passes --length_sort 1 plans: not without it, nor with --row_budget (which splits them "
+                 "again), nor --perm_kl (a permuted copy is a second pass whose activations are alive at the same time)")
+    if a.row_budget and (a.perm_kl > 0 or a.anchor_w > 0 or int(os.environ.get("WORLD_SIZE", "1")) > 1):
+        ap.error("--row_budget splits micro-batches into passes: not with --perm_kl (a record and its permuted copy share a loss term), "
+                 "nor --anchor_w (a split record's parts would weight its anchored questions by their part's share of all its questions, "
+                 "not 1 / anchored questions), nor under torchrun (FSDP2 ranks must run the same number of backward passes; sharded "
+                 "ranks have the memory without it)")
+    if (a.save_every_steps or a.save_every_minutes or a.resume or a.stop_after or a.stop_after_minutes) and not a.full_ft and a.row_budget:
+        ap.error("LoRA resume points do not support --row_budget")
+    try: fractions = full_ft.snapshot_fractions(a.snapshot_fractions)
+    except ValueError as error: ap.error(str(error))
+    if a.snapshot_every_steps < 0 or ((fractions or a.snapshot_every_steps) and not a.full_ft):
+        ap.error("snapshots (--snapshot_fractions, --snapshot_every_steps >= 0) are for full-weight runs (--full_ft 1)")
+    # kev.budget.MAX_SNAPSHOTS; an every-N plan without --max_steps is checked in main, once the run's steps are known
+    if not (a.snapshot_every_steps and not a.max_steps) and (problem := full_ft.too_many_snapshots(fractions, a.snapshot_every_steps, a.max_steps or None)):
+        ap.error(problem)
+    if Path(a.out).exists() and not a.resume and os.environ.get("RANK", "0") == "0":   # under torchrun rank 0 creates it; the others would race it
+        ap.error("refusing to overwrite an existing run")
+    if (fractions or a.snapshot_every_steps) and not a.resume and full_ft.completed_snapshots(snapshot_root(a)):
+        ap.error(f"{snapshot_root(a)} holds another run's snapshots (a new run would skip their steps); choose another --snapshot_dir")
+    return a
+
+
+def snapshot_root(a):
+    return Path(a.snapshot_dir or f"{a.out}-snapshots")
+
+
+def finish_checkpoint(out, meta, tok):
+    """What a checkpoint holds besides the backbone (or adapter): head.pt and the tokenizer files. The final checkpoint and
+    every snapshot are finished the same way, so a snapshot loads like the checkpoint it precedes."""
+    write_meta(out, meta)
+    tok.save_pretrained(out)
+
+
+RESUME_KNOBS = ("resume", "save_every_steps", "save_every_minutes", "stop_after", "stop_after_minutes", "snapshot_fractions", "snapshot_every_steps", "snapshot_dir")   # may differ between a run and its continuation
+RESUMED = ("step", "seen", "tokens_seen", "peak_mem", "optimizer_seconds", "step_seconds", "elapsed", "epoch", "microbatch", "grad_norms")   # counters a resume point carries
+
+
+MAX_GRAD_NORM = 1.0   # both optimizers clip the global gradient norm to this (full_ft.MasterAdamW's default)
+
+
+def grad_norm_summary(grad_norms):
+    """Per epoch: mean and max of the steps' global gradient norms before clipping, and how many steps were clipped."""
+    return [{"epoch": ep, "steps": len(norms), "mean": sum(norms) / len(norms), "max": max(norms), "clipped_steps": sum(n > MAX_GRAD_NORM for n in norms)}
+            for ep, norms in enumerate(grad_norms) if norms]
+
+
+def pinned_revision(a, manifest):
+    """The base commit this run trains against: the suite's pin, or --base_revision when the suite has none."""
+    revision = manifest["base_revisions"].get(a.base) if manifest else None
+    if a.base_revision:
+        if revision and revision != a.base_revision: raise ValueError("--base_revision conflicts with the suite's pinned revision")
+        revision = a.base_revision
+    if manifest and not revision:
+        raise ValueError("base not pinned by the suite; pass --base_revision")
+    return revision
+
+
+def main():
+    a = parse_args()
+    dev = a.device or default_device()
+    rank, world = full_ft.init_distributed(dev)   # torchrun: each rank's "cuda" is its own GPU; (0, 1) on one process
+    out_dir = Path(a.out)
+    if rank: sys.stdout = open(os.devnull, "w", encoding="utf-8")   # one log: rank 0's (errors still reach stderr)
+    else: out_dir.mkdir(parents=True, exist_ok=bool(a.resume))
+    torch.manual_seed(a.seed); rng = random.Random(a.seed)
+    if dev == "cuda":
+        torch.backends.cuda.matmul.allow_tf32 = True; torch.backends.cudnn.allow_tf32 = True
+    autocast = torch.autocast("cuda", dtype=torch.bfloat16) if a.dtype == "bf16" else contextlib.nullcontext()
+    manifest = read_manifest(a.suite) if a.suite else None
+    revision = pinned_revision(a, manifest)
+    holdout = manifest["holdout_sources"] if manifest else [s for s in a.holdout.split(",") if s]
+    anchors = read_json(a.anchor).get("targets", {}) if a.anchor else {}
+    if a.anchor: print(f"anchor targets: {len(anchors)} records from {a.anchor}", flush=True)
+    anchor_sources = set(a.anchor_sources.split(",")) if a.anchor_sources else None
+
+    tok = load_tokenizer(a.base, revision=revision)
+    loop = LoopSpec.parse(a.loop, a.loop_gate, bool(a.loop_share), a.loop_inject) if a.loop else None
+    depths = [int(d) for d in a.loop_depths.split(",") if d] if a.loop_depths else []
+    if depths and (not loop or max(depths) != loop.repeats or min(depths) < 1):
+        raise SystemExit("kev.train: --loop_depths needs --loop, with its largest depth equal to the --loop repeats")
+    if loop and a.full_ft: raise SystemExit("kev.train: --loop is LoRA-only (full-weight saving would write the expanded config)")
+    model = DecisionModel(a.base, tok, dev, lora=None if a.full_ft else a.lora, revision=revision, head_dim=a.head_dim, lora_targets=a.lora_targets,
+                          option_isolation=bool(a.option_isolation), special_embeddings=bool(a.special_embeddings),
+                          dtype=torch.bfloat16 if a.weights_dtype == "bf16" else torch.float32, direct_load=bool(a.full_ft), loop=loop, readout=a.readout)
+    if a.native_steps:
+        if not getattr(model, "native_loop", False): raise SystemExit("kev.train: --native_steps is for a natively looped backbone (Ouro, Nanbeige4.2)")
+        set_native_steps(model, a.native_steps)
+        print(f"native loop: {a.native_steps} steps", flush=True)
+    if a.checkpointing:
+        model.lm.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+    model.lm.config.use_cache = False
+    # what this run will save as head.pt; also the architecture a warm start must match
+    meta = Meta(base=a.base, base_revision=revision, lora=0 if a.full_ft else a.lora, head_dim=a.head_dim, option_isolation=bool(a.option_isolation),
+                special_embeddings=bool(a.special_embeddings), weights_dtype=a.weights_dtype, holdout=holdout, weights="full" if a.full_ft else "lora",
+                loop=None if loop is None else {"spec": loop.to_dict(), "gates": None})
+    init_source = None
+    if a.init_from:
+        # delta mode (PR #9, Radexito): start from an already trained adapter (or full backbone) + pointer head instead of the
+        # base model, so a fine-tune on new data keeps what the released checkpoint knows
+        init_source = Checkpoint(a.init_from).warm_start(model, meta)
+        print(f"delta: warm start from {init_source['resolved']}: {init_source['tensors']} {meta.weights} tensors and the pointer head loaded", flush=True)
+    if a.pass_tokens_max and not model.hybrid:
+        # pass_tokens is exact for the row form and the shared prefix, which a hybrid backbone always runs; an attention-only
+        # one runs the packed mask (rows_form) unless a record is over ROW_PASS_TOKENS, whose cost it does not measure
+        raise SystemExit("kev.train: --pass_tokens_max needs a hybrid backbone (Gated DeltaNet: every pass runs as rows or a shared "
+                         f"prefix, which pass_tokens measures); {a.base} is attention-only and runs the packed mask")
+    teacher = None
+    if a.teacher:
+        # frozen teacher (v2 S1): the trained plain Kev the looped student starts from; KL keeps the decisions it already
+        # makes while the student adapts to the loop (cf. the KL-to-pre-adaptation term of looped tool-calling SFT)
+        teacher = Checkpoint(a.teacher).load(dev, LoadOptions())[1]
+        teacher.head.temperature = 1.0
+        for p in teacher.parameters(): p.requires_grad_(False)
+        print(f"teacher: {a.teacher} (w {a.teacher_w}, sources {a.teacher_sources or 'all'})", flush=True)
+    if world > 1: full_ft.shard(model) if a.full_ft else full_ft.replicate(model.trainable_parameters())
+    print(f"device={dev} world={world} trainable params={sum(p.numel() for p in model.trainable_parameters())/1e6:.1f}M", flush=True)
+
+    reqs = training_requests(a, tok, manifest, holdout)
+    # the none-pair gate (none_pairs) and the ceiling's token shapes (plan_shapes)
+    state_tokens = state_token_counts(tok, reqs) if a.none_pair_max_state is not None or a.pass_tokens_max else None
+    suite_hash = digest(Path(a.suite) / "manifest.json") if manifest else None
+    if not rank:
+        write_json(out_dir / "training_config.json", {"args": vars(a), "suite_sha256": suite_hash, "base_revision": revision, "init_source": init_source,
+                                                    "ordinal_objective": "ranked_probability_score", "holdout": holdout})
+    print(f"{len(reqs)} training requests (holdout={holdout}), questions by type "
+          f"{dict(Counter(q['qtype'] for r in reqs for q in materialize(r)['questions']))}")
+
+    head_params = list(model.head.parameters()); loop_params = list(model.loop.parameters()) if model.loop is not None else []
+    head_ids = {id(p) for p in head_params + loop_params}
+    groups = [{"params": [p for p in model.trainable_parameters() if id(p) not in head_ids], "lr": a.lr},
+              {"params": head_params, "lr": a.head_lr or a.lr}]
+    if loop_params: groups.append({"params": loop_params, "lr": a.loop_lr, "weight_decay": 0.0})
+    groups = [g for g in groups if g["params"]]   # --readout letter: the head has no parameters
+    # full weights: one GPU keeps the fp32 masters and moments in host memory; FSDP2 ranks keep their shard's on the GPU
+    opt = full_ft.MasterAdamW(groups, lr=a.lr, weight_decay=a.weight_decay, offload=world == 1, max_grad_norm=MAX_GRAD_NORM) if a.full_ft else torch.optim.AdamW(groups, lr=a.lr, weight_decay=a.weight_decay)
+    # counts only: they depend on len(reqs), not on the shuffle (--length_sort: one step per batch x accum x world records,
+    # however many micro-batches the ceiling gives it)
+    per_epoch = math.ceil(len(reqs) / (a.batch * a.accum * world)) if a.pass_tokens_max else sum(ends for _, _, ends in microbatch_plan(reqs, a, world, rank))
+    steps = a.epochs * per_epoch
+    steps = min(steps, a.max_steps) if a.max_steps else steps
+    if a.full_ft and (problem := full_ft.too_many_snapshots(full_ft.snapshot_fractions(a.snapshot_fractions), a.snapshot_every_steps, steps)):
+        raise SystemExit(f"kev.train: {problem}")   # before the first step (and before a resume point is read): nothing to lose yet
+    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=[g["lr"] for g in groups], total_steps=max(steps, 1), pct_start=0.1)
+    step = seen = tokens_seen = peak_mem = optimizer_seconds = elapsed = start_epoch = start_mb = 0; step_seconds, resume_seconds = [], []; run = Counter()
+    grad_norms = []   # per epoch, each optimizer step's global gradient norm before clipping
+    resume_dir, resume_args = out_dir / "resume", {k: v for k, v in vars(a).items() if k not in RESUME_KNOBS}
+    # LoRA runs: the optimizer does not hold the weights (MasterAdamW's fp32 masters do for full-weight runs), so a resume
+    # point also carries the trainable tensors (adapter, pointer head, loop gates)
+    lora_params = None if a.full_ft else {n: p for n, p in model.named_parameters() if p.requires_grad}
+    position = full_ft.load_resume(resume_dir, opt, sched, resume_args, params=lora_params) if a.resume else None
+    if position:
+        step, seen, tokens_seen, peak_mem, optimizer_seconds, step_seconds, elapsed, start_epoch, start_mb, grad_norms = (position[k] for k in RESUMED)
+        seen, tokens_seen = seen / world, tokens_seen / world   # saved as sums over the ranks (global_sum below adds them back)
+        run = Counter(position["run"])
+        print(f"resumed from {resume_dir / position['dir']}: step {step}, epoch {start_epoch}, micro-batch {start_mb}", flush=True)
+    resumable = a.full_ft or a.save_every_steps or a.save_every_minutes or a.stop_after_minutes or a.stop_after
+    # FSDP2: state on the GPUs, written from a host copy in a thread; LoRA (one GPU or data parallel): a few hundred MB, written in place
+    writer = full_ft.ResumeWriter(resume_dir, background=world > 1 and bool(a.full_ft)) if resumable else None
+    snapshots = None
+    if a.full_ft and (plan_steps := full_ft.snapshot_steps(steps, full_ft.snapshot_fractions(a.snapshot_fractions), a.snapshot_every_steps)):
+        snapshots = full_ft.SnapshotWriter(snapshot_root(a), plan_steps, background=world > 1)   # FSDP2: written from rank 0's gathered copy
+        print(f"snapshots after optimizer steps {plan_steps} of {steps} -> {snapshot_root(a)}/step-<N>/checkpoint", flush=True)
+        if position and (missed := snapshots.missed(step)):
+            print(f"!!! snapshot(s) at step(s) {missed} are missing and cannot be written: this run continues from step {step}", flush=True)
+    model.train(); t0, last, saved_at, stopped = time.time() - elapsed, time.time(), time.time(), False
+    attempt_start = time.time()
+    for ep in range(a.epochs):
+        rng.shuffle(reqs)
+        if ep < start_epoch: continue   # the finished epochs' shuffles are replayed, so the interrupted epoch's order returns
+        pairs = none_pairs(a, reqs, ep, state_tokens) if a.none_pair_max_state is not None else None
+        if pairs is not None and not rank:
+            print(f"none pairs: {len(pairs)} of {len(reqs)} records (states of at most {a.none_pair_max_state} tokens, p {a.p_none_pair})", flush=True)
+        shapes = plan_shapes(model, tok, a, reqs, ep, pairs, state_tokens) if a.pass_tokens_max else None
+        plan = microbatch_plan(reqs, a, world, rank, pairs, shapes)   # every record once per epoch across the ranks (all of them on one GPU)
+        if shapes is not None:   # every rank: the largest pass over the ranks is a collective
+            largest = int(full_ft.global_max([max(pass_tokens([s for r in chunk for s in shapes[id(r)]], a.shared_prefix) for chunk, _, _ in plan)])[0])
+            if not rank:
+                print(f"plan: {len(plan)} micro-batches per rank for {sum(ends for _, _, ends in plan)} steps (--accum {a.accum}); "
+                      f"the plan's largest pass {largest} of --pass_tokens_max {a.pass_tokens_max} padded tokens", flush=True)
+        for mb in range(start_mb if ep == start_epoch else 0, len(plan)):
+            chunk, step_records, ends_step = plan[mb]
+            batch = encode_batch(model, tok, a, chunk, ep, pairs)
+            variants = sum(v.share for v in batch)   # a record split by --row_budget counts once
+            # weight by source records in the accumulation group (over all ranks) so none-pair siblings do not inflate a record's share
+            group_records = step_records * (variants / len(chunk))
+            if depths:   # a deterministic draw per micro-batch, so a resumed run trains the same depths
+                set_repeats(model.lm, random.Random(f"depth:{a.seed}:{ep}:{mb}").choice(depths))
+            for part in row_passes(batch, a.row_budget, a.shared_prefix):
+                loss, terms = batch_loss(model, a, part, dev, anchors, anchor_sources, autocast, teacher)
+                (loss / group_records).backward()
+                run += terms
+            run["n"] += variants; seen += round(variants); tokens_seen += sum(v.tokens for v in batch)
+            peak_mem = max(peak_mem, allocated_bytes(dev))
+            if ends_step:
+                if not a.full_ft and world > 1: full_ft.sum_grads(model.trainable_parameters())   # LoRA data parallel: every rank steps on the global gradient
+                if not a.full_ft: norm = float(torch.nn.utils.clip_grad_norm_(model.trainable_parameters(), MAX_GRAD_NORM, error_if_nonfinite=True))   # MasterAdamW clips by the global norm itself; both refuse a non-finite norm (a NaN gradient from a finite loss)
+                started = time.time(); opt.step(); sync(dev); optimizer_seconds += time.time() - started
+                grad_norms += [[] for _ in range(ep + 1 - len(grad_norms))]
+                grad_norms[ep].append(round(opt.grad_norm if a.full_ft else norm, 6))
+                sched.step(); opt.zero_grad(); step += 1
+                step_seconds.append(round(time.time() - last, 3)); last = time.time()
+                if dev == "mps": empty_cache(dev)   # MPS only: per-step cache release keeps the unified-memory footprint down; on CUDA it would just slow the step
+                if step % 10 == 0:
+                    keys = ("ce", "n", "kl", "kl_n", "anchor", "anchor_n", "teacher", "teacher_n", "seen")   # over the ranks (a collective)
+                    g = dict(zip(keys, full_ft.global_sum([float(run[k]) for k in keys[:-1]] + [float(seen)])))
+                    print(f"ep{ep} step {step}/{steps} loss {g['ce']/g['n']:.3f} kl {g['kl']/max(g['kl_n'],1):.3f} anchor {g['anchor']/max(g['anchor_n'],1):.3f} teacher {g['teacher']/max(g['teacher_n'],1):.3f} {(time.time()-t0)/g['seen']:.3f}s/rec"
+                          + (f" gates {model.loop.summary()}" if model.loop is not None else ""), flush=True)
+                    run = Counter()
+                if step == steps: break
+                if snapshots and snapshots.due(step):
+                    info = {"step": step, "steps": steps, "epoch": round(ep + (mb + 1) / len(plan), 6), "records_seen": round(full_ft.global_sum([seen])[0])}
+                    head = {k: v.detach().to("cpu", copy=True) for k, v in model.head.state_dict().items()}   # training goes on while it is written
+                    snap_meta = dataclasses.replace(meta, head=head, extra={"args": vars(a), "suite_sha256": suite_hash, "init_source": init_source, "snapshot": info} | native_extra(a))
+                    snapshots.save(step, model.lm, lambda d, m=snap_meta: finish_checkpoint(d, m, tok), info)
+                    last = time.time()   # the time training blocked, not part of the next step's
+                out_of_time = bool(a.stop_after_minutes) and time.time() - attempt_start > a.stop_after_minutes * 60 and step < steps
+                if writer and (out_of_time or (not a.full_ft and step == a.stop_after) or full_ft.save_due(step, a.save_every_steps, a.save_every_minutes, saved_at, max(resume_seconds, default=0))):
+                    values = (step, *full_ft.global_sum([seen, tokens_seen]), peak_mem, optimizer_seconds, step_seconds, time.time() - t0, ep, mb + 1, grad_norms)
+                    writer.save(step, opt, sched, {**dict(zip(RESUMED, values)), "run": dict(run), "world": world, "args": resume_args}, after=snapshots, params=lora_params)
+                    resume_seconds.append(round(time.time() - last, 3)); saved_at = last = time.time()   # the time training blocked, not part of the next step's
+                if step == a.stop_after or out_of_time: stopped = True; break
+        if step == steps or stopped: break
+    if depths: set_repeats(model.lm, loop.repeats)   # the checkpoint's depth (the one evaluation defaults to)
+    if writer: writer.wait()   # a resume point being written in the background is finished (and then superseded, or continued from)
+    if snapshots: snapshots.wait()   # and the last snapshot
+    if stopped:
+        print(f"stopped after step {step}; continue with --resume 1", flush=True); return
+    seen, tokens_seen = full_ft.global_sum([seen, tokens_seen])   # ranks' micro-batches differ in size under --length_sort
+
+    wall = time.time() - t0
+    if a.full_ft: full_ft.save_backbone(model.lm, a.out)   # every rank: FSDP2 gathers to rank 0
+    elif not rank: model.lm.save_pretrained(a.out)   # LoRA ranks hold the same adapter
+    if rank: return
+    backbone_seconds = time.time() - t0 - wall
+    shutil.rmtree(resume_dir, ignore_errors=True)   # the checkpoint supersedes it
+    meta.head, meta.extra = model.head.state_dict(), {"args": vars(a), "suite_sha256": suite_hash, "init_source": init_source} | native_extra(a)
+    if model.loop is not None: meta.loop = {"spec": loop.to_dict(), "gates": {k: v.detach().cpu() for k, v in model.loop.state_dict().items()}}
+    finish_checkpoint(a.out, meta, tok)
+    write_json(out_dir / "training_metrics.json", {"wall_seconds": wall, "records_seen": round(seen),
+               "requested_records": a.epochs * len(reqs), "truncated_records": 0, "rejected_records": 0,
+               "optimizer_steps": step, "forward_tokens": round(tokens_seen), "step_seconds": step_seconds, "optimizer_seconds": optimizer_seconds, "resume_seconds": resume_seconds, "resume_write_seconds": writer.seconds if writer else [], "world_size": world,
+               "backbone_save_seconds": round(backbone_seconds, 1), "snapshots": snapshots.written if snapshots else [],   # snapshots: this attempt's (each snapshot.json has its own)
+               "grad_norm": grad_norm_summary(grad_norms),
+               "weights": meta.weights, "peak_device_bytes": peak_mem, "device": dev, "dtype": a.dtype, "batch": a.batch,
+               "peak_rss_bytes": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * (1 if sys.platform == "darwin" else 1024)})
+    print("saved", a.out, flush=True)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,836 @@
+{
+  "version": "hard-v1",
+  "partitions": [
+    "train",
+    "development",
+    "test"
+  ],
+  "locked": [
+    "test"
+  ],
+  "seed": "hard-v1-20260923",
+  "families": [
+    "long_policy",
+    "tradeoff",
+    "probability",
+    "multi_hop",
+    "temporal_numeric",
+    "judge",
+    "ambiguous"
+  ],
+  "templates": {
+    "train": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "development": [
+      4
+    ],
+    "test": [
+      5
+    ]
+  },
+  "trainable_sources": [
+    "hard_long_policy",
+    "hard_tradeoff",
+    "hard_probability",
+    "hard_multi_hop",
+    "hard_temporal_numeric",
+    "hard_judge",
+    "hard_ambiguous"
+  ],
+  "eval_only_sources": [],
+  "holdout_sources": [],
+  "eval_only": false,
+  "context": {
+    "max_state": 7552,
+    "max_branch": 8192,
+    "max_packed": 9216,
+    "truncate": false
+  },
+  "tokenizer": {
+    "model": "Qwen/Qwen3.5-4B-Base",
+    "revision": "1001bb4d826a52d1f399e183466143f4da7b741b"
+  },
+  "base_revisions": {
+    "Qwen/Qwen3.5-4B-Base": "1001bb4d826a52d1f399e183466143f4da7b741b"
+  },
+  "files": {
+    "train.jsonl": {
+      "sha256": "a08ca9c5ba5d365967876d7d88753cf876624be8553df5af3dca8973e4a1aa4d",
+      "records": 6000,
+      "questions": 9310,
+      "bytes": 23118561,
+      "in_git": false,
+      "by_family": {
+        "ambiguous": {
+          "records": 858,
+          "questions": 858,
+          "question_types": {
+            "choice": 858
+          },
+          "label_position": {
+            "0/3": 245,
+            "0/4": 31,
+            "1/3": 245,
+            "1/4": 31,
+            "2/3": 244,
+            "2/4": 31,
+            "3/4": 31
+          },
+          "noul_true_rate": null,
+          "other_labels": {
+            "abstain_or_none": 353
+          },
+          "subtypes": {
+            "approval": 126,
+            "overtime": 104,
+            "price_match": 124,
+            "return_window": 126,
+            "shipping": 126,
+            "tenure": 126,
+            "warranty": 126
+          },
+          "templates": {
+            "ambiguous/t0": 216,
+            "ambiguous/t1": 214,
+            "ambiguous/t2": 214,
+            "ambiguous/t3": 214
+          }
+        },
+        "judge": {
+          "records": 857,
+          "questions": 1607,
+          "question_types": {
+            "noul": 857,
+            "choice": 750
+          },
+          "label_position": {
+            "0/4": 18,
+            "0/5": 135,
+            "1/4": 18,
+            "1/5": 136,
+            "2/4": 18,
+            "2/5": 136,
+            "3/4": 18,
+            "3/5": 136,
+            "4/5": 135
+          },
+          "noul_true_rate": 0.499,
+          "other_labels": {},
+          "subtypes": {
+            "convert": 107,
+            "fence": 107,
+            "logic": 107,
+            "order": 107,
+            "pct_change": 108,
+            "rate": 107,
+            "reverse_pct": 107,
+            "wavg": 107
+          },
+          "templates": {
+            "judge/t0": 215,
+            "judge/t1": 214,
+            "judge/t2": 214,
+            "judge/t3": 214
+          }
+        },
+        "long_policy": {
+          "records": 857,
+          "questions": 1714,
+          "question_types": {
+            "choice": 1714
+          },
+          "label_position": {
+            "0/5": 342,
+            "1/4": 1,
+            "1/5": 341,
+            "2/5": 343,
+            "3/5": 344,
+            "4/5": 343
+          },
+          "noul_true_rate": null,
+          "other_labels": {},
+          "subtypes": {
+            "benefits": 209,
+            "device": 217,
+            "home": 219,
+            "travel": 212
+          },
+          "templates": {
+            "long_policy/t0": 215,
+            "long_policy/t1": 214,
+            "long_policy/t2": 214,
+            "long_policy/t3": 214
+          }
+        },
+        "multi_hop": {
+          "records": 857,
+          "questions": 1068,
+          "question_types": {
+            "choice": 1068
+          },
+          "label_position": {
+            "0/3": 1,
+            "0/4": 116,
+            "0/5": 120,
+            "1/3": 1,
+            "1/4": 116,
+            "1/5": 121,
+            "2/4": 116,
+            "2/5": 121,
+            "3/4": 115,
+            "3/5": 121,
+            "4/5": 120
+          },
+          "noul_true_rate": null,
+          "other_labels": {
+            "abstain_or_none": 93
+          },
+          "subtypes": {
+            "deps": 222,
+            "oncall": 222,
+            "org": 202,
+            "ownership": 211
+          },
+          "templates": {
+            "multi_hop/t0": 215,
+            "multi_hop/t1": 214,
+            "multi_hop/t2": 214,
+            "multi_hop/t3": 214
+          }
+        },
+        "probability": {
+          "records": 857,
+          "questions": 1349,
+          "question_types": {
+            "choice": 980,
+            "score": 280,
+            "noul": 89
+          },
+          "label_position": {
+            "0/3": 76,
+            "0/4": 20,
+            "0/5": 134,
+            "1/3": 76,
+            "1/4": 20,
+            "1/5": 134,
+            "2/3": 76,
+            "2/4": 20,
+            "2/5": 135,
+            "3/4": 21,
+            "3/5": 134,
+            "4/5": 134
+          },
+          "noul_true_rate": 0.551,
+          "other_labels": {
+            "level_3": 62,
+            "level_4": 30,
+            "level_5": 80,
+            "level_2": 57,
+            "level_1": 41,
+            "level_0": 10
+          },
+          "subtypes": {
+            "bayes": 195,
+            "compare": 171,
+            "ev": 123,
+            "independent": 174,
+            "table": 194
+          },
+          "templates": {
+            "probability/t0": 215,
+            "probability/t1": 214,
+            "probability/t2": 214,
+            "probability/t3": 214
+          }
+        },
+        "temporal_numeric": {
+          "records": 857,
+          "questions": 1000,
+          "question_types": {
+            "choice": 857,
+            "noul": 143
+          },
+          "label_position": {
+            "0/4": 15,
+            "0/5": 159,
+            "1/4": 15,
+            "1/5": 161,
+            "2/4": 15,
+            "2/5": 160,
+            "3/4": 15,
+            "3/5": 160,
+            "4/5": 157
+          },
+          "noul_true_rate": 0.497,
+          "other_labels": {},
+          "subtypes": {
+            "deadline": 144,
+            "diff": 143,
+            "prorata": 143,
+            "recurring_business_days": 42,
+            "recurring_every_n_weeks": 43,
+            "recurring_last_business": 25,
+            "recurring_monthly_rollback": 30,
+            "shift": 144,
+            "tz": 143
+          },
+          "templates": {
+            "temporal_numeric/t0": 215,
+            "temporal_numeric/t1": 214,
+            "temporal_numeric/t2": 214,
+            "temporal_numeric/t3": 214
+          }
+        },
+        "tradeoff": {
+          "records": 857,
+          "questions": 1714,
+          "question_types": {
+            "choice": 857,
+            "noul": 857
+          },
+          "label_position": {
+            "0/3": 53,
+            "0/4": 77,
+            "0/5": 54,
+            "0/6": 19,
+            "1/3": 54,
+            "1/4": 78,
+            "1/5": 54,
+            "1/6": 19,
+            "2/3": 53,
+            "2/4": 77,
+            "2/5": 54,
+            "2/6": 20,
+            "3/4": 77,
+            "3/5": 54,
+            "3/6": 20,
+            "4/5": 54,
+            "4/6": 20,
+            "5/6": 20
+          },
+          "noul_true_rate": 0.432,
+          "other_labels": {
+            "abstain_or_none": 140
+          },
+          "subtypes": {
+            "lex": 435,
+            "tco": 114,
+            "weighted": 308
+          },
+          "templates": {
+            "tradeoff/t0": 215,
+            "tradeoff/t1": 214,
+            "tradeoff/t2": 214,
+            "tradeoff/t3": 214
+          }
+        }
+      }
+    },
+    "development.jsonl": {
+      "sha256": "3cdbf12a6b7c3b70c73e8c39f2677127ea61ef32f0ea75b55a43556d884b2d98",
+      "records": 700,
+      "questions": 1083,
+      "bytes": 2633546,
+      "in_git": true,
+      "by_family": {
+        "ambiguous": {
+          "records": 100,
+          "questions": 100,
+          "question_types": {
+            "choice": 100
+          },
+          "label_position": {
+            "0/3": 28,
+            "0/4": 4,
+            "1/3": 28,
+            "1/4": 4,
+            "2/3": 28,
+            "2/4": 4,
+            "3/4": 4
+          },
+          "noul_true_rate": null,
+          "other_labels": {
+            "abstain_or_none": 38
+          },
+          "subtypes": {
+            "approval": 14,
+            "overtime": 12,
+            "price_match": 16,
+            "return_window": 14,
+            "shipping": 14,
+            "tenure": 16,
+            "warranty": 14
+          },
+          "templates": {
+            "ambiguous/t4": 100
+          }
+        },
+        "judge": {
+          "records": 100,
+          "questions": 188,
+          "question_types": {
+            "noul": 100,
+            "choice": 88
+          },
+          "label_position": {
+            "0/4": 1,
+            "0/5": 16,
+            "1/4": 1,
+            "1/5": 17,
+            "2/4": 2,
+            "2/5": 17,
+            "3/4": 2,
+            "3/5": 16,
+            "4/5": 16
+          },
+          "noul_true_rate": 0.5,
+          "other_labels": {},
+          "subtypes": {
+            "convert": 13,
+            "fence": 13,
+            "logic": 12,
+            "order": 12,
+            "pct_change": 13,
+            "rate": 12,
+            "reverse_pct": 13,
+            "wavg": 12
+          },
+          "templates": {
+            "judge/t4": 100
+          }
+        },
+        "long_policy": {
+          "records": 100,
+          "questions": 200,
+          "question_types": {
+            "choice": 200
+          },
+          "label_position": {
+            "0/5": 40,
+            "1/5": 40,
+            "2/5": 40,
+            "3/5": 40,
+            "4/5": 40
+          },
+          "noul_true_rate": null,
+          "other_labels": {},
+          "subtypes": {
+            "benefits": 24,
+            "device": 25,
+            "home": 25,
+            "travel": 26
+          },
+          "templates": {
+            "long_policy/t4": 100
+          }
+        },
+        "multi_hop": {
+          "records": 100,
+          "questions": 124,
+          "question_types": {
+            "choice": 124
+          },
+          "label_position": {
+            "0/4": 12,
+            "0/5": 14,
+            "1/3": 1,
+            "1/4": 13,
+            "1/5": 15,
+            "2/4": 12,
+            "2/5": 15,
+            "3/4": 13,
+            "3/5": 14,
+            "4/5": 15
+          },
+          "noul_true_rate": null,
+          "other_labels": {
+            "abstain_or_none": 11
+          },
+          "subtypes": {
+            "deps": 26,
+            "oncall": 27,
+            "org": 23,
+            "ownership": 24
+          },
+          "templates": {
+            "multi_hop/t4": 100
+          }
+        },
+        "probability": {
+          "records": 100,
+          "questions": 155,
+          "question_types": {
+            "choice": 112,
+            "score": 35,
+            "noul": 8
+          },
+          "label_position": {
+            "0/3": 9,
+            "0/4": 1,
+            "0/5": 16,
+            "1/3": 9,
+            "1/4": 2,
+            "1/5": 16,
+            "2/3": 8,
+            "2/4": 2,
+            "2/5": 16,
+            "3/4": 2,
+            "3/5": 15,
+            "4/5": 16
+          },
+          "noul_true_rate": 0.625,
+          "other_labels": {
+            "level_1": 2,
+            "level_5": 9,
+            "level_3": 6,
+            "level_2": 10,
+            "level_0": 3,
+            "level_4": 5
+          },
+          "subtypes": {
+            "bayes": 23,
+            "compare": 21,
+            "ev": 12,
+            "independent": 20,
+            "table": 24
+          },
+          "templates": {
+            "probability/t4": 100
+          }
+        },
+        "temporal_numeric": {
+          "records": 100,
+          "questions": 116,
+          "question_types": {
+            "choice": 100,
+            "noul": 16
+          },
+          "label_position": {
+            "0/4": 2,
+            "0/5": 19,
+            "1/4": 2,
+            "1/5": 19,
+            "2/4": 1,
+            "2/5": 19,
+            "3/4": 2,
+            "3/5": 18,
+            "4/5": 18
+          },
+          "noul_true_rate": 0.5,
+          "other_labels": {},
+          "subtypes": {
+            "deadline": 17,
+            "diff": 16,
+            "prorata": 17,
+            "recurring_business_days": 1,
+            "recurring_every_n_weeks": 6,
+            "recurring_last_business": 1,
+            "recurring_monthly_rollback": 8,
+            "shift": 17,
+            "tz": 17
+          },
+          "templates": {
+            "temporal_numeric/t4": 100
+          }
+        },
+        "tradeoff": {
+          "records": 100,
+          "questions": 200,
+          "question_types": {
+            "choice": 100,
+            "noul": 100
+          },
+          "label_position": {
+            "0/3": 6,
+            "0/4": 9,
+            "0/5": 7,
+            "0/6": 2,
+            "1/3": 7,
+            "1/4": 8,
+            "1/5": 7,
+            "1/6": 2,
+            "2/3": 7,
+            "2/4": 8,
+            "2/5": 6,
+            "2/6": 2,
+            "3/4": 9,
+            "3/5": 7,
+            "3/6": 2,
+            "4/5": 7,
+            "4/6": 2,
+            "5/6": 2
+          },
+          "noul_true_rate": 0.39,
+          "other_labels": {
+            "abstain_or_none": 18
+          },
+          "subtypes": {
+            "lex": 49,
+            "tco": 14,
+            "weighted": 37
+          },
+          "templates": {
+            "tradeoff/t4": 100
+          }
+        }
+      }
+    },
+    "test.jsonl": {
+      "sha256": "246ee92234d33f8e3f10ac6e1542651531b128fd7cc66f3a9964589b77dfa22b",
+      "records": 700,
+      "questions": 1088,
+      "bytes": 2598306,
+      "in_git": true,
+      "by_family": {
+        "ambiguous": {
+          "records": 100,
+          "questions": 100,
+          "question_types": {
+            "choice": 100
+          },
+          "label_position": {
+            "0/3": 29,
+            "0/4": 4,
+            "1/3": 29,
+            "1/4": 4,
+            "2/3": 28,
+            "2/4": 3,
+            "3/4": 3
+          },
+          "noul_true_rate": null,
+          "other_labels": {
+            "abstain_or_none": 39
+          },
+          "subtypes": {
+            "approval": 14,
+            "overtime": 12,
+            "price_match": 14,
+            "return_window": 14,
+            "shipping": 14,
+            "tenure": 16,
+            "warranty": 16
+          },
+          "templates": {
+            "ambiguous/t5": 100
+          }
+        },
+        "judge": {
+          "records": 100,
+          "questions": 188,
+          "question_types": {
+            "noul": 100,
+            "choice": 88
+          },
+          "label_position": {
+            "0/4": 2,
+            "0/5": 16,
+            "1/4": 1,
+            "1/5": 16,
+            "2/4": 2,
+            "2/5": 16,
+            "3/4": 2,
+            "3/5": 16,
+            "4/5": 17
+          },
+          "noul_true_rate": 0.5,
+          "other_labels": {},
+          "subtypes": {
+            "convert": 13,
+            "fence": 13,
+            "logic": 12,
+            "order": 13,
+            "pct_change": 12,
+            "rate": 12,
+            "reverse_pct": 12,
+            "wavg": 13
+          },
+          "templates": {
+            "judge/t5": 100
+          }
+        },
+        "long_policy": {
+          "records": 100,
+          "questions": 200,
+          "question_types": {
+            "choice": 200
+          },
+          "label_position": {
+            "0/5": 40,
+            "1/5": 40,
+            "2/5": 40,
+            "3/5": 40,
+            "4/5": 40
+          },
+          "noul_true_rate": null,
+          "other_labels": {},
+          "subtypes": {
+            "benefits": 24,
+            "device": 25,
+            "home": 25,
+            "travel": 26
+          },
+          "templates": {
+            "long_policy/t5": 100
+          }
+        },
+        "multi_hop": {
+          "records": 100,
+          "questions": 125,
+          "question_types": {
+            "choice": 125
+          },
+          "label_position": {
+            "0/4": 13,
+            "0/5": 14,
+            "1/4": 14,
+            "1/5": 14,
+            "2/4": 13,
+            "2/5": 15,
+            "3/4": 14,
+            "3/5": 14,
+            "4/5": 14
+          },
+          "noul_true_rate": null,
+          "other_labels": {
+            "abstain_or_none": 15
+          },
+          "subtypes": {
+            "deps": 26,
+            "oncall": 25,
+            "org": 24,
+            "ownership": 25
+          },
+          "templates": {
+            "multi_hop/t5": 100
+          }
+        },
+        "probability": {
+          "records": 100,
+          "questions": 158,
+          "question_types": {
+            "choice": 113,
+            "score": 36,
+            "noul": 9
+          },
+          "label_position": {
+            "0/3": 8,
+            "0/4": 2,
+            "0/5": 16,
+            "1/3": 9,
+            "1/4": 2,
+            "1/5": 16,
+            "2/3": 9,
+            "2/4": 2,
+            "2/5": 15,
+            "3/4": 2,
+            "3/5": 16,
+            "4/5": 16
+          },
+          "noul_true_rate": 0.556,
+          "other_labels": {
+            "level_1": 6,
+            "level_2": 8,
+            "level_4": 3,
+            "level_5": 12,
+            "level_3": 5,
+            "level_0": 2
+          },
+          "subtypes": {
+            "bayes": 22,
+            "compare": 19,
+            "ev": 13,
+            "independent": 23,
+            "table": 23
+          },
+          "templates": {
+            "probability/t5": 100
+          }
+        },
+        "temporal_numeric": {
+          "records": 100,
+          "questions": 117,
+          "question_types": {
+            "choice": 100,
+            "noul": 17
+          },
+          "label_position": {
+            "0/4": 3,
+            "0/5": 18,
+            "1/4": 3,
+            "1/5": 17,
+            "2/4": 2,
+            "2/5": 18,
+            "3/4": 3,
+            "3/5": 18,
+            "4/5": 18
+          },
+          "noul_true_rate": 0.471,
+          "other_labels": {},
+          "subtypes": {
+            "deadline": 16,
+            "diff": 17,
+            "prorata": 17,
+            "recurring_business_days": 4,
+            "recurring_every_n_weeks": 5,
+            "recurring_last_business": 4,
+            "recurring_monthly_rollback": 4,
+            "shift": 16,
+            "tz": 17
+          },
+          "templates": {
+            "temporal_numeric/t5": 100
+          }
+        },
+        "tradeoff": {
+          "records": 100,
+          "questions": 200,
+          "question_types": {
+            "choice": 100,
+            "noul": 100
+          },
+          "label_position": {
+            "0/3": 9,
+            "0/4": 8,
+            "0/5": 6,
+            "0/6": 2,
+            "1/3": 8,
+            "1/4": 8,
+            "1/5": 6,
+            "1/6": 3,
+            "2/3": 9,
+            "2/4": 7,
+            "2/5": 7,
+            "2/6": 2,
+            "3/4": 7,
+            "3/5": 6,
+            "3/6": 2,
+            "4/5": 6,
+            "4/6": 2,
+            "5/6": 2
+          },
+          "noul_true_rate": 0.44,
+          "other_labels": {
+            "abstain_or_none": 13
+          },
+          "subtypes": {
+            "lex": 54,
+            "tco": 11,
+            "weighted": 35
+          },
+          "templates": {
+            "tradeoff/t5": 100
+          }
+        }
+      }
+    }
+  },
+  "large_partitions": [
+    "train.jsonl"
+  ],
+  "public_artifact": "evals/hard-v1",
+  "metadata_notice": "Public-schema metadata projection. Partition hashes identify the study data; omitted preparation history is not distributed. Exact reconstruction is not validated."
+}

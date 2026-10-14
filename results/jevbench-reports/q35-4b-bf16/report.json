@@ -1,0 +1,31 @@
+{
+  "base": "Qwen/Qwen3.5-4B-Base",
+  "temperatures": null,
+  "rotations": 1,
+  "native_loop": false,
+  "dtype": "bf16",
+  "device": "cuda",
+  "gpu": "NVIDIA H200",
+  "depths": {
+    "1": {
+      "n": 231,
+      "accuracy_all": 0.7359307359307359,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.9027777777777778,
+        "hard": 0.5135135135135135
+      },
+      "intelligence_public": 63.91929794680695,
+      "hard_ece": 0.21871621621621629,
+      "calibration_public": 56.256756756756744,
+      "latency": {
+        "p50_s": 0.14028964191675186,
+        "p95_s": 0.14356841798871756,
+        "mean_s": 0.1412928376096861,
+        "dtype": "torch.bfloat16",
+        "speed_axis_selfhosted": 87.25329464429214
+      }
+    }
+  },
+  "model_id": "q35-4b-bf16"
+}

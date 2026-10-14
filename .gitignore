@@ -1,0 +1,15 @@
+.venv/
+outputs/
+vendor/
+checkpoints/
+__pycache__/
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.env
+*.pt
+*.safetensors
+*.jsonl
+figures/*.pdf
+figures/*.png

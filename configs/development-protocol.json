@@ -1,0 +1,57 @@
+{
+  "name": "Lev development protocol",
+  "status": "Study settings; public metadata projection",
+  "checkpoint": {
+    "artifact_id": "Lev-2.6B-s0",
+    "trained_on": "Train-31k"
+  },
+  "temperatures": "one per depth, fitted on decision-v7 calibration (scripts/depth_rows.py rows; analysis/adaptive_depth.py), frozen",
+  "stopper": {
+    "script": "analysis/adaptive_depth.py",
+    "primary": {
+      "rule": "agree",
+      "fit": "xfit",
+      "min_agree": 0.98
+    },
+    "control": {
+      "rule": "agree",
+      "fit": "calibration",
+      "min_agree": 0.98
+    }
+  },
+  "panels": {
+    "eval-v1-development": {
+      "suite": "evals/levbench-v1",
+      "partition": "development",
+      "primary": true
+    },
+    "breadth-v1-development": {
+      "suite": "evals/breadth-v1",
+      "partition": "development",
+      "condition": "only if the local rebuild matches the manifest sha256 9aad8f4a...",
+      "primary": false
+    }
+  },
+  "gates": {
+    "where": "eval-v1 development, pooled over its tiers, answerable rows only: unknowable rows and report_only rows (StrategyQA) are excluded",
+    "G1": "adaptive accuracy - depth 4 accuracy >= -1 pp, paired 95% CI lower bound > -2 pp, question cost <= 0.70",
+    "G2": "adaptive - random escalation with the same stop distribution: paired 95% CI lower bound > 0",
+    "G3": "adaptive - fixed-depth frontier at the same question cost: paired 95% CI lower bound > 0",
+    "ci": "paired bootstrap over record groups, 2,000 resamples, seed 0",
+    "decision": "phase 2 passes when the primary stopper passes G1-G3 on the pooled panel; a tier where it fails is reported as a boundary condition, not re-tuned"
+  },
+  "reported_not_gated": [
+    "per tier (id / near / deep / far) and per source: fixed-depth accuracy, adaptive accuracy and cost, deltas vs depth 4 and vs the frontier",
+    "per difficulty k (generated families; BoardgameQA, StepGame, CLadder): adaptive cost and accuracy by k, to answer whether harder items go deeper",
+    "seen_s31 split: rows whose source is in S31 vs not",
+    "unknowable tier: rate of confident answers (top probability >= 0.9) per fixed depth and under the adaptive stops",
+    "report_only (StrategyQA): the same table as a tier",
+    "breadth-v1 development, if rebuilt: the same tables",
+    "the control stopper (fit calibration) on every panel"
+  ],
+  "not_read": [
+    "eval-v1 test",
+    "breadth-v1 test",
+    "decision-v7 / transfer-v9 / hard-v1 test: phase 5 only"
+  ]
+}

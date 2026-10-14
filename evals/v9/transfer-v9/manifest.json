@@ -1,0 +1,107 @@
+{
+  "version": 5,
+  "base_revisions": {
+    "Qwen/Qwen3-0.6B-Base": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd",
+    "Qwen/Qwen3-4B-Base": "906bfd4b4dc7f14ee4320094d8b41684abff8539",
+    "Qwen/Qwen3.5-4B-Base": "1001bb4d826a52d1f399e183466143f4da7b741b",
+    "Qwen/Qwen3.5-9B-Base": "68c46c4b3498877f3ef123c856ecfde50c39f404",
+    "Qwen/Qwen3.5-0.8B-Base": "dc7cdfe2ee4154fa7e30f5b51ca41bfa40174e68"
+  },
+  "dataset_revisions": {
+    "CogComp/trec": "65752bf53af25bc935a0dce92fb5b6c930728450",
+    "legacy-datasets/banking77": "f54121560de48f2852f90be299010d1d6dc612ec",
+    "stanfordnlp/imdb": "e6281661ce1c48d982bc483cf8a173c1bbeb5d31",
+    "fancyzhx/ag_news": "eb185aade064a813bc0b7f42de02595523103ca4",
+    "SetFit/amazon_reviews_multi_en": "ec73b665e4be0f567b69d39425355401cfe0d29b",
+    "fancyzhx/dbpedia_14": "9abd46cf7fc8b4c64290f26993c540b92aa145ac",
+    "google/boolq": "35b264d03638db9f4ce671b711558bf7ff0f80d5",
+    "SetFit/sst5": "e51bdcd8cd3a30da231967c1a249ba59361279a3",
+    "nyu-mll/multi_nli": "da70db2af9d09693783c3320c4249840212ee221",
+    "Yelp/yelp_review_full": "c1f9ee939b7d05667af864ee1cb066393154bf85",
+    "TIGER-Lab/MMLU-Pro": "b189ec765aa7ed75c8acfea42df31fdae71f97be"
+  },
+  "holdout_sources": [
+    "mmlu",
+    "emotion",
+    "tweet_offensive",
+    "qnli",
+    "paws",
+    "sciq",
+    "contrastive",
+    "legacy_holdout",
+    "composition_holdout"
+  ],
+  "trainable_sources": [],
+  "eval_only_sources": [
+    "mmlu",
+    "emotion",
+    "tweet_offensive",
+    "qnli",
+    "paws",
+    "sciq",
+    "contrastive",
+    "legacy_holdout",
+    "composition_holdout",
+    "mmlu_pro",
+    "buried",
+    "unknowable",
+    "unknowable_control"
+  ],
+  "context": {
+    "max_state": 384,
+    "max_branch": 1024,
+    "max_packed": 2048,
+    "truncate": false
+  },
+  "files": {
+    "development.jsonl": {
+      "sha256": "53872ba045564315cf3c3dd8fb656e76441c6c514b1a7ff985ff0db3955710cf",
+      "records": 1264
+    },
+    "test.jsonl": {
+      "sha256": "048abea5e12c73c3a622ce5836898c00fa43766e0bf48fb2459e77ee9873497f",
+      "records": 1264
+    },
+    "train.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "records": 0
+    },
+    "calibration.jsonl": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "records": 0
+    }
+  },
+  "counts": {
+    "development": {
+      "buried": 80,
+      "composition_holdout": 96,
+      "emotion": 116,
+      "legacy_holdout": 80,
+      "mmlu": 116,
+      "mmlu_pro": 200,
+      "paws": 80,
+      "qnli": 80,
+      "sciq": 116,
+      "tweet_offensive": 80,
+      "unknowable": 110,
+      "unknowable_control": 110
+    },
+    "test": {
+      "buried": 80,
+      "composition_holdout": 96,
+      "contrastive": 80,
+      "emotion": 116,
+      "mmlu": 116,
+      "mmlu_pro": 200,
+      "paws": 80,
+      "qnli": 80,
+      "sciq": 116,
+      "tweet_offensive": 80,
+      "unknowable": 110,
+      "unknowable_control": 110
+    }
+  },
+  "eval_only": true,
+  "public_artifact": "evals/v9/transfer-v9",
+  "metadata_notice": "Public-schema metadata projection. Partition hashes identify the study data; omitted preparation history is not distributed. Exact reconstruction is not validated."
+}

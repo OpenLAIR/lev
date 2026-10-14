@@ -1,0 +1,8 @@
+{
+  "artifact_id": "LevBench-v1",
+  "partition_sha256": {
+    "development.jsonl": "a0f8f8ad4a7c51aeb313b5ab4667ac23e9bd9e6ab184900d0a2069faa62a298c",
+    "test.jsonl": "73c6f3622012d8e784bae8f0e0547386fcee7534bbb423d2243984022e37aaba"
+  },
+  "metadata_notice": "Dataset partition identities only; no execution or source-checkout provenance is published."
+}

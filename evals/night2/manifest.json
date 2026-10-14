@@ -1,0 +1,49 @@
+{
+  "seed": "night2-20260920",
+  "files": {
+    "dates.jsonl": {
+      "records": 900,
+      "dropped_eval_overlap": 0,
+      "sha256": "9d068b1e7d382992add46e93b22a9d539036f4db78b576ea07c0954534b3d401",
+      "sources": [
+        "night2_dates"
+      ]
+    },
+    "unknowable.jsonl": {
+      "records": 525,
+      "dropped_eval_overlap": 15,
+      "sha256": "7d3ec178c743e922a491d372bf0920b5a341260414d38c99d7c1159855bf6e14",
+      "sources": [
+        "night2_unknowable",
+        "night2_unknowable_control"
+      ]
+    },
+    "assertion.jsonl": {
+      "records": 800,
+      "dropped_eval_overlap": 0,
+      "sha256": "0cf795280db6c16ec66499b6d8e5326215080e76a1f5b0a1a265d1f8ef9dd164",
+      "sources": [
+        "night2_assertion"
+      ]
+    },
+    "all.jsonl": {
+      "records": 2225,
+      "sha256": "b8692830579a1b501aed66a4b5490c943a6fc47d5eca2ac7d1fa132eda0a3319",
+      "concat_of": [
+        "dates.jsonl",
+        "unknowable.jsonl",
+        "assertion.jsonl"
+      ]
+    },
+    "dates_unknowable.jsonl": {
+      "records": 1425,
+      "sha256": "afd8502d162163605ac446439e32c7b9083302dd78a6bfdc5e30075619e98437",
+      "concat_of": [
+        "dates.jsonl",
+        "unknowable.jsonl"
+      ]
+    }
+  },
+  "public_artifact": "evals/night2",
+  "metadata_notice": "Public-schema metadata projection. Partition hashes identify the study data; omitted preparation history is not distributed. Exact reconstruction is not validated."
+}

@@ -1,0 +1,737 @@
+{
+  "schema_version": 1,
+  "scope": "Training, LevBench and Kev-Breadth source inventory; no source text is distributed",
+  "sources": [
+    {
+      "source": "agnews",
+      "repository": "fancyzhx/ag_news",
+      "revision": "eb185aade064a813bc0b7f42de02595523103ca4",
+      "recorded_license": "Consult the pinned original dataset card; not resolved in this candidate",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "amazon",
+      "repository": "SetFit/amazon_reviews_multi_en",
+      "revision": "ec73b665e4be0f567b69d39425355401cfe0d29b",
+      "recorded_license": "Consult the pinned original dataset card; not resolved in this candidate",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "banking77",
+      "repository": "legacy-datasets/banking77",
+      "revision": "f54121560de48f2852f90be299010d1d6dc612ec",
+      "recorded_license": "CC BY 4.0",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "boolq",
+      "repository": "google/boolq",
+      "revision": "35b264d03638db9f4ce671b711558bf7ff0f80d5",
+      "recorded_license": "CC BY-SA 3.0",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "dbpedia14",
+      "repository": "fancyzhx/dbpedia_14",
+      "revision": "9abd46cf7fc8b4c64290f26993c540b92aa145ac",
+      "recorded_license": "CC BY-SA 3.0",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "imdb",
+      "repository": "stanfordnlp/imdb",
+      "revision": "e6281661ce1c48d982bc483cf8a173c1bbeb5d31",
+      "recorded_license": "Consult the pinned original dataset card; not resolved in this candidate",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "mnli",
+      "repository": "nyu-mll/multi_nli",
+      "revision": "da70db2af9d09693783c3320c4249840212ee221",
+      "recorded_license": "Mixed original sources including OANC; separate review required",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "sst5",
+      "repository": "SetFit/sst5",
+      "revision": "e51bdcd8cd3a30da231967c1a249ba59361279a3",
+      "recorded_license": "Consult the pinned original dataset card; not resolved in this candidate",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "trec",
+      "repository": "CogComp/trec",
+      "revision": "65752bf53af25bc935a0dce92fb5b6c930728450",
+      "recorded_license": "Consult the pinned original dataset card; not resolved in this candidate",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "yelp",
+      "repository": "Yelp/yelp_review_full",
+      "revision": "c1f9ee939b7d05667af864ee1cb066393154bf85",
+      "recorded_license": "Yelp dataset terms; separate review required",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "arc",
+      "repository": "allenai/ai2_arc",
+      "revision": "210d026faf9955653af8916fad021475a3f00453",
+      "recorded_license": "CC BY-SA 4.0",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "openbookqa",
+      "repository": "allenai/openbookqa",
+      "revision": "388097ea7776314e93a529163e0fea805b8a6454",
+      "recorded_license": "Consult the pinned original dataset card; not resolved in this candidate",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "csqa",
+      "repository": "tau/commonsense_qa",
+      "revision": "94630fe30dad47192a8546eb75f094926d47e155",
+      "recorded_license": "MIT",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_condaqa",
+      "repository": "lasha-nlp/CONDAQA",
+      "revision": "3c9caa2f2f6960711e7f4d2e800581def2b6c183",
+      "recorded_license": "Apache-2.0",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_social_iqa",
+      "repository": "allenai/social_i_qa",
+      "revision": "537a2ec8ec565adc0b70b70752893e59e024df26",
+      "recorded_license": "CC-BY-4.0",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_cosmosqa",
+      "repository": "allenai/cosmos_qa",
+      "revision": "ed50fe83db62b355759053b1cd5eef344ee371e0",
+      "recorded_license": "CC-BY-4.0",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_mathqa",
+      "repository": "allenai/math_qa",
+      "revision": "fafb9f7ee5b9ec4da9499f9c4177a4c91389f2d6",
+      "recorded_license": "Apache-2.0",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_qasc",
+      "repository": "allenai/qasc",
+      "revision": "a34ba204eb9a33b919c10cc08f4f1c8dae5ec070",
+      "recorded_license": "CC-BY-4.0",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_piqa",
+      "repository": "ybisk/piqa",
+      "revision": "142c51238b3ca2bc61e9a075913871b8b600e8e1",
+      "recorded_license": "AFL-3.0",
+      "role": "trainable",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "cfpb",
+      "repository": "davidheineman/consumer-finance-complaints-large",
+      "revision": null,
+      "recorded_license": "Public-domain claim in source catalog; verify the original release terms",
+      "role": "training-source",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_boardgameqa",
+      "repository": "tasksource/Boardgame-QA",
+      "revision": "78e38c3c8df3b4f6de7ae8bd1fc6a8bd1f31be56",
+      "recorded_license": "CC-BY-4.0",
+      "role": "eval_only",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_stepgame",
+      "repository": "Fangjun-Li/SpatialLM-StepGame",
+      "revision": "1114cb58382e1cea8c66c8bf98b5749fb32d7575",
+      "recorded_license": "MIT (StepGame, ShiZhengyan/StepGame); the corrected-subset repository has no licence file",
+      "role": "eval_only",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_cladder",
+      "repository": "causal-nlp/CLadder",
+      "revision": "18d684e444ed07cc57ae0f3a91ee983a79b8119a",
+      "recorded_license": "MIT",
+      "role": "eval_only",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_strategyqa",
+      "repository": "voidful/StrategyQA",
+      "revision": "2279eaf9f2580aef77ed6fa0efd7846c381ab5a0",
+      "recorded_license": "MIT",
+      "role": "eval_only",
+      "report_only": true,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_logiqa2",
+      "repository": "datatune/LogiQA2.0",
+      "revision": "edbf6440d36a03f715c0c9d479f421f2ece87d6a",
+      "recorded_license": "CC-BY-NC-SA-4.0 (upstream csitfun/LogiQA2.0; the HF card's mit conflicts)",
+      "role": "eval_only",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_ar_lsat",
+      "repository": "tasksource/lsat-ar",
+      "revision": "0adf424eef17df6a3506ab3d94ed194a80dfd837",
+      "recorded_license": "MIT (zhongwanjun/AR-LSAT); questions copyright LSAC",
+      "role": "eval_only",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_quail",
+      "repository": "textmachinelab/quail",
+      "revision": "2bd9d7f90a532fe1a910b70972cef5fda341c8fe",
+      "recorded_license": "CC-BY-NC-SA-4.0",
+      "role": "eval_only",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "lev_timedial",
+      "repository": "google-research-datasets/time_dial",
+      "revision": "6c65411432c135ac7cca3669db8da476c858b141",
+      "recorded_license": "CC-BY-NC-SA-4.0",
+      "role": "eval_only",
+      "report_only": false,
+      "distribution": "not included; review pinned source terms and attribution before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "codereviewer",
+      "source_suite": "devtools-v1",
+      "recorded_license": "CC-BY-4.0",
+      "license_url": "https://zenodo.org/records/6900648",
+      "attribution": "Li et al., Automating Code Review Activities by Large-Scale Pre-Training (ESEC/FSE 2022), Microsoft CodeReviewer",
+      "pins": {
+        "zenodo": {
+          "record": 6900648,
+          "doi": "10.5281/zenodo.6900648",
+          "file": "Diff_Quality_Estimation.zip",
+          "md5": "aad78e57d7d591172922da96e38e47dd",
+          "sha256": "86d054de47741cb358c8a17ab55b6191356fc63e44010c864dd790481f41fff5",
+          "members": [
+            "cls-valid.jsonl",
+            "cls-test.jsonl"
+          ]
+        },
+        "licences": "scripts/devtools_v1_licences.json#codereviewer"
+      },
+      "role": "trainable",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "commitpackft",
+      "source_suite": "devtools-v1",
+      "recorded_license": "MIT (dataset); per-row repository licence",
+      "license_url": "https://huggingface.co/datasets/bigcode/commitpackft",
+      "attribution": "Muennighoff et al., OctoPack: Instruction Tuning Code Large Language Models (2023), BigCode",
+      "pins": {
+        "hf": "bigcode/commitpackft@fc56fe33c030c6daa414c2b112c932b8eed085e6",
+        "files": {
+          "data/python/data.jsonl": "d167da37e1058371c48e057cd8815d03700c867dd8bcf58e61420d4dcd288d73",
+          "data/javascript/data.jsonl": "968688a1163c2dbbced0d0f9cf1dd52bc0b626c2ad9b02ff23f5700b2e277f25",
+          "data/typescript/data.jsonl": "43d32596844c62aa23b0e5a8811648f6f20fa07d9ab80499d66507136b844a76",
+          "data/java/data.jsonl": "c51a331320f4220d6053e3389485916c738fcaccfd583298b7738af834fa19b9",
+          "data/go/data.jsonl": "05a65e973fcc6894a234fb382987cc25e26f053d60b032ea83540a5b36a528b8",
+          "data/rust/data.jsonl": "5611f3701026acf3c43ba64da50f4f65a078e84fba56e2bf313e8f2996b0cc68",
+          "data/c/data.jsonl": "a67d9aeac62e693fb782030ad7c4aa9e0d9f38a02bd2e06a438604a92628ca71",
+          "data/c++/data.jsonl": "ee59eb0dca07dadb74bde829134e0d3c42176e198773f125a14554a5547df4f2",
+          "data/c#/data.jsonl": "a58a0a03a9965fae11e20c53cf5661ecca6ae5b3ca241f2989db4c2c1be5c04a",
+          "data/ruby/data.jsonl": "6b1970e1c286f98445e519b92360eac5618f29f422c56ac949623d42dccd04b1",
+          "data/php/data.jsonl": "fda88bbb6483a504dcbaec36abd363eb6ae99531431fecc924d95ecdad91c691",
+          "data/shell/data.jsonl": "08eef5271d29368db2af8b0ca127c8d249d056ae7f6bce9c0692ade5dcad66ca"
+        }
+      },
+      "role": "trainable",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "aegis",
+      "source_suite": "devtools-v1",
+      "recorded_license": "CC-BY-4.0",
+      "license_url": "https://huggingface.co/datasets/nvidia/Aegis-AI-Content-Safety-Dataset-2.0",
+      "attribution": "Ghosh et al., AEGIS2.0: A Diverse AI Safety Dataset and Risks Taxonomy for Alignment of LLM Guardrails (NAACL 2025), NVIDIA",
+      "pins": {
+        "hf": "nvidia/Aegis-AI-Content-Safety-Dataset-2.0@d86bb8bedff51d25ac834ab7838f1cc61acb7a2c",
+        "files": {
+          "train.json": "154fba82c71d9fa73abd2ca5588a198e693ddc816c83444df180a22f613e02f6",
+          "validation.json": "a97200e226ad4f6ba6a639982f817f675909bc74513859df3e8fc9a92951dfcd",
+          "test.json": "b0a6d602260524866053cb34105194f074f2c2906e3691b68d43b9e6e9318f35"
+        },
+        "aart_filter": {
+          "hf": "walledai/AART@dd98454c52d34e860f5927625a3989edd5617d78",
+          "files": {
+            "data/train-00000-of-00001.parquet": "d22e3a35637a129bbffa6055a9ae83df1327f373ea22ef6f3cfa1c2d17eba0f1"
+          }
+        }
+      },
+      "role": "trainable",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "when2call",
+      "source_suite": "devtools-v1",
+      "recorded_license": "CC-BY-4.0",
+      "license_url": "https://huggingface.co/datasets/nvidia/When2Call",
+      "attribution": "Ross et al., When2Call: When (not) to Call Tools (NAACL 2025), NVIDIA",
+      "pins": {
+        "hf": "nvidia/When2Call@0582f7749df63a96fdc3070932e83e72396ace53",
+        "files": {
+          "test/when2call_test_mcq.jsonl": "8c3694e583eeeb8dbc297e6cd90da70efc68efa4b6adb7227523e828c6b7b14c"
+        }
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "flakeflagger",
+      "source_suite": "devtools-v1",
+      "recorded_license": "CC-BY-4.0 (Zenodo data); BSD-3-Clause (GitHub repo with the test bodies); test code under each project's licence",
+      "license_url": "https://zenodo.org/records/4450723",
+      "attribution": "Alshammari et al., FlakeFlagger: Predicting Flakiness Without Rerunning Tests (ICSE 2021)",
+      "pins": {
+        "zenodo": {
+          "record": 4450723,
+          "doi": "10.5281/zenodo.4450723",
+          "files": {
+            "test_results.csv": "86210ed8ac0171a3d64cf5ab83d503cc97e82845e0299b9f55599a8414218f13",
+            "Project_Info.csv": "f0064b25ed64995842465b67c6fec86b5ddf72d30e1a7dc5b64abd8b0208e9fd"
+          }
+        },
+        "github": "AlshammariA/FlakeFlagger@2fcbafc4713abbcc452bee07aa9681c7c8ccb707",
+        "tarball_sha256": "67da177462a3026655a9ed8ef4e7c87a86d538c599ed484080db3b355f6d76b1",
+        "licences": "scripts/devtools_v1_licences.json#flakeflagger"
+      },
+      "role": "trainable",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "prompt_injection",
+      "source_suite": "devtools-v1",
+      "recorded_license": "Apache-2.0 (deepset/prompt-injections); MIT (Lakera/gandalf_ignore_instructions)",
+      "license_url": "https://huggingface.co/datasets/deepset/prompt-injections ; https://huggingface.co/datasets/Lakera/gandalf_ignore_instructions",
+      "attribution": "deepset; Lakera (Gandalf)",
+      "pins": {
+        "deepset": {
+          "hf": "deepset/prompt-injections@4f61ecb038e9c3fb77e21034b22511b523772cdd",
+          "files": {
+            "data/train-00000-of-00001-9564e8b05b4757ab.parquet": "2e10bc7ab30f542c97e4e83e2a5683000b5057d25ec10908784c631d44124c04",
+            "data/test-00000-of-00001-701d16158af87368.parquet": "39ac797cabc157eeed58435a08593b2952bb6cb16fc394a2d383f447cc7b246e"
+          }
+        },
+        "gandalf": {
+          "hf": "Lakera/gandalf_ignore_instructions@04737b65e90a6794ec227012e4a255a7def6344b",
+          "files": {
+            "data/train-00000-of-00001-ded53be747ff55cd.parquet": "5b6acf3e5a5998d21f8e1222bb45bbdec25a14408747b1cd63bebef4a75fa439",
+            "data/validation-00000-of-00001-94481a2a09ff2fff.parquet": "f51ab3e3407a368845b0f57932cc745c09280429416d7507bd178a16326a79f6",
+            "data/test-00000-of-00001-bc92128b9288a6d1.parquet": "56b646d133335ebc535266bd55dbe1b5bee7caa4b95bf49d040684b9b5dd9972"
+          }
+        }
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "musr",
+      "source_suite": "breadth-v1",
+      "recorded_license": "CC-BY-4.0 (dataset card); code MIT",
+      "license_url": "https://huggingface.co/datasets/TAUR-Lab/MuSR",
+      "attribution": "Sprague et al., MuSR: Testing the Limits of Chain-of-thought with Multistep Soft Reasoning (ICLR 2024)",
+      "pins": {
+        "hf": "TAUR-Lab/MuSR@7c365b439a222150f317764d4f16ae6c96d7d94a",
+        "files": {
+          "murder_mystery.csv": "ce19b6dc0b953f698e79528c72705804bc97e772a4303734808971f63ce233a7",
+          "object_placements.csv": "98cd17d2c9ea53664e274365e901c90dfcaa40d17547dfbd369f1cd26fd2a81c",
+          "team_allocation.csv": "ddbef3bb61857a7cc3b73db62fac4605679e1b7ff4357d57fdfcf91f7caaa1f8"
+        }
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "sata_bench",
+      "source_suite": "breadth-v1",
+      "recorded_license": "CC-BY-NC-4.0 (dataset card; the GitHub repo is MIT): the derived records inherit the non-commercial term",
+      "license_url": "https://huggingface.co/datasets/sata-bench/sata-bench",
+      "attribution": "Xu et al., SATA-Bench: Select All That Apply Benchmark for Multiple Choice Questions (2025)",
+      "pins": {
+        "hf": "sata-bench/sata-bench@ba43a7ab537adfa3498e3a160a6d1eafbefc95c1",
+        "files": {
+          "data_main.json": "d9809889057a6f37bf0dd35b371a4cf3f3a23ff431f9fc69201220598e950112"
+        }
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "chessbench",
+      "source_suite": "breadth-v1",
+      "recorded_license": "Apache-2.0 (code and data release); positions from lichess.org (CC0)",
+      "license_url": "https://github.com/google-deepmind/searchless_chess",
+      "attribution": "Ruoss et al., Amortized Planning with Large-Scale Transformers: A Case Study on Chess (NeurIPS 2024)",
+      "pins": {
+        "url": "https://storage.googleapis.com/searchless_chess/data/test/action_value_data.bag",
+        "sha256": "5f73aac8f60e31734cdbf276ba3fca8d5ba5cb6171ba600e31af4f36327986b0",
+        "code": "google-deepmind/searchless_chess@90ae0e6b121673fc3079aaeffa047580bb600c0a"
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "contractnli",
+      "source_suite": "breadth-v1",
+      "recorded_license": "CC-BY-4.0 (Hitachi America terms of use grant CC BY 4.0)",
+      "license_url": "https://stanfordnlp.github.io/contract-nli/",
+      "attribution": "Koreeda and Manning, ContractNLI: A Dataset for Document-level Natural Language Inference for Contracts (Findings of EMNLP 2021)",
+      "pins": {
+        "url": "https://stanfordnlp.github.io/contract-nli/resources/contract-nli.zip",
+        "sha256": "e03fc77bbf8b53e2976a250e81d8a294bc3d5e5fb014521e477dee9340d6287b"
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "hellaswag",
+      "source_suite": "breadth-v1",
+      "recorded_license": "MIT (code/data release); ActivityNet Captions contexts only",
+      "license_url": "https://huggingface.co/datasets/Rowan/hellaswag",
+      "attribution": "Zellers et al., HellaSwag: Can a Machine Really Finish Your Sentence? (ACL 2019)",
+      "pins": {
+        "hf": "Rowan/hellaswag@218ec52e09a7e7462a5400043bb9a69a41d06b76",
+        "files": {
+          "data/validation-00000-of-00001.parquet": "899813071e1e95efafec90f856e1987d2150fa4d020fc005df6962c259f660cd"
+        }
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "clinc150",
+      "source_suite": "breadth-v1",
+      "recorded_license": "CC-BY-3.0",
+      "license_url": "https://huggingface.co/datasets/clinc/clinc_oos",
+      "attribution": "Larson et al., An Evaluation Dataset for Intent Classification and Out-of-Scope Prediction (EMNLP 2019)",
+      "pins": {
+        "hf": "clinc/clinc_oos@155b9c710419136e17307b80d0a13e68cd46b4ec",
+        "files": {
+          "plus/test-00000-of-00001.parquet": "3e60e45b25bf86543aa5df8ba4fcc674114164e6184f0197690648c2908d0102",
+          "plus/validation-00000-of-00001.parquet": "fbd545b46c611c4a7ba4b48cae6c7f09bb5b59f33ff56206ad1cd366c85cdfaa",
+          "README.md": "e28704a3c04f6b05c286ca2a8891bbf32c69c000dedfc5825d6e1713369b7a89"
+        },
+        "domains": {
+          "url": "https://raw.githubusercontent.com/clinc/oos-eval/828f8093932c8fe6ca7936c3d2e52903b1c523de/data/domains.json",
+          "sha256": "b947b579d3b8e74b06f93b01083d8efaff2888b43a3e362533bd88a6e1211b3a"
+        }
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "sgd",
+      "source_suite": "breadth-v1",
+      "recorded_license": "CC-BY-SA-4.0: the derived records inherit the share-alike term",
+      "license_url": "https://github.com/google-research-datasets/dstc8-schema-guided-dialogue",
+      "attribution": "Rastogi et al., Towards Scalable Multi-domain Conversational Agents: The Schema-Guided Dialogue Dataset (AAAI 2020); Lee et al., SGD-X (AAAI 2022)",
+      "pins": {
+        "url": "https://codeload.github.com/google-research-datasets/dstc8-schema-guided-dialogue/tar.gz/e852981ae34990f4358979625854259302feaa78",
+        "sha256": "ff97a9ab52b4cc9f25e1a093c96431512465e8377f9a1f57dc710a10484d2188",
+        "commit": "e852981ae34990f4358979625854259302feaa78"
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "bright",
+      "source_suite": "breadth-v1",
+      "recorded_license": "CC-BY-4.0",
+      "license_url": "https://huggingface.co/datasets/xlangai/BRIGHT",
+      "attribution": "Su et al., BRIGHT: A Realistic and Challenging Benchmark for Reasoning-Intensive Retrieval (ICLR 2025)",
+      "pins": {
+        "hf": "xlangai/BRIGHT@3066d29c9651a576c8aba4832d249807b181ecae",
+        "files": {
+          "examples/biology-00000-of-00001.parquet": "6e105c4f09d9a70b8a20ed6a4d0e386823a5545151df41b3f0e64eb5c5987829",
+          "documents/biology-00000-of-00001.parquet": "8516d0c233f9c34e9eb6922b56e8a1698e5a6f6e504a9499fcd511cdd5741670",
+          "examples/earth_science-00000-of-00001.parquet": "5d29f108701111984eb91c93d3e340a784a99df47dc11f43783d1b994010a91d",
+          "documents/earth_science-00000-of-00001.parquet": "abcb2cd130d7d333b364bf5c89b7ff3829e0f88eb6a2de8232c3df1173eeb8a2",
+          "examples/economics-00000-of-00001.parquet": "2a79f0f3a881c7c03a258cf8ef8ac2db1ca9080963252d9a020bb45a264aa037",
+          "documents/economics-00000-of-00001.parquet": "f3ba8a0fbc9a9aed07b4970cc686e32cfefcd06d6922402587adf871f006394c",
+          "examples/psychology-00000-of-00001.parquet": "404e7dff2a4528419df0bdc162541e92138e35b78918d82d3a04ade5b8f7876b",
+          "documents/psychology-00000-of-00001.parquet": "085d381739cb24b4227dfaf577f39d0adcad8b7b1ae74be028ac239d37be3c1d",
+          "examples/robotics-00000-of-00001.parquet": "621484c87c9ebae12f81e32a0a8c5d085af4b95cbe1b575ab40ae4b659adb53a",
+          "documents/robotics-00000-of-00001.parquet": "2c83f286006a3b2e11a677abe88f382009c5ee79f97c1f43f6a571f3f94e6d15",
+          "examples/stackoverflow-00000-of-00001.parquet": "97d417ba449ef70c9c9ae2937e9df106654a2554ce1533b090cb64b998a077e1",
+          "documents/stackoverflow-00000-of-00001.parquet": "d54559692f925666c3c6b1d33a696a64ef324cf5aaeff9d6f4d11fba5cd5ac8b",
+          "examples/sustainable_living-00000-of-00001.parquet": "61f97837a16b47a0d9953039cf0b6a53d0fc5deae96a34f839b7cb5e798eb117",
+          "documents/sustainable_living-00000-of-00001.parquet": "474628623cf9de252bd80a7d1b667aa5070e21b87e1dd33f6723db4d24121fdf"
+        }
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "bfcl",
+      "source_suite": "breadth-v1",
+      "recorded_license": "Apache-2.0",
+      "license_url": "https://huggingface.co/datasets/gorilla-llm/Berkeley-Function-Calling-Leaderboard",
+      "attribution": "Patil et al., The Berkeley Function Calling Leaderboard (BFCL) (ICML 2025)",
+      "pins": {
+        "hf": "gorilla-llm/Berkeley-Function-Calling-Leaderboard@61fc0608cfd831fcfbbaa676ebdfef0ed963eeda",
+        "files": {
+          "BFCL_v3_simple.json": "fbc37b2ad252bf9af985582e0e07b456173fe627d957491472ea9cef5fb83158",
+          "BFCL_v3_multiple.json": "aef168155ebd74b7ac2401198b201343bc7d16d7a3d7e0d4e6d8ee82c6969b2a",
+          "BFCL_v3_parallel.json": "fad375d68295776efb63e5aa331dd884f8635e7bb50e05908113c74f14281c3c",
+          "BFCL_v3_parallel_multiple.json": "8863ea8433239f55c5f016154cf0830853c89f693c6ea270396a2fa121960579",
+          "BFCL_v3_irrelevance.json": "975f51c51f688649fd190078efd87081241e0a326f9114a2ea3c1ca2440d8690",
+          "BFCL_v3_live_simple.json": "b398743e6c0dfd2a87cee97a3bc1b9b90b81edc228c3153a820a93b51186fc00",
+          "BFCL_v3_live_multiple.json": "af2520ac5bb0b05aa9b8abe14a79b87198e5a3137a707d4f5633c792330f0cee",
+          "BFCL_v3_live_parallel.json": "6c26e9fdc3350cf596e6d1ea9c179cbff834761bccf562f4141ed29a839ca421",
+          "BFCL_v3_live_parallel_multiple.json": "21d4b9319c1faac431e22757b367ea28917fe467364c3a4b17f16ec06d4f6e79",
+          "BFCL_v3_live_irrelevance.json": "0d259e1c3ab6ba06c2a51911e2f49ecaa2eac3723a4a14f183a7687955e61338",
+          "possible_answer/BFCL_v3_simple.json": "2911a2bc00df82c4f999ffa64fedb0164cb88e96212ffa5972087eb91fd496ee",
+          "possible_answer/BFCL_v3_multiple.json": "244e00ce9395df948bcafc7bee64e8f9c87ef70887587d83cae45b13699f3047",
+          "possible_answer/BFCL_v3_parallel.json": "3af54bf04e5b7640b03a9b6a82440f52474feb24b398f94435fd2b155c7727de",
+          "possible_answer/BFCL_v3_parallel_multiple.json": "df4d2c16238c1465dc04697c273cf3ab4a450075fcd274e3dc86ad5bf0049b75",
+          "possible_answer/BFCL_v3_live_simple.json": "4a1988780cdd8a723967587614cb84a9f53aa5d6fd37f83c78a0dd7acc2f3d15",
+          "possible_answer/BFCL_v3_live_multiple.json": "97e90d59c5bd76c55a2920ce93e5566e9046307d3f558578f085f9d3a56c3084",
+          "possible_answer/BFCL_v3_live_parallel.json": "5e3d26c9103dd25912003d3c5f681f30efc6fd2b5f8ba474450f2df21fdf6fcb",
+          "possible_answer/BFCL_v3_live_parallel_multiple.json": "f5b5f360556c5feb51db46fb9f56ee4b304f4b45b161599bbb14161c98a2873f"
+        }
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "toolret",
+      "source_suite": "breadth-v1",
+      "recorded_license": "Apache-2.0 (ToolRet release); queries and tools re-published from its source benchmarks",
+      "license_url": "https://github.com/mangopy/tool-retrieval-benchmark",
+      "attribution": "Shi et al., Retrieval Models Aren't Tool-Savvy: Benchmarking Tool Retrieval for Large Language Models (Findings of ACL 2025)",
+      "pins": {
+        "queries": {
+          "hf": "mangopy/ToolRet-Queries@b8c76ad3349ff17497b6bdb28bb5b8f61a0f6445",
+          "files": {
+            "appbench/queries-00000-of-00001.parquet": "e7efff5e12a7676df46ded343abfdd44cc3c4fbeacee3d6b89edec8a9022b5d7",
+            "autotools-food/queries-00000-of-00001.parquet": "a780caf11c358db91552c6c75a7c8fe6312c73dcead3413543b9ccb1ffef6419",
+            "autotools-music/queries-00000-of-00001.parquet": "aff4630b7e8828b262df047b2db1172cf24b57c15e454261359f6e64e028487d",
+            "autotools-weather/queries-00000-of-00001.parquet": "80203c8ee6070ca102b08eb90b134f9602e4d085ba2f4da4f89288e1edd5f68f",
+            "craft-math-algebra/queries-00000-of-00001.parquet": "70993dcb4bc2b55f42994bed7f08b785d6af6baad941ee6973db26e2700b5df6",
+            "craft-tabmwp/queries-00000-of-00001.parquet": "c86458e41e26ac631aea4223fb9e24803d1b8117e31c28265824c10d221cfdf5",
+            "craft-vqa/queries-00000-of-00001.parquet": "014a4d68f6f55f74820139ea6008cbce91c609d8e0965aac94ac1599683d8d9b",
+            "gorilla-huggingface/queries-00000-of-00001.parquet": "ed64800b722bc8e2b8520feb3e5defc3988b0cc858929396ffc930625e71f703",
+            "gorilla-pytorch/queries-00000-of-00001.parquet": "b6423e142bab08ac0d7f9cdc1851a8e85a915970936139c795f697188b137ae0",
+            "gorilla-tensor/queries-00000-of-00001.parquet": "5b037823ac75e503df7abb08c51dcf7843f86ffb8ff45a625a09f1589b8f1fc7",
+            "gpt4tools/queries-00000-of-00001.parquet": "7171ba30b7930b76e3562d38c0cf74c2c778fbc429e2087234f8bef577ed7576",
+            "gta/queries-00000-of-00001.parquet": "757560b5e587993e8fb05c9d3ad146016cdefa21b938bd50b78ad6045067bb08",
+            "metatool/queries-00000-of-00001.parquet": "f4839301cd345a6b5eef1ebfd1710dfb209e5c9b6812a31ed8d7152979393ca0",
+            "mnms/queries-00000-of-00001.parquet": "d591f2cf3974abe21c6c0462a935b53b807246b95ed4d7439d5d05e0e97973ca",
+            "restgpt-spotify/queries-00000-of-00001.parquet": "a2dcd32971d6e807c437f09f3c09f84a2bc53a805468b98307ea41116c35e0a4",
+            "restgpt-tmdb/queries-00000-of-00001.parquet": "aa8a256d7100b005f6258f60229b5c0350967be3b8b8d6e6b58dfa79a8059193",
+            "reversechain/queries-00000-of-00001.parquet": "d4da51689cfc10f045e37bce6ffeb665e43a67faa9d71834abc84106603ad854",
+            "rotbench/queries-00000-of-00001.parquet": "2f75a1caf9c105560b5da02bd17e733e7d4d7e57ed6e0696728ffc36dae00159",
+            "t-eval-dialog/queries-00000-of-00001.parquet": "da566b97d930ce44b89bca85c2e7fa6acac6809110f76bb2e354a77a978ed97e",
+            "t-eval-step/queries-00000-of-00001.parquet": "eddd81571593a320e09b96d3807350d81f5c2778087489844d73551fca14c899",
+            "taskbench-daily/queries-00000-of-00001.parquet": "7357298960afafd3afcff91559cc14e95486e729798ef1b39af044e494cb8d15",
+            "taskbench-huggingface/queries-00000-of-00001.parquet": "c94f6ca056dd0906fb0f0d2cd9abe4f98a077c368fc52af9dee14325ee60d58a",
+            "taskbench-multimedia/queries-00000-of-00001.parquet": "0cebfcd50a061c48c043785f80db4ec48fbaa82f764db29f20b83f82b7e6d7e4",
+            "tool-be-honest/queries-00000-of-00001.parquet": "e936b9dde7b3e7256662464a118b952c3873ea0b6086d0a328a568b7b35678cb",
+            "toolace/queries-00000-of-00001.parquet": "49f7c861cec1799430680cea1df6cb98a10b33227f6cb183ac32375f396fcd5a",
+            "toolalpaca/queries-00000-of-00001.parquet": "627659a13d1b30a76e94d91ea27b14b4bc3be30e3fd6cd727f58ca1665bb1fe2",
+            "toolbench-sam/queries-00000-of-00001.parquet": "36075db0985db103afac9ad959f7974e79eb267c7d47fd31a6de4813e3a3802f",
+            "toolbench/queries-00000-of-00001.parquet": "2bb32ea009d6ece37b1b785330247aacac037a20dd4522632cb3359809c8837d",
+            "toolemu/queries-00000-of-00001.parquet": "f11491359b61bfb4a6f4d9bed2c45baab547938986e749e9eee555c667887020",
+            "tooleyes/queries-00000-of-00001.parquet": "c28280ed0a3cb119cc22f3f6678610bd2b7d4f9acbe7b800f0452b9a8d8a5d09",
+            "toolink/queries-00000-of-00001.parquet": "6ff2d524e1e79b8af96518e9d880ddf00cb8371e1bf58475011551b74d9d4a91",
+            "toollens/queries-00000-of-00001.parquet": "344e08a552508c77cb58e87dc93f7090f5c4eedba771095e5cdf6c1b12243a79",
+            "ultratool/queries-00000-of-00001.parquet": "5fc5fd59cab9e9a6852817ccb4645f81d47bf4394da232404d798c1be33d36b8"
+          }
+        },
+        "tools": {
+          "hf": "mangopy/ToolRet-Tools@e06c38c75612b6536bd959e08cdd345894aba6a7",
+          "files": {
+            "web/tools-00000-of-00001.parquet": "57faceebd778b2cb74571dca0e71e8bc8078c11ba05dce0efc562e818d3950e6",
+            "code/tools-00000-of-00001.parquet": "a5b1a8111a40128b1429fe53a490e627fd2832ebe2e641db5eeb695ecb4f0d9a",
+            "customized/tools-00000-of-00001.parquet": "e3d0cf64f5d5321751401677c820c5e8c7df79bfd67a85c01e275fe573cbde41"
+          }
+        }
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "apibank",
+      "source_suite": "breadth-v1",
+      "recorded_license": "MIT",
+      "license_url": "https://huggingface.co/datasets/liminghao1630/API-Bank",
+      "attribution": "Li et al., API-Bank: A Comprehensive Benchmark for Tool-Augmented LLMs (EMNLP 2023)",
+      "pins": {
+        "hf": "liminghao1630/API-Bank@12e8158b7628c168f07e8f31fbbe3445e99f44cf",
+        "files": {
+          "test-data/level-1-api.json": "0d3155c5495399836b5b1f1cc4eb6d5d50efa16b2734af50a016a158e9dd79bb"
+        }
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "routerbench",
+      "source_suite": "breadth-v1",
+      "recorded_license": "MIT",
+      "license_url": "https://github.com/withmartian/routerbench",
+      "attribution": "Hu et al., RouterBench: A Benchmark for Multi-LLM Routing System (2024), Martian",
+      "pins": {
+        "hf": "withmartian/routerbench@784021482c3f320c6619ed4b3bb3b41a21424fcb",
+        "files": {
+          "routerbench_0shot.pkl": "ba4f77f19517610a707c374e99322d7750c30fc4ae7ff5527888595a1e65d36d"
+        }
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "humicroedit",
+      "source_suite": "breadth-v1",
+      "recorded_license": "none stated (SemEval-2020 Task 7 research release; the README asks users to cite the task paper)",
+      "license_url": "https://cs.rochester.edu/u/nhossain/humicroedit.html",
+      "attribution": "Hossain et al., SemEval-2020 Task 7: Assessing Humor in Edited News Headlines (SemEval 2020)",
+      "pins": {
+        "url": "https://cs.rochester.edu/u/nhossain/semeval-2020-task-7-dataset.zip",
+        "sha256": "12a6cbf28c8b698ad80be42a65ac867b57e4c71662eedab607805e167ba791ab"
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    },
+    {
+      "source": "cfcolor",
+      "source_suite": "breadth-v1",
+      "recorded_license": "release notice: 'Permission is granted for anyone to copy, use, modify, or distribute this program and accompanying programs and documents for any purpose' (runPrediction.m), no separate data licence",
+      "license_url": "https://www.dgp.toronto.edu/~donovan/cfcolor/",
+      "attribution": "O'Donovan, Agarwala and Hertzmann, Collaborative Filtering of Color Aesthetics (CAe 2014)",
+      "pins": {
+        "url": "https://www.dgp.toronto.edu/~donovan/cfcolor/cfcolor.zip",
+        "sha256": "47c07095642cfab3c2eeab366a5d152b07783cbb5af390cbfda7d7c13db4b54c"
+      },
+      "role": "eval_only",
+      "distribution": "not included; review source and upstream repository terms before redistribution",
+      "verification": "recorded source statement, not a legal clearance"
+    }
+  ],
+  "external_benchmarks": [
+    {
+      "name": "JevBench",
+      "url": "https://github.com/fstandhartinger/jevbench",
+      "revision": "bb05a335bc809e61b20c0f745d25499a82b326fc",
+      "distribution": "external acquisition; public tasks only"
+    },
+    {
+      "name": "Kev suites",
+      "url": "https://huggingface.co/datasets/jaredpalmer/kev-suites",
+      "revision": "cc4bac803e73112689ec327ffa481c519cbc7a05",
+      "distribution": "consult individual suite manifests and source terms"
+    }
+  ]
+}

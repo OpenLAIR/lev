@@ -1,0 +1,19 @@
+{
+  "run": "Lev-3B-s0",
+  "suite": "evals/v7/decision-v7",
+  "split": "calibration",
+  "native_loop": true,
+  "questions": 1148,
+  "temperatures": [
+    1.0,
+    1.0233738919967748
+  ],
+  "nll_raw": [
+    0.43132513761520386,
+    0.35952630639076233
+  ],
+  "nll_fit": [
+    0.43132512498201425,
+    0.3593748270523957
+  ]
+}

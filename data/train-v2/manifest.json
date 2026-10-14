@@ -1,0 +1,159 @@
+{
+  "version": 2,
+  "name": "lev-train-v2",
+  "seed": "lev-train-v2",
+  "sizes": "full",
+  "files": {
+    "increment.jsonl": {
+      "sha256": "91433417f8072c00376037ada0cb554a794ff31c9c9cc49e26e410293ea07253",
+      "records": 89723
+    },
+    "s60.jsonl": {
+      "sha256": "89817d166d6fed1b39bf52a237a7b9ca221d521f4f2fd503b14118995daf6d26",
+      "records": 47424,
+      "increment_records": 28660
+    },
+    "s120.jsonl": {
+      "sha256": "711a9dfc700055426757ddc2aa3d8ff80b846d2e4413f93ed04924a50891455e",
+      "records": 107424,
+      "increment_records": 88660
+    }
+  },
+  "s31": {
+    "mix": {
+      "path": "data/local/kev08b-release-mix.jsonl",
+      "sha256": "f8da4b2fe19f69dec8244edaad787edd416b10d62e95e7ae97be638c71efa251",
+      "records": 18764
+    },
+    "replay": {
+      "suite": "evals/v7/decision-v7",
+      "partition": "train",
+      "records": 12576,
+      "sha256": "7ed5254b5cb5291baefaceb09edf7e13110258211518c8038f4a12c11bd628ad"
+    }
+  },
+  "train_with": "kev.train --data <subset>.jsonl --suite evals/v7/decision-v7 --replay 12576",
+  "components": {
+    "graded": {
+      "target": 32000,
+      "records": 32000,
+      "sources": {
+        "lev_gen_rule_depth": 8000,
+        "lev_gen_dep_chain": 8000,
+        "lev_gen_ledger_steps": 8000,
+        "lev_gen_date_chain": 8000
+      }
+    },
+    "hard_v1": {
+      "target": 12000,
+      "records": 12000,
+      "sources": {
+        "hard_temporal_numeric": 1714,
+        "hard_multi_hop": 1714,
+        "hard_tradeoff": 1714,
+        "hard_long_policy": 1715,
+        "hard_ambiguous": 1716,
+        "hard_judge": 1713,
+        "hard_probability": 1714
+      }
+    },
+    "kev_public": {
+      "target": 16000,
+      "records": 16000,
+      "sources": {
+        "boolq": 1600,
+        "trec": 1600,
+        "yelp": 1600,
+        "dbpedia14": 1600,
+        "banking77": 1600,
+        "amazon": 1600,
+        "imdb": 1600,
+        "sst5": 1600,
+        "agnews": 1600,
+        "mnli": 1600
+      }
+    },
+    "kev_added": {
+      "target": 10000,
+      "records": 7721,
+      "sources": {
+        "openbookqa": 3334,
+        "csqa": 3334,
+        "arc": 1053
+      }
+    },
+    "audited": {
+      "target": 22000,
+      "records": 22002,
+      "sources": {
+        "lev_condaqa": 3667,
+        "lev_social_iqa": 3667,
+        "lev_cosmosqa": 3667,
+        "lev_mathqa": 3667,
+        "lev_qasc": 3667,
+        "lev_piqa": 3667
+      }
+    }
+  },
+  "subset_components": {
+    "s60": {
+      "graded": 10222,
+      "audited": 7028,
+      "kev_public": 5111,
+      "hard_v1": 3833,
+      "kev_added": 2466
+    },
+    "s120": {
+      "graded": 31621,
+      "audited": 21741,
+      "kev_public": 15810,
+      "hard_v1": 11858,
+      "kev_added": 7630
+    }
+  },
+  "graded": {
+    "families": [
+      "rule_depth",
+      "dep_chain",
+      "ledger_steps",
+      "date_chain"
+    ],
+    "k_train": {
+      "rule_depth": 3,
+      "dep_chain": 4,
+      "ledger_steps": 3,
+      "date_chain": 3
+    },
+    "templates": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "unknowable_share": 0.1
+  },
+  "dataset_revisions": {
+    "CogComp/trec": "65752bf53af25bc935a0dce92fb5b6c930728450",
+    "legacy-datasets/banking77": "f54121560de48f2852f90be299010d1d6dc612ec",
+    "stanfordnlp/imdb": "e6281661ce1c48d982bc483cf8a173c1bbeb5d31",
+    "fancyzhx/ag_news": "eb185aade064a813bc0b7f42de02595523103ca4",
+    "SetFit/amazon_reviews_multi_en": "ec73b665e4be0f567b69d39425355401cfe0d29b",
+    "fancyzhx/dbpedia_14": "9abd46cf7fc8b4c64290f26993c540b92aa145ac",
+    "google/boolq": "35b264d03638db9f4ce671b711558bf7ff0f80d5",
+    "SetFit/sst5": "e51bdcd8cd3a30da231967c1a249ba59361279a3",
+    "nyu-mll/multi_nli": "da70db2af9d09693783c3320c4249840212ee221",
+    "Yelp/yelp_review_full": "c1f9ee939b7d05667af864ee1cb066393154bf85",
+    "allenai/ai2_arc": "210d026faf9955653af8916fad021475a3f00453",
+    "allenai/openbookqa": "388097ea7776314e93a529163e0fea805b8a6454",
+    "tau/commonsense_qa": "94630fe30dad47192a8546eb75f094926d47e155"
+  },
+  "pool_drops": {
+    "kev_public:duplicate_state": 637,
+    "kev_public:overlap_dropped": 461,
+    "kev_added:overlap_dropped": 146,
+    "kev_added:duplicate_state": 50,
+    "audited:duplicate_state": 137,
+    "audited:overlap_dropped": 11
+  },
+  "shortfall": {}
+}

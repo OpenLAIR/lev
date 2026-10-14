@@ -1,0 +1,553 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": ".github/workflows/verify.yml",
+      "kind": "yaml"
+    },
+    {
+      "path": ".gitignore",
+      "kind": "text"
+    },
+    {
+      "path": ".gitleaks.toml",
+      "kind": "toml"
+    },
+    {
+      "path": "LICENSE",
+      "kind": "text"
+    },
+    {
+      "path": "NOTICE",
+      "kind": "text"
+    },
+    {
+      "path": "PROVENANCE.json",
+      "kind": "json"
+    },
+    {
+      "path": "README.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "RELEASE_READINESS.json",
+      "kind": "json"
+    },
+    {
+      "path": "analysis/__init__.py",
+      "kind": "python"
+    },
+    {
+      "path": "analysis/adaptive_depth.py",
+      "kind": "python"
+    },
+    {
+      "path": "analysis/arm_compare.py",
+      "kind": "python"
+    },
+    {
+      "path": "analysis/cascade.py",
+      "kind": "python"
+    },
+    {
+      "path": "analysis/dense_slope.py",
+      "kind": "python"
+    },
+    {
+      "path": "analysis/depth_breakdown.py",
+      "kind": "python"
+    },
+    {
+      "path": "analysis/difficulty_hypothesis.py",
+      "kind": "python"
+    },
+    {
+      "path": "analysis/jevbench_paired.py",
+      "kind": "python"
+    },
+    {
+      "path": "analysis/pareto.py",
+      "kind": "python"
+    },
+    {
+      "path": "analysis/seed_pool.py",
+      "kind": "python"
+    },
+    {
+      "path": "analysis/stopper_ablations.py",
+      "kind": "python"
+    },
+    {
+      "path": "calibration/Lev-1.4B-s0.json",
+      "kind": "json"
+    },
+    {
+      "path": "calibration/Lev-2.6B-s0.json",
+      "kind": "json"
+    },
+    {
+      "path": "calibration/Lev-3B-s0.json",
+      "kind": "json"
+    },
+    {
+      "path": "configs/backbone-revisions.json",
+      "kind": "json"
+    },
+    {
+      "path": "configs/development-protocol.json",
+      "kind": "json"
+    },
+    {
+      "path": "configs/heldout-protocol.json",
+      "kind": "json"
+    },
+    {
+      "path": "data/model-index.json",
+      "kind": "json"
+    },
+    {
+      "path": "data/sources.json",
+      "kind": "json"
+    },
+    {
+      "path": "data/train-v2/manifest.json",
+      "kind": "json"
+    },
+    {
+      "path": "data-cards/Lev-results.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "data-cards/Lev-train-v2.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "data-cards/LevBench.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "docs/DATA.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "docs/INSTALL.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "docs/LICENSING.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "docs/RELEASE_STATUS.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "docs/REPRODUCING.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "docs/RESOURCES.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "docs/VALIDATION.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "evals/breadth-v1/manifest.json",
+      "kind": "json"
+    },
+    {
+      "path": "evals/devtools-v1/manifest.json",
+      "kind": "json"
+    },
+    {
+      "path": "evals/documents-v1/manifest.json",
+      "kind": "json"
+    },
+    {
+      "path": "evals/hard-v1/manifest.json",
+      "kind": "json"
+    },
+    {
+      "path": "evals/levbench-v1/frozen.json",
+      "kind": "json"
+    },
+    {
+      "path": "evals/levbench-v1/manifest.json",
+      "kind": "json"
+    },
+    {
+      "path": "evals/night2/manifest.json",
+      "kind": "json"
+    },
+    {
+      "path": "evals/public-pool-v6/manifest.json",
+      "kind": "json"
+    },
+    {
+      "path": "evals/v7/decision-v7/manifest.json",
+      "kind": "json"
+    },
+    {
+      "path": "evals/v9/transfer-v9/manifest.json",
+      "kind": "json"
+    },
+    {
+      "path": "examples/fixed_depth.py",
+      "kind": "python"
+    },
+    {
+      "path": "figures/README.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "figures/adaptive_numbers.json",
+      "kind": "json"
+    },
+    {
+      "path": "figures/extra_numbers.json",
+      "kind": "json"
+    },
+    {
+      "path": "figures/figure-1-preview.svg",
+      "kind": "svg"
+    },
+    {
+      "path": "figures/make_ablation.py",
+      "kind": "python"
+    },
+    {
+      "path": "figures/make_appendix.py",
+      "kind": "python"
+    },
+    {
+      "path": "figures/make_cascade.py",
+      "kind": "python"
+    },
+    {
+      "path": "figures/make_cascade_v2.py",
+      "kind": "python"
+    },
+    {
+      "path": "figures/make_compact.py",
+      "kind": "python"
+    },
+    {
+      "path": "figures/make_figures.py",
+      "kind": "python"
+    },
+    {
+      "path": "figures/make_training.py",
+      "kind": "python"
+    },
+    {
+      "path": "figures/make_training_v2.py",
+      "kind": "python"
+    },
+    {
+      "path": "figures/reproduce.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/__init__.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/api.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/benchmark.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/budget.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/calibrate.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/checkpoint.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/composition.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/contrastive.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/cuda_graphs.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/data.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/device.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/evaluate.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/full_ft.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/fused_qwen35.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/loop.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/metrics.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/model.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/nanbeige.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/ouro.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/predictors.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/shared_prefix.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/suite.py",
+      "kind": "python"
+    },
+    {
+      "path": "kev/train.py",
+      "kind": "python"
+    },
+    {
+      "path": "model-cards/Lev-1.4B.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "model-cards/Lev-2.6B.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "model-cards/Lev-3B.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "pyproject.toml",
+      "kind": "toml"
+    },
+    {
+      "path": "release-evidence/cpu-observations.md",
+      "kind": "markdown"
+    },
+    {
+      "path": "release-evidence/cpu-tested-files.json",
+      "kind": "json"
+    },
+    {
+      "path": "release-evidence/cpu-tests.json",
+      "kind": "json"
+    },
+    {
+      "path": "requirements-tested.txt",
+      "kind": "text"
+    },
+    {
+      "path": "results/jevbench-nanbeige/pareto/points.json",
+      "kind": "json"
+    },
+    {
+      "path": "results/jevbench-ouro/pareto/points.json",
+      "kind": "json"
+    },
+    {
+      "path": "results/jevbench-reports/q35-2b-bf16/report.json",
+      "kind": "json"
+    },
+    {
+      "path": "results/jevbench-reports/q35-2b-fp32/report.json",
+      "kind": "json"
+    },
+    {
+      "path": "results/jevbench-reports/q35-4b-bf16/report.json",
+      "kind": "json"
+    },
+    {
+      "path": "results/jevbench-reports/q35-4b-fp32/report.json",
+      "kind": "json"
+    },
+    {
+      "path": "results/latency/latency-fits.json",
+      "kind": "json"
+    },
+    {
+      "path": "results/locked/cascade-latency.json",
+      "kind": "json"
+    },
+    {
+      "path": "results/training/joint_vs_specialist.json",
+      "kind": "json"
+    },
+    {
+      "path": "results/training/last_step_by_depth.json",
+      "kind": "json"
+    },
+    {
+      "path": "scripts/__init__.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/build_hard_v1.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/build_lev_eval.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/build_lev_train.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/depth_rows.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/export_results.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/fit_depth_temperatures.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/hard_v1_common.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/hard_v1_families.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/hard_v1_numeric.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/hard_v1_policy.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/jev_openrouter.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/jevbench_eval.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/latency_table.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/lev_graded.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/lev_sources.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/package_release.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/prepare_training_mix.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/run_data.sh",
+      "kind": "shell"
+    },
+    {
+      "path": "scripts/run_read.sh",
+      "kind": "shell"
+    },
+    {
+      "path": "scripts/run_stopper.sh",
+      "kind": "shell"
+    },
+    {
+      "path": "scripts/run_train.sh",
+      "kind": "shell"
+    },
+    {
+      "path": "scripts/screen_lev.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/screen_longdoc_v1.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/stopper_config.py",
+      "kind": "python"
+    },
+    {
+      "path": "scripts/verify_release.py",
+      "kind": "python"
+    },
+    {
+      "path": "tests/test_analysis_lev.py",
+      "kind": "python"
+    },
+    {
+      "path": "tests/test_lev_data.py",
+      "kind": "python"
+    },
+    {
+      "path": "tests/test_lev_sources.py",
+      "kind": "python"
+    },
+    {
+      "path": "tests/test_loop.py",
+      "kind": "python"
+    },
+    {
+      "path": "tests/test_nanbeige.py",
+      "kind": "python"
+    },
+    {
+      "path": "tests/test_ouro.py",
+      "kind": "python"
+    },
+    {
+      "path": "tests/test_release_gate.py",
+      "kind": "python"
+    },
+    {
+      "path": "tests/test_release_tools.py",
+      "kind": "python"
+    }
+  ]
+}

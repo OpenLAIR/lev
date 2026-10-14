@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "check_id": "cpu_tests",
+  "status": "passed",
+  "results": {
+    "exit_code": 0,
+    "passed": 187,
+    "failed": 0,
+    "skipped_network_only": true
+  }
+}

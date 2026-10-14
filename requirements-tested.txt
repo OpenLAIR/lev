@@ -1,0 +1,15 @@
+# Core/CPU reference environment; optional CUDA override described in docs/INSTALL.md.
+accelerate==1.15.0
+datasets==5.0.1
+numpy==2.5.3
+peft==0.21.0
+pydantic==2.13.5
+scikit-learn==1.9.1
+torch==2.8.0
+transformers==5.17.0
+huggingface-hub==1.32.0
+safetensors==0.8.0
+matplotlib==3.11.2
+pytest==9.1.1
+sentencepiece==0.2.2
+PyYAML==6.0.3

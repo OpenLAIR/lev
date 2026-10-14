@@ -1,0 +1,524 @@
+{
+  "version": "breadth-v1",
+  "seed": "breadth-v1",
+  "eval_only": true,
+  "partitions": [
+    "development",
+    "test"
+  ],
+  "locked": [
+    "test"
+  ],
+  "files": {
+    "development.jsonl": {
+      "sha256": "9aad8f4a7374988b2768d31135d5690137df3a3d6cbc1e771db4ee95ca515a94",
+      "records": 1990,
+      "questions": 3075,
+      "bytes": 5032194,
+      "in_git": true,
+      "by_source": {
+        "apibank": 150,
+        "bfcl": 150,
+        "bright": 150,
+        "cfcolor": 150,
+        "chessbench": 150,
+        "clinc150": 150,
+        "contractnli": 40,
+        "hellaswag": 150,
+        "humicroedit": 150,
+        "musr": 150,
+        "routerbench": 150,
+        "sata_bench": 150,
+        "sgd": 150,
+        "toolret": 150
+      }
+    },
+    "test.jsonl": {
+      "sha256": "91a64f0a9448dcaece421c051a4b3fd079c15b84ea6cb9cfa8155237d8d1fa18",
+      "records": 1990,
+      "questions": 3089,
+      "bytes": 5127662,
+      "in_git": true,
+      "by_source": {
+        "apibank": 150,
+        "bfcl": 150,
+        "bright": 150,
+        "cfcolor": 150,
+        "chessbench": 150,
+        "clinc150": 150,
+        "contractnli": 40,
+        "hellaswag": 150,
+        "humicroedit": 150,
+        "musr": 150,
+        "routerbench": 150,
+        "sata_bench": 150,
+        "sgd": 150,
+        "toolret": 150
+      }
+    }
+  },
+  "trainable_sources": [],
+  "eval_only_sources": [
+    "musr",
+    "sata_bench",
+    "chessbench",
+    "contractnli",
+    "hellaswag",
+    "clinc150",
+    "sgd",
+    "bright",
+    "bfcl",
+    "toolret",
+    "apibank",
+    "routerbench",
+    "humicroedit",
+    "cfcolor"
+  ],
+  "holdout_sources": [],
+  "areas": {
+    "knowledge": {
+      "label": "Knowledge & Reasoning",
+      "datasets": [
+        "musr",
+        "sata_bench",
+        "chessbench"
+      ]
+    },
+    "language": {
+      "label": "Language Understanding",
+      "datasets": [
+        "contractnli",
+        "hellaswag"
+      ]
+    },
+    "retrieval": {
+      "label": "Retrieval & Classification",
+      "datasets": [
+        "clinc150",
+        "sgd",
+        "bright"
+      ]
+    },
+    "tools": {
+      "label": "Tools & Automation",
+      "datasets": [
+        "bfcl",
+        "toolret",
+        "apibank",
+        "routerbench"
+      ]
+    },
+    "arts": {
+      "label": "Arts & Human Taste",
+      "datasets": [
+        "humicroedit",
+        "cfcolor"
+      ]
+    }
+  },
+  "counts": {
+    "development": {
+      "apibank": 150,
+      "bfcl": 150,
+      "bright": 150,
+      "cfcolor": 150,
+      "chessbench": 150,
+      "clinc150": 150,
+      "contractnli": 40,
+      "hellaswag": 150,
+      "humicroedit": 150,
+      "musr": 150,
+      "routerbench": 150,
+      "sata_bench": 150,
+      "sgd": 150,
+      "toolret": 150
+    },
+    "test": {
+      "apibank": 150,
+      "bfcl": 150,
+      "bright": 150,
+      "cfcolor": 150,
+      "chessbench": 150,
+      "clinc150": 150,
+      "contractnli": 40,
+      "hellaswag": 150,
+      "humicroedit": 150,
+      "musr": 150,
+      "routerbench": 150,
+      "sata_bench": 150,
+      "sgd": 150,
+      "toolret": 150
+    }
+  },
+  "questions": {
+    "development": {
+      "apibank": 150,
+      "bfcl": 306,
+      "bright": 150,
+      "cfcolor": 150,
+      "chessbench": 150,
+      "clinc150": 150,
+      "contractnli": 160,
+      "hellaswag": 150,
+      "humicroedit": 150,
+      "musr": 150,
+      "routerbench": 150,
+      "sata_bench": 959,
+      "sgd": 150,
+      "toolret": 150
+    },
+    "test": {
+      "apibank": 150,
+      "bfcl": 305,
+      "bright": 150,
+      "cfcolor": 150,
+      "chessbench": 150,
+      "clinc150": 150,
+      "contractnli": 160,
+      "hellaswag": 150,
+      "humicroedit": 150,
+      "musr": 150,
+      "routerbench": 150,
+      "sata_bench": 974,
+      "sgd": 150,
+      "toolret": 150
+    }
+  },
+  "strata": {
+    "development": {
+      "apibank": {
+        "AddAgenda": 4,
+        "AddAlarm": 1,
+        "AddMeeting": 1,
+        "AppointmentRegistration": 6,
+        "BookHotel": 2,
+        "Calculator": 5,
+        "CancelRegistration": 4,
+        "CancelTimedSwitch": 4,
+        "DeleteAccount": 5,
+        "DeleteAgenda": 3,
+        "DeleteMeeting": 1,
+        "DeleteReminder": 1,
+        "Dictionary": 4,
+        "DocumentQA": 4,
+        "EmergencyKnowledge": 6,
+        "ForgotPassword": 5,
+        "GetToday": 3,
+        "GetUserToken": 22,
+        "ModifyAgenda": 2,
+        "ModifyAlarm": 4,
+        "ModifyMeeting": 2,
+        "ModifyPassword": 4,
+        "ModifyRegistration": 6,
+        "ModifyReminder": 4,
+        "OpenBankAccount": 4,
+        "PlayMusic": 1,
+        "QueryBalance": 4,
+        "QueryHealthData": 2,
+        "QueryHistoryToday": 3,
+        "QueryMeeting": 1,
+        "QueryRegistration": 5,
+        "QueryReminder": 4,
+        "QueryScene": 3,
+        "QueryStock": 5,
+        "RecordHealthData": 5,
+        "RegisterUser": 3,
+        "SymptomSearch": 3,
+        "TimedSwitch": 1,
+        "Translate": 2,
+        "Wiki": 1
+      },
+      "bfcl": {
+        "irrelevance": 17,
+        "live_irrelevance": 17,
+        "live_multiple": 16,
+        "live_parallel": 8,
+        "live_parallel_multiple": 12,
+        "live_simple": 16,
+        "multiple": 16,
+        "parallel": 16,
+        "parallel_multiple": 16,
+        "simple": 16
+      },
+      "bright": {
+        "biology": 23,
+        "earth_science": 23,
+        "economics": 23,
+        "psychology": 23,
+        "robotics": 23,
+        "stackoverflow": 12,
+        "sustainable_living": 23
+      },
+      "cfcolor": {
+        "a": 75,
+        "b": 75
+      },
+      "chessbench": {
+        "endgame": 50,
+        "middlegame": 50,
+        "opening": 50
+      },
+      "clinc150": {
+        "auto_and_commute": 14,
+        "banking": 14,
+        "credit_cards": 14,
+        "home": 14,
+        "kitchen_and_dining": 14,
+        "meta": 14,
+        "oos": 14,
+        "small_talk": 13,
+        "travel": 13,
+        "utility": 13,
+        "work": 13
+      },
+      "contractnli": {
+        "search-pdf": 17,
+        "sec-html": 11,
+        "sec-text": 12
+      },
+      "hellaswag": {
+        "indomain": 75,
+        "zeroshot": 75
+      },
+      "humicroedit": {
+        "a": 75,
+        "b": 75
+      },
+      "musr": {
+        "murder_mystery": 61,
+        "object_placements": 29,
+        "team_allocation": 60
+      },
+      "routerbench": {
+        "mbpp": 50,
+        "mmlu": 50,
+        "winogrande": 50
+      },
+      "sata_bench": {
+        "answers_1": 1,
+        "answers_2": 75,
+        "answers_3": 74
+      },
+      "sgd": {
+        "changed": 50,
+        "none": 50,
+        "same": 50
+      },
+      "toolret": {
+        "appbench": 5,
+        "autotools-food": 5,
+        "autotools-music": 5,
+        "autotools-weather": 3,
+        "craft-math-algebra": 5,
+        "craft-tabmwp": 5,
+        "craft-vqa": 5,
+        "gorilla-huggingface": 5,
+        "gorilla-pytorch": 5,
+        "gorilla-tensor": 5,
+        "gpt4tools": 5,
+        "gta": 5,
+        "metatool": 5,
+        "mnms": 5,
+        "restgpt-spotify": 5,
+        "restgpt-tmdb": 5,
+        "reversechain": 5,
+        "rotbench": 5,
+        "t-eval-dialog": 5,
+        "t-eval-step": 5,
+        "taskbench-daily": 4,
+        "taskbench-huggingface": 4,
+        "taskbench-multimedia": 4,
+        "tool-be-honest": 4,
+        "toolace": 4,
+        "toolalpaca": 4,
+        "toolbench": 4,
+        "toolbench-sam": 4,
+        "toolemu": 4,
+        "tooleyes": 4,
+        "toolink": 4,
+        "toollens": 4,
+        "ultratool": 4
+      }
+    },
+    "test": {
+      "apibank": {
+        "AddAgenda": 5,
+        "AddAlarm": 2,
+        "AddMeeting": 1,
+        "AddReminder": 3,
+        "AppointmentRegistration": 5,
+        "BookHotel": 3,
+        "Calculator": 4,
+        "CancelRegistration": 7,
+        "CancelTimedSwitch": 1,
+        "DeleteAccount": 5,
+        "DeleteAgenda": 2,
+        "DeleteAlarm": 4,
+        "DeleteScene": 3,
+        "Dictionary": 1,
+        "DocumentQA": 2,
+        "EmergencyKnowledge": 9,
+        "ForgotPassword": 2,
+        "GetToday": 2,
+        "GetUserToken": 8,
+        "ImageCaption": 1,
+        "ModifyAlarm": 2,
+        "ModifyMeeting": 2,
+        "ModifyPassword": 2,
+        "ModifyRegistration": 7,
+        "ModifyReminder": 4,
+        "OpenBankAccount": 8,
+        "PlayMusic": 2,
+        "QueryAgenda": 1,
+        "QueryAlarm": 1,
+        "QueryBalance": 4,
+        "QueryHealthData": 3,
+        "QueryHistoryToday": 6,
+        "QueryMeeting": 2,
+        "QueryRegistration": 8,
+        "QueryScene": 2,
+        "QueryStock": 7,
+        "RecordHealthData": 7,
+        "RegisterUser": 3,
+        "SearchEngine": 1,
+        "SendEmail": 1,
+        "SpeechRecognition": 1,
+        "SymptomSearch": 2,
+        "TimedSwitch": 2,
+        "Translate": 2
+      },
+      "bfcl": {
+        "irrelevance": 17,
+        "live_irrelevance": 17,
+        "live_multiple": 16,
+        "live_parallel": 8,
+        "live_parallel_multiple": 12,
+        "live_simple": 16,
+        "multiple": 16,
+        "parallel": 16,
+        "parallel_multiple": 16,
+        "simple": 16
+      },
+      "bright": {
+        "biology": 23,
+        "earth_science": 23,
+        "economics": 23,
+        "psychology": 23,
+        "robotics": 22,
+        "stackoverflow": 14,
+        "sustainable_living": 22
+      },
+      "cfcolor": {
+        "a": 75,
+        "b": 75
+      },
+      "chessbench": {
+        "endgame": 50,
+        "middlegame": 50,
+        "opening": 50
+      },
+      "clinc150": {
+        "auto_and_commute": 14,
+        "banking": 14,
+        "credit_cards": 14,
+        "home": 14,
+        "kitchen_and_dining": 14,
+        "meta": 14,
+        "oos": 14,
+        "small_talk": 13,
+        "travel": 13,
+        "utility": 13,
+        "work": 13
+      },
+      "contractnli": {
+        "search-pdf": 14,
+        "sec-html": 13,
+        "sec-text": 13
+      },
+      "hellaswag": {
+        "indomain": 75,
+        "zeroshot": 75
+      },
+      "humicroedit": {
+        "a": 75,
+        "b": 75
+      },
+      "musr": {
+        "murder_mystery": 58,
+        "object_placements": 35,
+        "team_allocation": 57
+      },
+      "routerbench": {
+        "mbpp": 50,
+        "mmlu": 50,
+        "winogrande": 50
+      },
+      "sata_bench": {
+        "answers_2": 75,
+        "answers_3": 75
+      },
+      "sgd": {
+        "changed": 50,
+        "none": 50,
+        "same": 50
+      },
+      "toolret": {
+        "appbench": 5,
+        "autotools-food": 5,
+        "autotools-music": 5,
+        "autotools-weather": 5,
+        "craft-math-algebra": 5,
+        "craft-tabmwp": 5,
+        "craft-vqa": 5,
+        "gorilla-huggingface": 5,
+        "gorilla-pytorch": 5,
+        "gorilla-tensor": 5,
+        "gpt4tools": 5,
+        "gta": 5,
+        "metatool": 5,
+        "mnms": 5,
+        "restgpt-spotify": 5,
+        "restgpt-tmdb": 5,
+        "reversechain": 5,
+        "rotbench": 5,
+        "t-eval-dialog": 4,
+        "t-eval-step": 4,
+        "taskbench-daily": 4,
+        "taskbench-huggingface": 4,
+        "taskbench-multimedia": 4,
+        "tool-be-honest": 4,
+        "toolace": 4,
+        "toolalpaca": 4,
+        "toolbench": 4,
+        "toolbench-sam": 4,
+        "toolemu": 4,
+        "tooleyes": 4,
+        "toolink": 4,
+        "toollens": 4,
+        "ultratool": 4
+      }
+    }
+  },
+  "tokenizer": {
+    "model": "Qwen/Qwen3.5-4B-Base",
+    "revision": "1001bb4d826a52d1f399e183466143f4da7b741b"
+  },
+  "base_revisions": {
+    "Qwen/Qwen3.5-4B-Base": "1001bb4d826a52d1f399e183466143f4da7b741b"
+  },
+  "context": {
+    "max_state": 8192,
+    "max_branch": 8192,
+    "max_packed": 16384,
+    "truncate": false,
+    "admission": {
+      "max_state": 7168,
+      "max_branch": 7680,
+      "max_packed": 16384
+    },
+    "note": "records are admitted at `admission` under the tokenizer above (row = state + one question <= 7,680 tokens) and scored in the serving context; far longer than Kev's 384 / 1,024 training context"
+  },
+  "large_partitions": "partitions with in_git false are gitignored; upload them to the Hub mirror (kev.suite.SUITES_DATASET) and bump SUITES_REVISION before load_split can fetch them elsewhere",
+  "public_artifact": "evals/breadth-v1",
+  "metadata_notice": "Public-schema metadata projection. Partition hashes identify the study data; omitted preparation history is not distributed. Exact reconstruction is not validated."
+}

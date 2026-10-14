@@ -1,0 +1,25 @@
+{
+  "model": "Lev-2.6B-last-loss-s0",
+  "what": "Ouro-2.6B, Train-31k, seed 0, four loop steps with the loss on the last step only (--step_weights 0,0,0,1); fixed-depth accuracy at every depth",
+  "source": "Lev training comparison",
+  "panels": {
+    "eval-v1-development": {
+      "questions": 4370,
+      "accuracy_by_depth": [
+        0.3643020594965675,
+        0.5270022883295195,
+        0.594508009153318,
+        0.6324942791762014
+      ]
+    },
+    "breadth-v1-development": {
+      "questions": 3023,
+      "accuracy_by_depth": [
+        0.4118425405226596,
+        0.6209063843863711,
+        0.6695335759179623,
+        0.6787958981144558
+      ]
+    }
+  }
+}

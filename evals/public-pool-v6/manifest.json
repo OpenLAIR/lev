@@ -1,0 +1,71 @@
+{
+  "version": 2,
+  "seed": 20260919,
+  "holdout_sources": [],
+  "eval_only": false,
+  "trainable_sources": [
+    "banking77",
+    "boolq",
+    "agnews",
+    "mnli",
+    "sst5",
+    "yelp",
+    "trec",
+    "dbpedia14",
+    "amazon",
+    "imdb",
+    "arc",
+    "openbookqa",
+    "csqa"
+  ],
+  "eval_only_sources": [],
+  "dataset_revisions": {
+    "allenai/ai2_arc": "210d026faf9955653af8916fad021475a3f00453",
+    "Yelp/yelp_review_full": "c1f9ee939b7d05667af864ee1cb066393154bf85",
+    "SetFit/amazon_reviews_multi_en": "ec73b665e4be0f567b69d39425355401cfe0d29b",
+    "fancyzhx/dbpedia_14": "9abd46cf7fc8b4c64290f26993c540b92aa145ac",
+    "SetFit/sst5": "e51bdcd8cd3a30da231967c1a249ba59361279a3",
+    "google/boolq": "35b264d03638db9f4ce671b711558bf7ff0f80d5",
+    "CogComp/trec": "65752bf53af25bc935a0dce92fb5b6c930728450",
+    "fancyzhx/ag_news": "eb185aade064a813bc0b7f42de02595523103ca4",
+    "nyu-mll/multi_nli": "da70db2af9d09693783c3320c4249840212ee221",
+    "tau/commonsense_qa": "94630fe30dad47192a8546eb75f094926d47e155",
+    "stanfordnlp/imdb": "e6281661ce1c48d982bc483cf8a173c1bbeb5d31",
+    "allenai/openbookqa": "388097ea7776314e93a529163e0fea805b8a6454",
+    "legacy-datasets/banking77": "f54121560de48f2852f90be299010d1d6dc612ec"
+  },
+  "base_revisions": {
+    "Qwen/Qwen2.5-0.5B": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+    "Qwen/Qwen3-0.6B-Base": "da87bfb608c14b7cf20ba1ce41287e8de496c0cd"
+  },
+  "context": {
+    "max_state": 384,
+    "max_branch": 1024,
+    "max_packed": 2048,
+    "truncate": false
+  },
+  "files": {
+    "train.jsonl": {
+      "sha256": "f5f6d6e62b8617b0773be7fc7a7210c355a3b3247798deac7fe377ed70fd1164",
+      "records": 13000,
+      "questions": 16000
+    },
+    "calibration.jsonl": {
+      "sha256": "bb43a590d115bc559b56dc8a40b441b490d4bc87d99cbe344c66c3a44dcc1f51",
+      "records": 780,
+      "questions": 960
+    },
+    "development.jsonl": {
+      "sha256": "0d3b60dc355b4101372449bed321d420eb69618ad400b184684e46be4c33ee77",
+      "records": 1328,
+      "questions": 1592
+    },
+    "test.jsonl": {
+      "sha256": "ea63dfe433d05ce9548399ac770a87c6b427f47662bd68121f0091ac9119493a",
+      "records": 1328,
+      "questions": 1592
+    }
+  },
+  "public_artifact": "evals/public-pool-v6",
+  "metadata_notice": "Public-schema metadata projection. Partition hashes identify the study data; omitted preparation history is not distributed. Exact reconstruction is not validated."
+}

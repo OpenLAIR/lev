@@ -1,0 +1,9 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "The source-data matrix contains a reviewed SHA-256 checksum for an API-Bank JSON file; this is not a credential"
+condition = "AND"
+paths = ['''(?:^|/)data/sources\.json$''']
+regexTarget = "line"
+regexes = ['''^\s*"test-data/level-1-api\.json": "[0-9a-f]{64}",?\s*$''']

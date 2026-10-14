@@ -1,0 +1,24 @@
+{
+  "base": "Qwen/Qwen3.5-2B-Base",
+  "temperatures": null,
+  "rotations": 1,
+  "native_loop": false,
+  "dtype": "fp32",
+  "device": "cuda",
+  "gpu": "NVIDIA H200",
+  "depths": {
+    "1": {
+      "n": 231,
+      "accuracy_all": 0.6883116883116883,
+      "accuracy": {
+        "easy": 1.0,
+        "standard": 0.8888888888888888,
+        "hard": 0.42342342342342343
+      },
+      "intelligence_public": 57.47188632833782,
+      "hard_ece": 0.26969099099099103,
+      "calibration_public": 46.06180180180179
+    }
+  },
+  "model_id": "q35-2b-fp32"
+}

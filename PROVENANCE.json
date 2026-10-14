@@ -1,0 +1,16 @@
+{
+  "schema_version": 2,
+  "artifact_id": "OpenLAIR/lev-source-candidate",
+  "source_repository": "https://github.com/OpenLAIR/lev",
+  "upstream_repository": "https://github.com/jaredpalmer/kev",
+  "authors": [
+    "Dingjie Song",
+    "Zhiling Yan",
+    "Yuxuan Zhang",
+    "Lichao Sun"
+  ],
+  "dataset_metadata": "data/sources.json",
+  "model_metadata": "data/model-index.json",
+  "integrity_manifest": "MANIFEST.sha256",
+  "notice": "Academic source attribution and public artifacts only. Dataset partition identities and public base revisions are retained; execution history and development environment details are not distributed."
+}

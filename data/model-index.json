@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "models": [
+    {
+      "public_id": "songdj/Lev-1.4B",
+      "status": "privately-staged-public-release-pending",
+      "base": "ByteDance/Ouro-1.4B",
+      "base_revision": "574fa66cb8bf5abdc979642d01cf2b79b16bfab1",
+      "seed": 0,
+      "depths": 4,
+      "head_temperature": 1.0,
+      "per_depth_temperatures": "calibration/Lev-1.4B-s0.json",
+      "checkpoint_sha256": null,
+      "artifact_id": "Lev-1.4B-s0"
+    },
+    {
+      "public_id": "songdj/Lev-2.6B",
+      "status": "privately-staged-public-release-pending",
+      "base": "ByteDance/Ouro-2.6B",
+      "base_revision": "1ed04250da1a9936042725d302e81c8fa2ab5abd",
+      "seed": 0,
+      "depths": 4,
+      "head_temperature": 1.0,
+      "per_depth_temperatures": "calibration/Lev-2.6B-s0.json",
+      "checkpoint_sha256": null,
+      "artifact_id": "Lev-2.6B-s0"
+    },
+    {
+      "public_id": "songdj/Lev-3B",
+      "status": "privately-staged-public-release-pending",
+      "base": "Nanbeige/Nanbeige4.2-3B-Base",
+      "base_revision": "4a38e817c14b9f2c4b69b1e05cbda90395872f6b",
+      "seed": 0,
+      "depths": 2,
+      "head_temperature": 1.0,
+      "per_depth_temperatures": "calibration/Lev-3B-s0.json",
+      "checkpoint_sha256": null,
+      "artifact_id": "Lev-3B-s0"
+    }
+  ]
+}

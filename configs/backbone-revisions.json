@@ -1,0 +1,10 @@
+{
+  "ByteDance/Ouro-1.4B": "574fa66cb8bf5abdc979642d01cf2b79b16bfab1",
+  "ByteDance/Ouro-2.6B": "1ed04250da1a9936042725d302e81c8fa2ab5abd",
+  "Qwen/Qwen3-1.7B-Base": "ea980cb0a6c2ae4b936e82123acc929f1cec04c1",
+  "jaredpalmer/kev-0.8b": "bf75a6a8848ea6960ff2ed108d9ed44c2941174f",
+  "jaredpalmer/kev-4b": "6cfce5c2fa4b4bd64026336ab649c5ca78857d52",
+  "Nanbeige/Nanbeige4.2-3B-Base": "4a38e817c14b9f2c4b69b1e05cbda90395872f6b",
+  "Qwen/Qwen3.5-4B-Base": "1001bb4d826a52d1f399e183466143f4da7b741b",
+  "Qwen/Qwen3.5-2B-Base": "b1485b2fa6dfa1287294f269f5fb618e03d52d7c"
+}
