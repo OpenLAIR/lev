@@ -1,15 +1,16 @@
 # Project resources
 
-| Resource | Link | Current status |
+| Resource | Link | What it is |
 |---|---|---|
-| Project website | [Lev](https://openlair.github.io/lev/) | Deployed project homepage |
-| Paper and citation | [Paper section](https://openlair.github.io/lev/#paper) | The arXiv identifier is pending; this link leads to the project paper section |
-| Source code | [OpenLAIR/lev](https://github.com/OpenLAIR/lev) | Organization repository for the research release candidate; private staging |
-| Models and datasets | [Lev](https://huggingface.co/collections/songdj/lev) | Three models + three Dataset repositories; private |
-| Lev-1.4B | [songdj/Lev-1.4B](https://huggingface.co/songdj/Lev-1.4B) | Seed-0 artifacts staged in a private repository |
-| Lev-2.6B | [songdj/Lev-2.6B](https://huggingface.co/songdj/Lev-2.6B) | Seed-0 artifacts staged in a private repository; additional seeds pending |
-| Lev-3B | [songdj/Lev-3B](https://huggingface.co/songdj/Lev-3B) | Seed-0 artifacts staged in a private repository |
+| Project website | [openlair.github.io/lev](https://openlair.github.io/lev/) | Overview, interactive depth demo and results |
+| Paper | [alphaXiv](https://www.alphaxiv.org/pdf/2610.lev-looped-decision-models) · [PDF](https://openlair.github.io/lev/assets/lev-paper.pdf) | The arXiv listing will be linked once it is announced |
+| Source code | [OpenLAIR/lev](https://github.com/OpenLAIR/lev) | Training, depth readouts, analysis and reproduction |
+| Models and datasets | [Lev collection](https://huggingface.co/collections/songdj/lev) | Three models and three Dataset repositories |
+| Lev-1.4B | [songdj/Lev-1.4B](https://huggingface.co/songdj/Lev-1.4B) | Ouro-1.4B backbone, depths 1–4, seed 0 |
+| Lev-2.6B | [songdj/Lev-2.6B](https://huggingface.co/songdj/Lev-2.6B) | Ouro-2.6B backbone, depths 1–4, seed 0 |
+| Lev-3B | [songdj/Lev-3B](https://huggingface.co/songdj/Lev-3B) | Nanbeige4.2-3B backbone, depths 1–2, seed 0 |
+| LevBench | [songdj/LevBench](https://huggingface.co/datasets/songdj/LevBench) | Development and locked-test decisions across five tiers (rights-filtered subset) |
+| Lev-train-v2 | [songdj/Lev-train-v2](https://huggingface.co/datasets/songdj/Lev-train-v2) | Training mixtures, replay and order recipes (rights-filtered subset) |
+| Lev-results | [songdj/Lev-results](https://huggingface.co/datasets/songdj/Lev-results) | Per-depth outputs, calibration and latency, without question text |
 
-Private resources require authorized access and may appear unavailable to other visitors. A resource link does not establish public availability or release approval. GPU parity, complete reconstruction, data rights and the other conditions in [release status](RELEASE_STATUS.md) remain separately gated.
-
-Dataset repositories are private: [LevBench](https://huggingface.co/datasets/songdj/LevBench) (rights-filtered development/test), [Lev-train-v2](https://huggingface.co/datasets/songdj/Lev-train-v2) (rights-filtered training sources and order recipes), and [Lev-results](https://huggingface.co/datasets/songdj/Lev-results) (text-free existing numerical results). The hosted subsets do not constitute the complete frozen corpus. See the [dataset cards](../data-cards/) and [data requirements](DATA.md). Source code, model artifacts, and dataset text have separate licensing and verification requirements.
+The hosted dataset subsets do not constitute the complete frozen corpus: sources whose redistribution rights are unclear are left out and can be rebuilt locally from their original releases. See the [dataset cards](../data-cards/) and [data requirements](DATA.md). Source code, model artifacts and dataset text have separate licensing terms; see [licensing](LICENSING.md). What has and has not been re-run on the released packages is in [release status](RELEASE_STATUS.md).

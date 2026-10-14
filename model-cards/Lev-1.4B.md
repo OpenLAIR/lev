@@ -6,13 +6,13 @@ tags:
 - recurrent-model
 - lora
 ---
-# Lev-1.4B — release draft
+# Lev-1.4B
 
-[Project website](https://openlair.github.io/lev/) · [Paper](https://openlair.github.io/lev/#paper) · [GitHub](https://github.com/OpenLAIR/lev) · [Hugging Face collection — private](https://huggingface.co/collections/songdj/lev)
+[Project website](https://openlair.github.io/lev/) · [Paper (alphaXiv)](https://www.alphaxiv.org/pdf/2610.lev-looped-decision-models) · [PDF](https://openlair.github.io/lev/assets/lev-paper.pdf) · [GitHub](https://github.com/OpenLAIR/lev) · [Hugging Face collection](https://huggingface.co/collections/songdj/lev)
 
 [Resource availability](../docs/RESOURCES.md)
 
-Hub repository: [songdj/Lev-1.4B](https://huggingface.co/songdj/Lev-1.4B) **(private)**. Seed-0 artifacts are privately staged; public availability and GPU parity remain pending. Lev is a typed decision model with one checkpoint supporting 4 native recurrent depths; it returns probabilities over caller-provided options and does not generate a chain of thought.
+Hub repository: [songdj/Lev-1.4B](https://huggingface.co/songdj/Lev-1.4B). Seed-0 artifacts; full-size GPU parity has not been re-run on the released package. Lev is a typed decision model with one checkpoint supporting 4 native recurrent depths; it returns probabilities over caller-provided options and does not generate a chain of thought.
 
 ## Provenance
 
@@ -20,7 +20,7 @@ Hub repository: [songdj/Lev-1.4B](https://huggingface.co/songdj/Lev-1.4B) **(pri
 - Public checkpoint identity: `Lev-1.4B-s0`, seed 0.
 - S31: original mixture 18,764 + decision-v7 replay 12,576 records before context admission. LoRA rank 16, learning rate 1e-4, one epoch, effective batch 64, uniform per-depth loss, shared pointer head, length sorting, bf16 training autocast, max state 5,120, none-pair augmentation 0.25.
 - Required weight layout: LoRA adapter weights/config, `head.pt`, tokenizer assets, and a separate `temperatures.json` for per-depth calibration. Existing calibration values are packaged at `calibration/Lev-1.4B-s0.json`; verify them against the eventual public checkpoint. The source `head.pt` has scalar `temperature=1.0`, not a per-depth temperature array. Its `base_revision` pins the base even if `adapter_config.json` has no revision.
-- Public artifact hashes and checkpoint revision: **pending public release verification**. Additional seed revisions must be described separately.
+- Public artifact hashes: `manifest.json` in [songdj/Lev-1.4B](https://huggingface.co/songdj/Lev-1.4B); pin a Hub commit for reproducible downloads. Additional seed revisions must be described separately.
 
 ## Existing results
 
@@ -48,7 +48,7 @@ Depth helps harder items more than easier ones, but can also overturn a correct 
 
 The upstream card states Apache-2.0 and also says “This model is intended for research purposes only. It is provided as-is without warranties for production use.” See docs/LICENSING.md for the distinction between that statement and the declared license. This draft deliberately leaves the HF weight-license metadata unset until the exact released artifacts and notices are reviewed. Source code remains Apache-2.0, separately from dataset terms.
 
-Paper citation and arXiv identifier: pending the final public record; see the [paper section](https://openlair.github.io/lev/#paper).
+Paper: [alphaXiv](https://www.alphaxiv.org/pdf/2610.lev-looped-decision-models) · [PDF](https://openlair.github.io/lev/assets/lev-paper.pdf). The arXiv identifier will be added when it is announced.
 
 
-Companion datasets are [privately staged](../docs/RESOURCES.md): [LevBench](https://huggingface.co/datasets/songdj/LevBench), [Lev-train-v2](https://huggingface.co/datasets/songdj/Lev-train-v2), and [Lev-results](https://huggingface.co/datasets/songdj/Lev-results). Benchmark/training downloads are source-specific rights-filtered subsets; the complete frozen corpus still requires lawful acquisition of withheld sources.
+Companion datasets are [published on Hugging Face](../docs/RESOURCES.md): [LevBench](https://huggingface.co/datasets/songdj/LevBench), [Lev-train-v2](https://huggingface.co/datasets/songdj/Lev-train-v2), and [Lev-results](https://huggingface.co/datasets/songdj/Lev-results). Benchmark/training downloads are source-specific rights-filtered subsets; the complete frozen corpus still requires lawful acquisition of withheld sources.

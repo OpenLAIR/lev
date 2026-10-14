@@ -1,6 +1,6 @@
 # Data inputs and provenance
 
-No training or evaluation question text is distributed in this source candidate. `evals/**/manifest.json`, `evals/levbench-v1/frozen.json`, and `data/train-v2/manifest.json` are metadata only. Companion Dataset repositories [LevBench](https://huggingface.co/datasets/songdj/LevBench), [Lev-train-v2](https://huggingface.co/datasets/songdj/Lev-train-v2), and [Lev-results](https://huggingface.co/datasets/songdj/Lev-results) are privately staged. The first two contain separately versioned, rights-filtered source subsets and full positional recipes; results contain existing numerical outputs with question text removed. Authorized access is required.
+No training or evaluation question text is distributed in this source candidate. `evals/**/manifest.json`, `evals/levbench-v1/frozen.json`, and `data/train-v2/manifest.json` are metadata only. Companion Dataset repositories [LevBench](https://huggingface.co/datasets/songdj/LevBench), [Lev-train-v2](https://huggingface.co/datasets/songdj/Lev-train-v2), and [Lev-results](https://huggingface.co/datasets/songdj/Lev-results) are published on Hugging Face. The first two contain separately versioned, rights-filtered source subsets and full positional recipes; results contain existing numerical outputs with question text removed. Authorized access is required.
 
 ## Inventory
 
@@ -29,14 +29,14 @@ Exact reconstruction additionally requires the original S31 partitions, the comp
 
 Some original prerequisite builders (night2, devtools, documents, breadth and the external reference subset) are not bundled in the retained source snapshot. Use the pinned upstream source and source terms to recover them, or provide the original hash-matched partitions. Thus this candidate **does not yet claim byte-for-byte end-to-end data reconstruction from a clean clone**. Neither skipping unavailable references nor excluding restricted sources reconstructs the frozen corpus: such output needs a new version and fresh hashes.
 
-The source revisions and recorded license statements are in `data/sources.json`. The private Dataset packages include per-source decisions, evidence references, full license copies, attribution, coverage and checksums. In this staging, 31 of 49 source families meet the packaging conditions; 18 remain reconstruction-only. Each hosted source retains its own terms, including noncommercial/share-alike conditions where applicable. The historical source inventory in this code snapshot is not itself hosting clearance. A Hugging Face config name alone is not a license notice. A noncommercial/share-alike license is not itself a categorical prohibition on redistribution; its conditions must be satisfied. Unclear mirrors and independently copyrighted question banks require separate review.
+The source revisions and recorded license statements are in `data/sources.json`. The Hugging Face Dataset packages include per-source decisions, evidence references, full license copies, attribution, coverage and checksums. In the hosted packages, 31 of 49 source families meet the packaging conditions; 18 remain reconstruction-only. Each hosted source retains its own terms, including noncommercial/share-alike conditions where applicable. The historical source inventory in this code snapshot is not itself hosting clearance. A Hugging Face config name alone is not a license notice. A noncommercial/share-alike license is not itself a categorical prohibition on redistribution; its conditions must be satisfied. Unclear mirrors and independently copyrighted question banks require separate review.
 
 ## Public artifact identities
 
 `PROVENANCE.json` records only public project, upstream and author identities. Dataset partition hashes remain scientific reference identities. Metadata fields, public paths and model names are projected into a public schema; these metadata files and adapted builders are not byte-identical copies of the original artifacts. `MANIFEST.sha256` records the actual public bytes. No question partition was opened for this projection. Detailed development origins are outside the public artifact.
 
 
-## Private staging coverage
+## Hosted coverage
 
 | Input | Original records | Hosted records |
 |---|---:|---:|
@@ -52,4 +52,4 @@ Scales overlap and should not be added. See each HF package's `metadata/coverage
 
 Existing seed-0 training metrics distinguish admission from constructed size: Lev-1.4B and Lev-2.6B accepted 31,329 / 59,987 / 119,985 records at S31 / S60 / S120; Lev-3B accepted 31,334 / 59,994 / 119,994. These counts describe the full original inputs, not the smaller hosted subsets. No training or tokenization was rerun to derive them.
 
-A dedicated, hash-allowlisted publication route performed mechanical frozen-test packaging under explicit author authorization. Normal evaluation and `scripts/export_results.py` test restrictions remain unchanged. Dataset packaging did not run inference, scoring, training or tuning. GPU parity is independent of this private data staging and remains a formal model-release gate.
+A dedicated, hash-allowlisted publication route performed mechanical frozen-test packaging under explicit author authorization. Normal evaluation and `scripts/export_results.py` test restrictions remain unchanged. Dataset packaging did not run inference, scoring, training or tuning. GPU parity is independent of the data packages and has not been re-run on the released model packages.

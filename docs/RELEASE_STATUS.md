@@ -1,6 +1,6 @@
 # Candidate hygiene and release readiness
 
-This is a research source candidate for [OpenLAIR/lev](https://github.com/OpenLAIR/lev), staged for review in the organization repository. Companion seed-0 model repositories and their collection are private. [Project resources](RESOURCES.md) link the website, paper, source and model artifacts with their availability status. Three companion Dataset repositories are privately staged with explicit source coverage, licenses and checksums. Full-corpus rights and complete reconstruction remain blocked. Links and private staging do not establish public release readiness.
+This is the research source release for [OpenLAIR/lev](https://github.com/OpenLAIR/lev). Companion seed-0 model repositories, three Dataset repositories and their collection are public on Hugging Face; [project resources](RESOURCES.md) link the website, paper, source, models and datasets. The Dataset repositories host rights-filtered subsets with explicit source coverage, licenses and checksums; full-corpus rights and complete reconstruction remain open, and full-size GPU parity has not been re-run on the released packages. The conditions below are the checks `scripts/verify_release.py` enforces for a formal release tag.
 
 ## Artifact hygiene
 

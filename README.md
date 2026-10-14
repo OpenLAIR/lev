@@ -12,22 +12,24 @@
 </p>
 
 <p align="center">
-  <a href="docs/RELEASE_STATUS.md"><img src="https://img.shields.io/badge/research-release%20candidate-2448ff?style=flat-square" alt="Research release candidate"></a>
-  <a href="https://openlair.github.io/lev/#paper"><img src="https://img.shields.io/badge/paper-forthcoming-5b6467?style=flat-square" alt="Paper forthcoming"></a>
-  <a href="docs/VALIDATION.md"><img src="https://img.shields.io/badge/CPU%20tests-187%20passed-2448ff?style=flat-square" alt="CPU validation: 187 passed"></a>
+  <a href="https://www.alphaxiv.org/pdf/2610.lev-looped-decision-models"><img src="https://img.shields.io/badge/Paper-alphaXiv-b31b1b?style=flat-square" alt="Paper on alphaXiv"></a>
+  <a href="https://openlair.github.io/lev/"><img src="https://img.shields.io/badge/Website-Lev-2448ff?style=flat-square" alt="Project website"></a>
+  <a href="https://huggingface.co/collections/songdj/lev"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models%20%26%20Data-ffcc4d?style=flat-square" alt="Models and data on Hugging Face"></a>
+  <a href="https://github.com/OpenLAIR/lev/actions/workflows/verify.yml"><img src="https://img.shields.io/github/actions/workflow/status/OpenLAIR/lev/verify.yml?branch=main&style=flat-square&label=CPU%20tests" alt="CPU tests"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache%202.0-5b6467?style=flat-square" alt="Code license: Apache 2.0"></a>
 </p>
 
 <p align="center">
   <a href="https://openlair.github.io/lev/"><strong>Website</strong></a> ·
-  <a href="https://openlair.github.io/lev/#paper"><strong>Paper</strong></a> ·
-  <a href="https://huggingface.co/collections/songdj/lev"><strong>Models — private</strong></a> ·
+  <a href="https://www.alphaxiv.org/pdf/2610.lev-looped-decision-models"><strong>Paper</strong></a> ·
+  <a href="https://openlair.github.io/lev/assets/lev-paper.pdf"><strong>PDF</strong></a> ·
+  <a href="https://huggingface.co/collections/songdj/lev"><strong>Models &amp; data</strong></a> ·
   <a href="#quick-start"><strong>Quick start</strong></a> ·
   <a href="#reproduce-the-study"><strong>Reproduce</strong></a> ·
   <a href="#citation"><strong>Citation</strong></a>
 </p>
 
-> **Release status:** GitHub source and Hugging Face model repositories are private research candidates. The paper is forthcoming; no arXiv identifier has been assigned. Three companion Dataset repositories are **privately staged**: licensed source subsets of LevBench and Lev-train-v2, plus text-free Lev-results. [Resource availability →](docs/RESOURCES.md)
+> **Release:** the code, three model checkpoints and three datasets are public. Read the paper on [alphaXiv](https://www.alphaxiv.org/pdf/2610.lev-looped-decision-models) or download the [PDF](https://openlair.github.io/lev/assets/lev-paper.pdf); the arXiv listing will be linked once it is announced.
 
 ## One checkpoint, more room to think
 
@@ -41,15 +43,21 @@ The accuracy result uses JevBench's **231 public tasks** and fp32 readouts. Fixe
 
 ## Model family
 
-All linked model repositories currently require authorized access. The source package contains model cards and calibration metadata; weights are staged separately.
+Each Hugging Face repository holds the seed-0 LoRA adapter, decision head, tokenizer assets and per-depth temperatures. This source repository holds the model cards and calibration metadata.
 
 | Model | Backbone | Native depths | JevBench accuracy, first → deepest | Artifacts |
 |---|---|---|---|---|
-| **Lev-1.4B** | Ouro-1.4B | 1–4 | 58.0% → 68.0% | [HF · private](https://huggingface.co/songdj/Lev-1.4B) · [Model card](model-cards/Lev-1.4B.md) |
-| **Lev-2.6B** | Ouro-2.6B | 1–4 | 63.2% → 76.2% | [HF · private](https://huggingface.co/songdj/Lev-2.6B) · [Model card](model-cards/Lev-2.6B.md) |
-| **Lev-3B** | Nanbeige4.2-3B-Base | 1–2 | 69.3% → 72.7% | [HF · private](https://huggingface.co/songdj/Lev-3B) · [Model card](model-cards/Lev-3B.md) |
+| **Lev-1.4B** | Ouro-1.4B | 1–4 | 58.0% → 68.0% | [🤗 Lev-1.4B](https://huggingface.co/songdj/Lev-1.4B) · [Model card](model-cards/Lev-1.4B.md) |
+| **Lev-2.6B** | Ouro-2.6B | 1–4 | 63.2% → 76.2% | [🤗 Lev-2.6B](https://huggingface.co/songdj/Lev-2.6B) · [Model card](model-cards/Lev-2.6B.md) |
+| **Lev-3B** | Nanbeige4.2-3B-Base | 1–2 | 69.3% → 72.7% | [🤗 Lev-3B](https://huggingface.co/songdj/Lev-3B) · [Model card](model-cards/Lev-3B.md) |
 
-These are existing study results, not new evaluations of the release candidate. The cards document backbone revisions, seed coverage, calibration and limitations.
+These are existing study results, not new evaluations of the released packages. The cards document backbone revisions, seed coverage, calibration and limitations.
+
+| Dataset | What it holds |
+|---|---|
+| [🤗 LevBench](https://huggingface.co/datasets/songdj/LevBench) | Development and locked-test decisions across five tiers (rights-filtered subset) |
+| [🤗 Lev-train-v2](https://huggingface.co/datasets/songdj/Lev-train-v2) | S31 / S60 / S120 training mixtures, replay and order recipes (rights-filtered subset) |
+| [🤗 Lev-results](https://huggingface.co/datasets/songdj/Lev-results) | Per-depth outputs, calibration and latency evidence, without question text |
 
 ## Quick start
 
@@ -76,7 +84,7 @@ The validated fresh CPU installation passed **187 tests**, with **14 opt-in netw
 
 ### 2. Score a request at a chosen depth
 
-For model inference, obtain the appropriate private checkpoint and prepare a **separate CUDA-capable PyTorch environment** using the [installation notes](docs/INSTALL.md). The CPU-only test environment above is for validation. A checkpoint needs its adapter configuration, adapter weights and `head.pt`; the loader fetches the pinned backbone, so cache it first for offline use.
+For model inference, download a checkpoint (`hf download songdj/Lev-2.6B --local-dir ../lev-weights/Lev-2.6B`) and prepare a **separate CUDA-capable PyTorch environment** using the [installation notes](docs/INSTALL.md). The CPU-only test environment above is for validation. A checkpoint needs its adapter configuration, adapter weights and `head.pt`; the loader fetches the pinned backbone, so cache it first for offline use.
 
 ```bash
 python examples/fixed_depth.py \
@@ -84,7 +92,7 @@ python examples/fixed_depth.py \
   --depth 2 --device cuda
 ```
 
-The example scores an original two-option toy request. A chosen fixed depth executes only that many recurrent steps. `--all-depths` returns every depth's output from a full-depth pass; **it does not save computation**. Full-size GPU parity remains a release requirement.
+The example scores an original two-option toy request. A chosen fixed depth executes only that many recurrent steps. `--all-depths` returns every depth's output from a full-depth pass; **it does not save computation**. Full-size GPU parity has not been re-run on the released packages.
 
 For calibrated probabilities, verify checkpoint identity and add `--temperatures calibration/Lev-2.6B-s0.json`. Per-depth temperatures are separate from the scalar temperature in `head.pt`. Without this option, the example explicitly labels its scores as uncalibrated.
 
@@ -105,14 +113,14 @@ PYTHONDONTWRITEBYTECODE=1 python figures/reproduce.py \
   --output-dir ../lev-figures
 ```
 
-The redraws preserve the study's table-value assertions. They do not recompute confidence intervals from the complete per-question collection. Companion [Dataset repositories](docs/RESOURCES.md) now stage source-specific licensed subsets and existing text-free results privately. Complete source rights and end-to-end reconstruction remain under review; these subsets are not the full frozen corpus.
+The redraws preserve the study's table-value assertions. They do not recompute confidence intervals from the complete per-question collection. The companion [datasets](docs/RESOURCES.md) publish source-specific licensed subsets and existing text-free results. Complete source rights and end-to-end reconstruction remain open; these subsets are not the full frozen corpus.
 
 ## Scope and limitations
 
 - **Adaptive routing is offline.** The saved all-depth logits support analysis of early exits. Online hidden-state continuation and adaptive serving are not implemented. The paper's stopper is cross-fitted per workload, rather than supplied as a universal checkpoint threshold.
 - **Gains are workload-dependent.** Lev-2.6B failed the locked LevBench G3 criterion in all three study seeds. The Lev-1.4B and Lev-3B headline seeds passed there; that does not establish a general advantage over fixed-depth frontiers. Greater depth can also overturn an earlier correct decision.
 - **Accuracy and timing have different measurement paths.** Accuracy uses fp32 readouts; reported H200 timing uses bf16, batch one and implementation-specific kernels. Latency comparisons are not portable speed guarantees. G3 and the paper's token-weighted cost intervals are different analyses.
-- **Release readiness is tracked separately.** CPU installation and tests have passed. Full-size GPU parity, final public weight identities, data rights, complete reconstruction, all-figure reproduction, public endpoints and author review remain gated. Never use the fixed locked test to choose a new rule or checkpoint.
+- **What has and has not been re-run.** CPU installation and tests pass on every push. Full-size GPU parity on the released packages, complete data reconstruction and all-figure reproduction have not been re-run; see [release status](docs/RELEASE_STATUS.md). Never use the fixed locked test to choose a new rule or checkpoint.
 
 [Full reproduction details](docs/REPRODUCING.md) · [Current release conditions](docs/RELEASE_STATUS.md)
 
@@ -132,7 +140,17 @@ PYTHONDONTWRITEBYTECODE=1 python scripts/verify_release.py
 **Lev: Thinking Fast and Deep with Looped Decision Models**  
 Dingjie Song, Zhiling Yan, Yuxuan Zhang, and Lichao Sun.
 
-The paper is forthcoming. Its arXiv identifier and final citation will be added when assigned; the [project paper section](https://openlair.github.io/lev/#paper) is the current reference point.
+Read the paper on [alphaXiv](https://www.alphaxiv.org/pdf/2610.lev-looped-decision-models) or download the [PDF](https://openlair.github.io/lev/assets/lev-paper.pdf). The arXiv identifier will be added when it is announced.
+
+```bibtex
+@misc{song2026lev,
+  title  = {Lev: Thinking Fast and Deep with Looped Decision Models},
+  author = {Song, Dingjie and Yan, Zhiling and Zhang, Yuxuan and Sun, Lichao},
+  year   = {2026},
+  note   = {Preprint},
+  url    = {https://openlair.github.io/lev/}
+}
+```
 
 ## License and acknowledgments
 
