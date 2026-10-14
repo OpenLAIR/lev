@@ -36,7 +36,10 @@ jobs:
           MKL_NUM_THREADS: '1'
         run: |
           python -m venv "$RUNNER_TEMP/lev-env"
-          "$RUNNER_TEMP/lev-env/bin/python" -m pip install "$RUNNER_TEMP/lev-work[dev]"
+          "$RUNNER_TEMP/lev-env/bin/python" -m pip install --no-cache-dir 'torch==2.8.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+          "$RUNNER_TEMP/lev-env/bin/python" -m pip install --no-cache-dir "$RUNNER_TEMP/lev-work[dev]"
+          "$RUNNER_TEMP/lev-env/bin/python" -m pip check
+          "$RUNNER_TEMP/lev-env/bin/python" -c 'import torch; assert torch.version.cuda is None, "CPU CI must use a CPU-only wheel"'
           cd "$RUNNER_TEMP/lev-work"
           "$RUNNER_TEMP/lev-env/bin/python" -m pytest -q -p no:cacheprovider
       - name: Verify exact source artifact hygiene

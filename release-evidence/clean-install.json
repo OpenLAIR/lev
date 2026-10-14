@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "check_id": "clean_install",
+  "status": "passed",
+  "results": {
+    "python_version": "3.13.14",
+    "dependency_install_exit_code": 0,
+    "isolated_environment": true
+  }
+}

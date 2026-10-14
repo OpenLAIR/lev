@@ -1,11 +1,10 @@
 {
   "schema_version": 1,
-  "scope": "Unchanged non-documentation files from the CPU-validated candidate; resource-link documentation update only.",
-  "prior_candidate_archive_sha256": "2eeebf879d8484e1f6f2cbdd6102647f199137a1ecc38ffb1b30a0baaf4aa45a",
+  "scope": "Non-documentation source files in the snapshot installed and tested in a fresh CPU-only environment. Evidence and integrity control files are excluded to avoid self-reference.",
   "files": [
     {
       "path": ".github/workflows/verify.yml",
-      "sha256": "2c42a98d58043d60ccf926a424d147af57c70b332b7fb907e44d9e50b4b7194e"
+      "sha256": "11aceb9487d4b14a193135c4ddb24b5f3bc3b5146c5ad95e38be32175079edae"
     },
     {
       "path": ".gitignore",
@@ -294,10 +293,6 @@
     {
       "path": "pyproject.toml",
       "sha256": "d46be0ef17c561a79a63903024fb056108e8af4cf63d5945f67e742ed8366466"
-    },
-    {
-      "path": "release-evidence/cpu-tests.json",
-      "sha256": "304c6ec9aa6d5afef27a07f55e8e30622eaed8d2ccd49c1e6e19b369d3eede2e"
     },
     {
       "path": "requirements-tested.txt",

@@ -358,6 +358,14 @@
       "kind": "toml"
     },
     {
+      "path": "release-evidence/clean-install-packages.json",
+      "kind": "json"
+    },
+    {
+      "path": "release-evidence/clean-install.json",
+      "kind": "json"
+    },
+    {
       "path": "release-evidence/cpu-observations.md",
       "kind": "markdown"
     },

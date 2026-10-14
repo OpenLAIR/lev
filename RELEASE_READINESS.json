@@ -4,15 +4,18 @@
   "distribution": "candidate",
   "checks": {
     "clean_install": {
-      "status": "blocked",
-      "reason": "Full dependency installation and CPU checks in a fresh environment remain unvalidated.",
-      "subject_sha256": null,
-      "evidence": null
+      "status": "passed",
+      "reason": "Fresh Python 3.13.14 CPU environment: complete dependency install, pip check and CPU suite passed.",
+      "subject_sha256": "563435b9286805f5b7bb53f840d00afbf845a1b74e066b2c1702de7e7ed45ffa",
+      "evidence": {
+        "path": "release-evidence/clean-install.json",
+        "sha256": "3071d107c6417021a3809cc438840cdea00212bef4fab1a1ced42745b7e30121"
+      }
     },
     "cpu_tests": {
       "status": "passed",
-      "reason": "Complete CPU suite: 187 passed; 14 opt-in network tests skipped.",
-      "subject_sha256": "a90fffe559be2a1eb085be6543d486b2105aeb16cda70a990fc1614c3199f1d2",
+      "reason": "Fresh CPU environment: 187 passed; 14 opt-in network tests skipped.",
+      "subject_sha256": "563435b9286805f5b7bb53f840d00afbf845a1b74e066b2c1702de7e7ed45ffa",
       "evidence": {
         "path": "release-evidence/cpu-tests.json",
         "sha256": "304c6ec9aa6d5afef27a07f55e8e30622eaed8d2ccd49c1e6e19b369d3eede2e"
