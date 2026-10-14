@@ -6,7 +6,7 @@
     "clean_install": {
       "status": "passed",
       "reason": "Fresh Python 3.13.14 CPU environment: complete dependency install, pip check and CPU suite passed.",
-      "subject_sha256": "563435b9286805f5b7bb53f840d00afbf845a1b74e066b2c1702de7e7ed45ffa",
+      "subject_sha256": "f917e00e974dd2e8b20aa442a17ca230c183fbc12101ae216f06a5fbc6b7f70b",
       "evidence": {
         "path": "release-evidence/clean-install.json",
         "sha256": "3071d107c6417021a3809cc438840cdea00212bef4fab1a1ced42745b7e30121"
@@ -15,7 +15,7 @@
     "cpu_tests": {
       "status": "passed",
       "reason": "Fresh CPU environment: 187 passed; 14 opt-in network tests skipped.",
-      "subject_sha256": "563435b9286805f5b7bb53f840d00afbf845a1b74e066b2c1702de7e7ed45ffa",
+      "subject_sha256": "f917e00e974dd2e8b20aa442a17ca230c183fbc12101ae216f06a5fbc6b7f70b",
       "evidence": {
         "path": "release-evidence/cpu-tests.json",
         "sha256": "304c6ec9aa6d5afef27a07f55e8e30622eaed8d2ccd49c1e6e19b369d3eede2e"
