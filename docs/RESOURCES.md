@@ -5,7 +5,7 @@
 | Project website | [Lev](https://openlair.github.io/lev/) | Deployed project homepage |
 | Paper and citation | [Paper section](https://openlair.github.io/lev/#paper) | The arXiv identifier is pending; this link leads to the project paper section |
 | Source code | [OpenLAIR/lev](https://github.com/OpenLAIR/lev) | Organization repository for the research release candidate; private staging |
-| Model collection | [Lev: Thinking Fast and Deep with Looped Decision Models](https://huggingface.co/collections/songdj/lev-thinking-fast-and-deep-with-looped-decision-models-6acefb135880c9d373cf42ba) | Created and private |
+| Model collection | [Lev: Thinking Fast and Deep with Looped Decision Models](https://huggingface.co/collections/songdj/lev) | Created and private |
 | Lev-1.4B | [songdj/Lev-1.4B](https://huggingface.co/songdj/Lev-1.4B) | Seed-0 artifacts staged in a private repository |
 | Lev-2.6B | [songdj/Lev-2.6B](https://huggingface.co/songdj/Lev-2.6B) | Seed-0 artifacts staged in a private repository; additional seeds pending |
 | Lev-3B | [songdj/Lev-3B](https://huggingface.co/songdj/Lev-3B) | Seed-0 artifacts staged in a private repository |

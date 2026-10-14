@@ -21,7 +21,7 @@
 <p align="center">
   <a href="https://openlair.github.io/lev/"><strong>Website</strong></a> ·
   <a href="https://openlair.github.io/lev/#paper"><strong>Paper</strong></a> ·
-  <a href="https://huggingface.co/collections/songdj/lev-thinking-fast-and-deep-with-looped-decision-models-6acefb135880c9d373cf42ba"><strong>Models — private</strong></a> ·
+  <a href="https://huggingface.co/collections/songdj/lev"><strong>Models — private</strong></a> ·
   <a href="#quick-start"><strong>Quick start</strong></a> ·
   <a href="#reproduce-the-study"><strong>Reproduce</strong></a> ·
   <a href="#citation"><strong>Citation</strong></a>
