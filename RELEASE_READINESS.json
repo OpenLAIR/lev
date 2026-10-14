@@ -6,7 +6,7 @@
     "clean_install": {
       "status": "passed",
       "reason": "Fresh Python 3.13.14 CPU environment: complete dependency install, pip check and CPU suite passed.",
-      "subject_sha256": "503b7bcaeba67d4641b5e77f035373cbcd8d63aaa675c47ddd58dc89bacd5483",
+      "subject_sha256": "0fe8b3400e8654561d81aa7d8e85e3e7d7e2c68f972c938036df053fd7f64b86",
       "evidence": {
         "path": "release-evidence/clean-install.json",
         "sha256": "3071d107c6417021a3809cc438840cdea00212bef4fab1a1ced42745b7e30121"
@@ -15,7 +15,7 @@
     "cpu_tests": {
       "status": "passed",
       "reason": "Fresh CPU environment: 187 passed; 14 opt-in network tests skipped.",
-      "subject_sha256": "503b7bcaeba67d4641b5e77f035373cbcd8d63aaa675c47ddd58dc89bacd5483",
+      "subject_sha256": "0fe8b3400e8654561d81aa7d8e85e3e7d7e2c68f972c938036df053fd7f64b86",
       "evidence": {
         "path": "release-evidence/cpu-tests.json",
         "sha256": "304c6ec9aa6d5afef27a07f55e8e30622eaed8d2ccd49c1e6e19b369d3eede2e"
@@ -35,13 +35,13 @@
     },
     "data_rights": {
       "status": "blocked",
-      "reason": "Per-source redistribution terms and required attribution remain under review.",
+      "reason": "Source subsets are privately staged with reviewed licenses; 18 source families still require rights/provenance resolution for the complete corpus.",
       "subject_sha256": null,
       "evidence": null
     },
     "data_reconstruction": {
       "status": "blocked",
-      "reason": "Exact data reconstruction and complete prerequisite acquisition remain unvalidated.",
+      "reason": "Source-subset download hashes and positional recipes are verified separately; complete clean-clone reconstruction still needs withheld sources and missing original prerequisites.",
       "subject_sha256": null,
       "evidence": null
     },

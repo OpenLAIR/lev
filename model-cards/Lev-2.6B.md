@@ -49,3 +49,6 @@ Depth helps harder items more than easier ones, but can also overturn a correct 
 The upstream card states Apache-2.0 and also says “This model is intended for research purposes only. It is provided as-is without warranties for production use.” See docs/LICENSING.md for the distinction between that statement and the declared license. This draft deliberately leaves the HF weight-license metadata unset until the exact released artifacts and notices are reviewed. Source code remains Apache-2.0, separately from dataset terms.
 
 Paper citation and arXiv identifier: pending the final public record; see the [paper section](https://openlair.github.io/lev/#paper).
+
+
+Companion datasets are [privately staged](../docs/RESOURCES.md): [LevBench](https://huggingface.co/datasets/songdj/LevBench), [Lev-train-v2](https://huggingface.co/datasets/songdj/Lev-train-v2), and [Lev-results](https://huggingface.co/datasets/songdj/Lev-results). Benchmark/training downloads are source-specific rights-filtered subsets; the complete frozen corpus still requires lawful acquisition of withheld sources.

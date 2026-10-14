@@ -1,6 +1,6 @@
 # Candidate hygiene and release readiness
 
-This is a research source candidate for [OpenLAIR/lev](https://github.com/OpenLAIR/lev), staged for review in the organization repository. Companion seed-0 model repositories and their collection are private. [Project resources](RESOURCES.md) link the website, paper, source and model artifacts with their availability status. Dataset destinations remain planned. Links and private staging do not establish public release readiness.
+This is a research source candidate for [OpenLAIR/lev](https://github.com/OpenLAIR/lev), staged for review in the organization repository. Companion seed-0 model repositories and their collection are private. [Project resources](RESOURCES.md) link the website, paper, source and model artifacts with their availability status. Three companion Dataset repositories are privately staged with explicit source coverage, licenses and checksums. Full-corpus rights and complete reconstruction remain blocked. Links and private staging do not establish public release readiness.
 
 ## Artifact hygiene
 

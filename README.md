@@ -27,7 +27,7 @@
   <a href="#citation"><strong>Citation</strong></a>
 </p>
 
-> **Release status:** GitHub source and Hugging Face model repositories are private research candidates. The paper is forthcoming; no arXiv identifier has been assigned. The datasets have **not been uploaded**. [Resource availability →](docs/RESOURCES.md)
+> **Release status:** GitHub source and Hugging Face model repositories are private research candidates. The paper is forthcoming; no arXiv identifier has been assigned. Three companion Dataset repositories are **privately staged**: licensed source subsets of LevBench and Lev-train-v2, plus text-free Lev-results. [Resource availability →](docs/RESOURCES.md)
 
 ## One checkpoint, more room to think
 
@@ -105,7 +105,7 @@ PYTHONDONTWRITEBYTECODE=1 python figures/reproduce.py \
   --output-dir ../lev-figures
 ```
 
-The redraws preserve the study's table-value assertions. They do not recompute confidence intervals from the complete per-question collection. Dataset text and that full collection are not bundled or uploaded; source terms and reconstruction prerequisites remain under review.
+The redraws preserve the study's table-value assertions. They do not recompute confidence intervals from the complete per-question collection. Companion [Dataset repositories](docs/RESOURCES.md) now stage source-specific licensed subsets and existing text-free results privately. Complete source rights and end-to-end reconstruction remain under review; these subsets are not the full frozen corpus.
 
 ## Scope and limitations
 
