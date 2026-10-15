@@ -15,7 +15,6 @@
   <a href="https://www.alphaxiv.org/pdf/2610.lev-looped-decision-models"><img src="https://img.shields.io/badge/Paper-alphaXiv-b31b1b?style=flat-square" alt="Paper on alphaXiv"></a>
   <a href="https://openlair.github.io/lev/"><img src="https://img.shields.io/badge/Website-Lev-2448ff?style=flat-square" alt="Project website"></a>
   <a href="https://huggingface.co/collections/songdj/lev"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models%20%26%20Data-ffcc4d?style=flat-square" alt="Models and data on Hugging Face"></a>
-  <a href="https://github.com/OpenLAIR/lev/actions/workflows/verify.yml"><img src="https://img.shields.io/github/actions/workflow/status/OpenLAIR/lev/verify.yml?branch=main&style=flat-square&label=CPU%20tests" alt="CPU tests"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache%202.0-5b6467?style=flat-square" alt="Code license: Apache 2.0"></a>
 </p>
 
@@ -144,11 +143,11 @@ Read the paper on [alphaXiv](https://www.alphaxiv.org/pdf/2610.lev-looped-decisi
 
 ```bibtex
 @misc{song2026lev,
-  title  = {Lev: Thinking Fast and Deep with Looped Decision Models},
-  author = {Song, Dingjie and Yan, Zhiling and Zhang, Yuxuan and Sun, Lichao},
-  year   = {2026},
-  note   = {Preprint},
-  url    = {https://openlair.github.io/lev/}
+  title        = {Lev: Thinking Fast and Deep with Looped Decision Models},
+  author       = {Song, Dingjie and Yan, Zhiling and Zhang, Yuxuan and Sun, Lichao},
+  year         = {2026},
+  howpublished = {alphaXiv},
+  url          = {https://www.alphaxiv.org/abs/2610.lev-looped-decision-models}
 }
 ```
 
