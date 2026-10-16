@@ -13,6 +13,7 @@
 
 <p align="center">
   <a href="https://arxiv.org/abs/2610.20951"><img src="https://img.shields.io/badge/arXiv-2610.20951-b31b1b?style=flat-square" alt="arXiv:2610.20951"></a>
+  <a href="https://www.alphaxiv.org/abs/2610.20951"><img src="https://img.shields.io/badge/alphaXiv-Discuss-a63d40?style=flat-square" alt="Discuss on alphaXiv"></a>
   <a href="https://openlair.github.io/lev/"><img src="https://img.shields.io/badge/Website-Lev-2448ff?style=flat-square" alt="Project website"></a>
   <a href="https://huggingface.co/collections/songdj/lev"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Models%20%26%20Data-ffcc4d?style=flat-square" alt="Models and data on Hugging Face"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-Apache%202.0-5b6467?style=flat-square" alt="Code license: Apache 2.0"></a>
@@ -22,6 +23,7 @@
   <a href="https://openlair.github.io/lev/"><strong>Website</strong></a> ·
   <a href="https://arxiv.org/abs/2610.20951"><strong>Paper</strong></a> ·
   <a href="https://arxiv.org/pdf/2610.20951"><strong>PDF</strong></a> ·
+  <a href="https://www.alphaxiv.org/abs/2610.20951"><strong>alphaXiv</strong></a> ·
   <a href="https://huggingface.co/collections/songdj/lev"><strong>Models &amp; data</strong></a> ·
   <a href="#quick-start"><strong>Quick start</strong></a> ·
   <a href="#reproduce-the-study"><strong>Reproduce</strong></a> ·
