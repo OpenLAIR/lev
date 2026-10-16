@@ -3,7 +3,7 @@ pretty_name: Lev-results
 ---
 # Lev-results
 
-[Project website](https://openlair.github.io/lev/) · [Paper (alphaXiv)](https://www.alphaxiv.org/pdf/2610.lev-looped-decision-models) · [PDF](https://openlair.github.io/lev/assets/lev-paper.pdf) · [GitHub](https://github.com/OpenLAIR/lev) · [Hugging Face collection](https://huggingface.co/collections/songdj/lev)
+[Project website](https://openlair.github.io/lev/) · [Paper (arXiv)](https://arxiv.org/abs/2610.20951) · [PDF](https://arxiv.org/pdf/2610.20951) · [GitHub](https://github.com/OpenLAIR/lev) · [Hugging Face collection](https://huggingface.co/collections/songdj/lev)
 
 [Resource availability](../docs/RESOURCES.md)
 

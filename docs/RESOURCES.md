@@ -3,7 +3,7 @@
 | Resource | Link | What it is |
 |---|---|---|
 | Project website | [openlair.github.io/lev](https://openlair.github.io/lev/) | Overview, interactive depth demo and results |
-| Paper | [alphaXiv](https://www.alphaxiv.org/pdf/2610.lev-looped-decision-models) · [PDF](https://openlair.github.io/lev/assets/lev-paper.pdf) | The arXiv listing will be linked once it is announced |
+| Paper | [arXiv:2610.20951](https://arxiv.org/abs/2610.20951) · [PDF](https://arxiv.org/pdf/2610.20951) | Discussion on [alphaXiv](https://www.alphaxiv.org/abs/2610.20951) |
 | Source code | [OpenLAIR/lev](https://github.com/OpenLAIR/lev) | Training, depth readouts, analysis and reproduction |
 | Models and datasets | [Lev collection](https://huggingface.co/collections/songdj/lev) | Three models and three Dataset repositories |
 | Lev-1.4B | [songdj/Lev-1.4B](https://huggingface.co/songdj/Lev-1.4B) | Ouro-1.4B backbone, depths 1–4, seed 0 |

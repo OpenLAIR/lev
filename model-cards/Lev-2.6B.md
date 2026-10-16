@@ -8,7 +8,7 @@ tags:
 ---
 # Lev-2.6B
 
-[Project website](https://openlair.github.io/lev/) · [Paper (alphaXiv)](https://www.alphaxiv.org/pdf/2610.lev-looped-decision-models) · [PDF](https://openlair.github.io/lev/assets/lev-paper.pdf) · [GitHub](https://github.com/OpenLAIR/lev) · [Hugging Face collection](https://huggingface.co/collections/songdj/lev)
+[Project website](https://openlair.github.io/lev/) · [Paper (arXiv)](https://arxiv.org/abs/2610.20951) · [PDF](https://arxiv.org/pdf/2610.20951) · [GitHub](https://github.com/OpenLAIR/lev) · [Hugging Face collection](https://huggingface.co/collections/songdj/lev)
 
 [Resource availability](../docs/RESOURCES.md)
 
@@ -48,7 +48,7 @@ Depth helps harder items more than easier ones, but can also overturn a correct 
 
 The upstream card states Apache-2.0 and also says “This model is intended for research purposes only. It is provided as-is without warranties for production use.” See docs/LICENSING.md for the distinction between that statement and the declared license. This draft deliberately leaves the HF weight-license metadata unset until the exact released artifacts and notices are reviewed. Source code remains Apache-2.0, separately from dataset terms.
 
-Paper: [alphaXiv](https://www.alphaxiv.org/pdf/2610.lev-looped-decision-models) · [PDF](https://openlair.github.io/lev/assets/lev-paper.pdf). The arXiv identifier will be added when it is announced.
+Paper: [arXiv:2610.20951](https://arxiv.org/abs/2610.20951) · [PDF](https://arxiv.org/pdf/2610.20951) · [alphaXiv](https://www.alphaxiv.org/abs/2610.20951).
 
 
 Companion datasets are [published on Hugging Face](../docs/RESOURCES.md): [LevBench](https://huggingface.co/datasets/songdj/LevBench), [Lev-train-v2](https://huggingface.co/datasets/songdj/Lev-train-v2), and [Lev-results](https://huggingface.co/datasets/songdj/Lev-results). Benchmark/training downloads are source-specific rights-filtered subsets; the complete frozen corpus still requires lawful acquisition of withheld sources.
