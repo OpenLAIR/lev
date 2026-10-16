@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://openlair.github.io/lev/">
-    <img src="https://openlair.github.io/lev/assets/social.png" alt="Lev: Thinking fast and deep. One checkpoint. Multiple depths." width="100%">
+    <img src="https://openlair.github.io/lev/assets/lev-social.png" alt="Lev: Thinking fast and deep. One checkpoint. Multiple depths." width="100%">
   </a>
 </p>
 
